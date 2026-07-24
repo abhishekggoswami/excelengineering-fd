@@ -21,7 +21,9 @@ const scope = [
   'Bridge trestle assembly — full fabrication and erection',
   'Stoplog monorail and structure',
   'Service sluice gate and emergency sluice gate',
+  'Platforms and trash racks',
   'Electrical hoist systems and allied components',
+  'Approximately 325 MT of fabricated steel',
   'Full erection, testing and commissioning on site',
 ]
 
@@ -86,7 +88,7 @@ export default function HiranIrrigationProjectPage() {
             <div className="flex flex-wrap gap-4">
               <span className="inline-flex items-center gap-1.5 text-white/70 text-sm font-medium">
                 <MapPin className="w-4 h-4 text-[#e85d3f]" />
-                Hiran River, Madhya Pradesh
+                Hiran River, Jabalpur, Madhya Pradesh
               </span>
               <span className="inline-flex items-center gap-1.5 text-white/70 text-sm font-medium">
                 <Building2 className="w-4 h-4 text-[#e85d3f]" />
@@ -133,6 +135,9 @@ export default function HiranIrrigationProjectPage() {
                 </p>
                 <p className="text-[#4b5563] text-base leading-relaxed text-pretty mt-4">
                   The scope includes design, drawing, supply, fabrication, erection, testing and commissioning of a 9.00 × 6.50 MTR Vertical Lift Gate with integrated hoist, Bridge Trestle Assembly, Stoplog Monorail and Structure, Service and Emergency Sluice Gates, and Electrical Hoist systems — all allied components included within the turnkey scope.
+                </p>
+                <p className="text-[#4b5563] text-base leading-relaxed text-pretty mt-4">
+                  The updated project scope also includes platforms and trash racks. The hydro-mechanical package represents approximately 325 MT of fabricated steel.
                 </p>
               </div>
 
@@ -183,7 +188,11 @@ export default function HiranIrrigationProjectPage() {
                   </div>
                   <div>
                     <div className="text-[10px] font-bold uppercase tracking-widest text-[#9ca3af] mb-1">Location</div>
-                    <div className="text-sm font-semibold text-[#1a1a1a]">Hiran River, Madhya Pradesh</div>
+                    <div className="text-sm font-semibold text-[#1a1a1a]">Hiran River, Jabalpur, Madhya Pradesh</div>
+                  </div>
+                  <div>
+                    <div className="text-[10px] font-bold uppercase tracking-widest text-[#9ca3af] mb-1">Fabricated Steel</div>
+                    <div className="text-sm font-semibold text-[#1a1a1a]">Approximately 325 MT</div>
                   </div>
                   <div>
                     <div className="text-[10px] font-bold uppercase tracking-widest text-[#9ca3af] mb-1">Primary Contractor</div>

@@ -12,7 +12,6 @@ const navLinks = [
     children: [
       { label: 'Dam Construction', href: '/services/dam-construction' },
       { label: 'Fabrication Works', href: '/services/fabrication' },
-      { label: 'Irrigation Projects', href: '/services/irrigation' },
       { label: 'Crane Services', href: '/services/crane-services' },
       { label: 'Infrastructure', href: '/services/infrastructure' },
     ],

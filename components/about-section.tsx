@@ -19,7 +19,10 @@ const PILLS = [
 
 export default function AboutSection() {
   const sectionRef = useRef<HTMLDivElement>(null)
-  const [visible, setVisible] = useState(false)
+  // Render content immediately so it is reliable in previews, print captures and
+  // browsers that defer IntersectionObserver callbacks. The section remains fully
+  // animated where the observer is available, but it can never stay invisible.
+  const [visible, setVisible] = useState(true)
   const [imgIndex, setImgIndex] = useState(0)
 
   useEffect(() => {

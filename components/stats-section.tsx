@@ -64,8 +64,10 @@ function StatCard({
   index: number
   sectionVisible: boolean
 }) {
-  const [dropped, setDropped] = useState(false)
-  const [counting, setCounting] = useState(false)
+  // Keep the real content visible before client effects are scheduled. This avoids
+  // blank statistic cards in browser previews while retaining the count-up effect.
+  const [dropped, setDropped] = useState(true)
+  const [counting, setCounting] = useState(true)
   const count = useCountUp(stat.end, stat.duration, counting)
 
   // Stagger: each card drops in 220ms after the previous one lands
@@ -125,7 +127,9 @@ function StatCard({
 
 export default function StatsSection() {
   const ref = useRef<HTMLElement>(null)
-  const [visible, setVisible] = useState(false)
+  // A visible default prevents the entire statistics row from remaining blank
+  // when an embedded preview does not dispatch IntersectionObserver events.
+  const [visible, setVisible] = useState(true)
 
   useEffect(() => {
     const observer = new IntersectionObserver(

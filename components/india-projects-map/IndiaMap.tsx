@@ -4,26 +4,40 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import dynamic from 'next/dynamic'
 import { geoMercator, geoPath } from 'd3-geo'
-import { ComposableMap, Geographies, Geography, Marker } from 'react-simple-maps'
+import { feature } from 'topojson-client'
 import { X } from 'lucide-react'
 import Link from 'next/link'
-import ProjectMarker from './ProjectMarker'
-import { STATE_BY_NAME, STATE_PROJECTS, REAL_PROJECTS, colorForState } from './data'
+import { STATE_BY_NAME, REAL_PROJECTS, colorForState } from './data'
 import type { RealProject } from './data'
 import type { LatLngBounds } from './StateDetailMap'
+import indiaTopology from '@/public/india-states.topo.json'
 
 // Leaflet touches `window`, so load the detail map on the client only.
 const StateDetailMap = dynamic(() => import('./StateDetailMap'), { ssr: false })
 
-const GEO_URL = '/india-states.topo.json'
-
-const HOVER_FILL = '#e85d3f'
-const HOVER_STROKE = '#c14a30'
 /** inset (px) used both for the outline clip and the Leaflet fit, so they align */
 const FIT_PAD = 26
 
+type MapFeature = {
+  geometry: any
+  properties: { st_nm?: string }
+}
+
+const mapProjection = geoMercator()
+  .scale(1180)
+  .center([82.5, 22.6])
+  .translate([400, 430])
+
+const topology = indiaTopology as unknown as { objects: { states: any } }
+const baseStates = ((feature(topology as any, topology.objects.states) as any).features as MapFeature[]).map((state) => ({
+  ...state,
+  name: state.properties.st_nm ?? '',
+  path: geoPath(mapProjection)(state as any) ?? '',
+  bounds: geometryBounds(state.geometry),
+}))
+
 interface IndiaMapProps {
-  /** live-hovered state name (drives highlight + panel preview) */
+  /** live-hovered project pin ID (drives the panel preview) */
   hovered: string | null
   /** clicked state name (drives the zoom-into-outline detail map) */
   selected: string | null
@@ -58,18 +72,10 @@ function geometryBounds(geometry: any): LatLngBounds {
 
 export default function IndiaMap({ hovered, selected, onHover, onSelect }: IndiaMapProps) {
   const router = useRouter()
-  const [mounted, setMounted] = useState(false)
   const [activeProject, setActiveProject] = useState<RealProject | null>(null)
   const [pinPoint, setPinPoint] = useState<{ x: number; y: number } | null>(null)
   const containerRef = useRef<HTMLDivElement>(null)
-  const boundsRef = useRef<Record<string, LatLngBounds>>({})
-  const featuresRef = useRef<Record<string, any>>({})
-  const [size, setSize] = useState<{ w: number; h: number } | null>(null)
-
-  // react-simple-maps projects coordinates with sub-pixel float differences
-  // between server and client, causing hydration mismatches. Render only
-  // after mount so the SVG geometry is computed once, on the client.
-  useEffect(() => setMounted(true), [])
+  const [size, setSize] = useState({ w: 800, h: 860 })
 
   // Track the pixel size of the map box so the outline clip-path (generated in
   // CSS px) matches the container exactly.
@@ -81,111 +87,98 @@ export default function IndiaMap({ hovered, selected, onHover, onSelect }: India
     const ro = new ResizeObserver(measure)
     ro.observe(el)
     return () => ro.disconnect()
-  }, [mounted])
+  }, [])
 
   // Build the exact outline path for the selected state, fitted (with the same
   // inset as the Leaflet map) into the measured box. This clips the real map
   // to the state's true shape instead of a rectangle.
   const clip = useMemo(() => {
     if (!selected || !size) return null
-    const feature = featuresRef.current[selected]
-    if (!feature) return null
+    const state = baseStates.find((item) => item.name === selected)
+    if (!state) return null
     const projection = geoMercator().fitExtent(
       [
         [FIT_PAD, FIT_PAD],
         [size.w - FIT_PAD, size.h - FIT_PAD],
       ],
-      feature,
+      state as any,
     )
-    return geoPath(projection)(feature)
+    return geoPath(projection)(state as any)
   }, [selected, size])
 
+  const selectedState = selected ? baseStates.find((item) => item.name === selected) : null
   const selData = selected ? STATE_BY_NAME[selected] : null
-  const selBounds = selected ? boundsRef.current[selected] : null
+  const selBounds = selectedState?.bounds ?? null
   const showOverlay = Boolean(selected && clip && selBounds)
 
   return (
     <div ref={containerRef} className="relative w-full">
-      {!mounted ? (
-        <div className="aspect-[800/860] w-full animate-pulse rounded-3xl bg-black/[0.04]" />
-      ) : (
-        <>
+      <>
           {/* ── India base map (blurs + dims when a state is opened) ────── */}
           <div
             className={`transition-all duration-500 ${
               selected ? 'scale-[0.99] opacity-40 blur-[5px]' : 'blur-0 opacity-100'
             }`}
           >
-            <ComposableMap
-              projection="geoMercator"
-              projectionConfig={{ scale: 1180, center: [82.5, 22.6] }}
-              width={800}
-              height={860}
-              style={{ width: '100%', height: 'auto' }}
-            >
-              <Geographies geography={GEO_URL}>
-                {({ geographies }) =>
-                  geographies.map((geo) => {
-                    const name: string = geo.properties.st_nm
-                    if (!boundsRef.current[name]) {
-                      boundsRef.current[name] = geometryBounds(geo.geometry)
-                    }
-                    featuresRef.current[name] = geo
-                    const isHovered = hovered === name
-                    const dimmed = hovered !== null && !isHovered
-                    const base = colorForState(name)
-
-                    return (
-                      <Geography
-                        key={geo.rsmKey}
-                        geography={geo}
-                        onMouseEnter={() => onHover(name)}
-                        onMouseLeave={() => onHover(null)}
-                        onClick={() => onSelect(name)}
-                        tabIndex={-1}
-                        style={{
-                          default: {
-                            fill: isHovered ? HOVER_FILL : base,
-                            stroke: isHovered ? HOVER_STROKE : '#fbfaf5',
-                            strokeWidth: isHovered ? 1.6 : 0.75,
-                            outline: 'none',
-                            opacity: dimmed ? 0.45 : 1,
-                            filter: isHovered
-                              ? 'drop-shadow(0 6px 14px rgba(232,93,63,0.4))'
-                              : 'none',
-                            transition:
-                              'fill 260ms ease, opacity 260ms ease, filter 260ms ease, stroke 260ms ease',
-                            cursor: 'pointer',
-                          },
-                          hover: {
-                            fill: isHovered ? HOVER_FILL : base,
-                            stroke: isHovered ? HOVER_STROKE : '#fbfaf5',
-                            strokeWidth: isHovered ? 1.6 : 0.75,
-                            outline: 'none',
-                            opacity: dimmed ? 0.45 : 1,
-                            cursor: 'pointer',
-                          },
-                          pressed: { outline: 'none' },
-                        }}
-                      />
-                    )
-                  })
-                }
-              </Geographies>
+            <svg viewBox="0 0 800 860" className="block h-auto w-full" role="img" aria-label="India project map">
+              {baseStates.map((state) => {
+                const isHovered = hovered === state.name
+                const dimmed = hovered !== null && !isHovered
+                return (
+                  <path
+                    key={state.name}
+                    d={state.path}
+                    fill={isHovered ? '#e85d3f' : colorForState(state.name)}
+                    stroke={isHovered ? '#c14a30' : '#fbfaf5'}
+                    strokeWidth={isHovered ? 1.6 : 0.75}
+                    opacity={dimmed ? 0.45 : 1}
+                    filter={isHovered ? 'drop-shadow(0 6px 14px rgba(232,93,63,0.4))' : undefined}
+                    role="button"
+                    aria-label={`View projects in ${state.name}`}
+                    tabIndex={0}
+                    onMouseEnter={() => onHover(state.name)}
+                    onMouseLeave={() => onHover(null)}
+                    onClick={() => onSelect(state.name)}
+                    onKeyDown={(event) => {
+                      if (event.key === 'Enter' || event.key === ' ') onSelect(state.name)
+                    }}
+                    className="cursor-pointer transition-[fill,stroke,opacity,filter] duration-200"
+                  />
+                )
+              })}
 
               {/* Real project site pins — one teardrop per confirmed project */}
-              {REAL_PROJECTS.map((p, i) => (
-                <ProjectMarker
-                  key={p.id}
-                  coordinates={p.coordinates}
-                  index={i}
-                  active={hovered === p.id}
-                  onEnter={() => onHover(p.id)}
-                  onLeave={() => onHover(null)}
-                  onClick={() => router.push(p.link)}
-                />
-              ))}
-            </ComposableMap>
+              {REAL_PROJECTS.map((project) => {
+                const [x, y] = mapProjection(project.coordinates) ?? [0, 0]
+                const active = hovered === project.id
+                const fill = active ? '#f5a623' : '#e85d3f'
+                return (
+                  <g
+                    key={project.id}
+                    transform={`translate(${x}, ${y})`}
+                    className="cursor-pointer [pointer-events:all]"
+                    onPointerEnter={() => onHover(project.id)}
+                    onPointerLeave={() => onHover(null)}
+                    onClick={() => router.push(project.link)}
+                    onKeyDown={(event) => {
+                      if (event.key === 'Enter' || event.key === ' ') {
+                        event.preventDefault()
+                        router.push(project.link)
+                      }
+                    }}
+                    role="link"
+                    aria-label={`View ${project.title}`}
+                    tabIndex={0}
+                  >
+                    <circle r={active ? 8 : 6} fill="none" stroke={fill} strokeWidth={1.2} opacity={0.5} />
+                    <g transform="translate(-6,-17)">
+                      <path d="M6 17C6 17 12 9.2 12 5.4C12 2.4 9.3 0 6 0C2.7 0 0 2.4 0 5.4C0 9.2 6 17 6 17Z" fill={fill} stroke="#ffffff" strokeWidth={1.4} />
+                      <circle cx={6} cy={5.4} r={2.2} fill="#ffffff" />
+                    </g>
+                  </g>
+                )
+              })}
+            </svg>
           </div>
 
           {/* ── Zoomed detail map, clipped to the true state outline ────── */}
@@ -232,7 +225,7 @@ export default function IndiaMap({ hovered, selected, onHover, onSelect }: India
                     // Anchor the bottom-center of the card 12px above the pin tip
                     left: Math.min(
                       Math.max(pinPoint.x - 128, 8),
-                      (size?.w ?? 600) - 264,
+                      Math.max((size?.w ?? 600) - 264, 8),
                     ),
                     top: Math.max(pinPoint.y - 210, 8),
                   }}
@@ -291,7 +284,7 @@ export default function IndiaMap({ hovered, selected, onHover, onSelect }: India
               )}
 
               {/* header chip */}
-              <div className="pointer-events-none absolute left-4 top-4 z-[1200] flex items-center gap-2 rounded-full bg-white/95 px-4 py-2 shadow-md backdrop-blur">
+              <div className="pointer-events-none absolute left-3 top-3 z-[1200] flex max-w-[calc(100%-6rem)] items-center gap-2 rounded-full bg-white/95 px-3 py-2 shadow-md backdrop-blur sm:left-4 sm:top-4 sm:px-4">
                 <span className="relative flex h-2.5 w-2.5">
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#e85d3f]/60" />
                   <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-[#e85d3f]" />
@@ -299,7 +292,7 @@ export default function IndiaMap({ hovered, selected, onHover, onSelect }: India
                 <span className="text-sm font-black uppercase tracking-wide text-[#1a1a1a]">
                   {selected}
                 </span>
-                <span className="text-[11px] font-semibold text-[#1a1a1a]/45">
+                <span className="hidden text-[11px] font-semibold text-[#1a1a1a]/45 sm:inline">
                   Road &amp; Rail Network
                 </span>
               </div>
@@ -309,15 +302,14 @@ export default function IndiaMap({ hovered, selected, onHover, onSelect }: India
                 type="button"
                 onClick={() => { onSelect(null); setActiveProject(null); setPinPoint(null) }}
                 aria-label="Zoom back out to India"
-                className="absolute right-4 top-4 z-[1200] flex items-center gap-1.5 rounded-full bg-[#1a1a1a] px-3.5 py-2 text-xs font-bold text-white shadow-lg transition-transform hover:scale-105"
+                className="absolute right-3 top-3 z-[1200] flex items-center gap-1.5 rounded-full bg-[#1a1a1a] px-3 py-2 text-xs font-bold text-white shadow-lg transition-transform hover:scale-105 sm:right-4 sm:top-4 sm:px-3.5"
               >
                 <X className="h-3.5 w-3.5" />
                 Back to India
               </button>
             </div>
           )}
-        </>
-      )}
+      </>
     </div>
   )
 }

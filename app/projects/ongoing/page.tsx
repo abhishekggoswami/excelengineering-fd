@@ -6,15 +6,18 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useState } from 'react'
 import { ArrowUpRight, MapPin, Calendar, Building2, ChevronDown } from 'lucide-react'
+import { additionalProjects } from '@/lib/additional-projects'
 
 const stats = [
-  { value: '2',    label: 'Active Projects' },
-  { value: '2+',   label: 'States Covered' },
+  { value: '10',   label: 'Active Projects' },
+  { value: '4',    label: 'States Covered' },
   { value: '25+',  label: 'Years of Experience' },
   { value: '100%', label: 'On-Time Delivery Target' },
 ]
 
 type Category = 'All' | 'Dam Construction' | 'Fabrication' | 'Irrigation' | 'Infrastructure'
+
+const additionalOngoingProjects = additionalProjects.filter((project) => project.status === 'Ongoing')
 
 const projects: {
   title: string
@@ -186,7 +189,7 @@ export default function OngoingProjectsPage() {
               </button>
             ))}
             <span className="ml-auto text-[#9ca3af] text-xs font-medium">
-              {filtered.length} project{filtered.length !== 1 ? 's' : ''}
+              {filtered.length + (activeCategory === 'All' ? additionalOngoingProjects.length : 0)} project{filtered.length + (activeCategory === 'All' ? additionalOngoingProjects.length : 0) !== 1 ? 's' : ''}
             </span>
           </div>
         </section>
@@ -280,6 +283,25 @@ export default function OngoingProjectsPage() {
                 </div>
               </article>
             ))}
+          </div>
+        </section>
+
+        <section className="bg-[#f7f4ec] px-6 pb-20 md:px-12 lg:px-20">
+          <div className="mx-auto max-w-7xl">
+            <div className="mb-7 flex items-center gap-3">
+              <div className="h-px w-8 bg-[#e85d3f]" />
+              <h2 className="text-xl font-black text-[#1a1a1a]">More Ongoing Works</h2>
+            </div>
+            <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+              {additionalOngoingProjects.map((project) => (
+                <Link key={project.slug} href={`/projects/${project.slug}`} className="group rounded-2xl border border-[#e5d9c0] bg-white p-6 transition-all hover:border-[#e85d3f]/60 hover:shadow-md">
+                  <div className="mb-4 flex items-center justify-between gap-3"><span className="rounded-full bg-[#fdf1ee] px-3 py-1 text-[10px] font-bold uppercase tracking-wide text-[#e85d3f]">Ongoing</span><ArrowUpRight className="h-4 w-4 text-[#9ca3af] transition-colors group-hover:text-[#e85d3f]" /></div>
+                  <h3 className="text-lg font-black leading-snug text-[#1a1a1a]">{project.title}</h3>
+                  <p className="mt-3 flex items-start gap-1.5 text-xs font-medium leading-snug text-[#6b7280]"><MapPin className="mt-0.5 h-3.5 w-3.5 flex-shrink-0" />{project.location}</p>
+                  <p className="mt-4 text-sm leading-relaxed text-[#4b5563]">{project.mapDescription}</p>
+                </Link>
+              ))}
+            </div>
           </div>
         </section>
 

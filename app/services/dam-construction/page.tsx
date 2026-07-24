@@ -1,5 +1,9 @@
 import DamHeroSlideshow from '@/components/dam-hero-slideshow'
 import DamGallerySection from '@/components/dam-gallery-section'
+import DamMethodology from '@/components/dam-methodology'
+import AnimatedSearchLabel from '@/components/animated-search-label'
+import DamGateCarousel from '@/components/dam-gate-carousel'
+import LoopingLetterHeading from '@/components/looping-letter-heading'
 import ServiceFaqSection from '@/components/service-faq-section'
 import Navbar from '@/components/navbar'
 import Image from 'next/image'
@@ -60,50 +64,74 @@ const methodology = [
 const damTypes = [
   {
     name: 'Radial Gates',
+    video: '/videos/radial-gates-drone.mp4',
+    videoLabel: 'Radial gate works',
     desc: 'Curved steel gates that rotate about a horizontal axis — ideal for large spillways requiring precise and reliable flow control.',
   },
   {
     name: 'Vertical Lift Gates',
+    video: '/videos/vertical-lift-gates.mp4',
+    videoLabel: 'Vertical lift gate works',
     desc: 'Heavy rectangular gates that slide vertically — widely used in irrigation canals, sluices, and power intake structures.',
   },
   {
     name: 'Flap Gates',
+    video: '/videos/flap-gates.mp4',
+    videoLabel: 'Flap gate spillway works',
     desc: 'Hinged gates that tilt open under water pressure, used for automatic flood relief on weirs and rivers without external power.',
   },
   {
     name: 'Fixed Wheel Gates',
+    video: '/videos/fixed-wheel-gates.mp4',
+    videoLabel: 'Fixed wheel gate works',
     desc: 'Large sliding gates mounted on wheels for reduced friction — suited to deep-seated, high-pressure sluice openings.',
   },
   {
     name: 'Slide Gates',
+    video: '/videos/slide-gates.mp4',
+    videoLabel: 'Slide gate works',
     desc: 'Simple plate gates sliding in guides — cost-effective and reliable for low-pressure irrigation and drainage control.',
   },
   {
     name: 'Canal Gates',
+    video: '/videos/canal-gates.mp4',
+    videoLabel: 'Canal gate works',
     desc: 'Purpose-built gates for irrigation canal networks to control and distribute water flows across multiple channels.',
   },
   {
     name: 'Stop Log Gates',
+    video: '/videos/stop-log-gates.mp4',
+    videoLabel: 'Stop log gate works',
     desc: 'Stacked removable beams forming temporary water barriers used for inspection and maintenance of sluice structures.',
   },
   {
     name: 'Sluices & Spillways',
+    video: '/videos/sluices-spillways.mp4',
+    videoLabel: 'Sluice and spillway works',
     desc: 'Engineered outlets to safely discharge excess water and regulate reservoir levels during high-inflow events.',
   },
   {
     name: 'Draft Tube Gates',
+    video: '/videos/draft-tube-gates.mp4',
+    videoLabel: 'Draft tube gate works',
     desc: 'Isolation gates installed at draft tube entries of hydroelectric turbines to enable safe maintenance shutoff.',
   },
   {
     name: 'Automatic Tilting Gates',
+    video: '/videos/automatic-tilting-gates.mp4',
+    videoLabel: 'Automatic tilting gate works',
     desc: 'Self-actuating gates that tilt open when upstream water exceeds a preset level — no external power or actuation required.',
   },
   {
     name: 'Rope Drum Hoist',
+    video: '/videos/rope-drum-hoist.mp4',
+    videoLabel: 'Rope drum hoist works',
     desc: 'Motorised drum hoist systems for operating vertical lift and radial gates with upstream and downstream suspension.',
   },
   {
     name: 'Hydraulic Hoist',
+    video: '/videos/hydraulic-hoist.mp4',
+    videoLabel: 'Hydraulic hoist works',
     desc: 'Hydraulic cylinder-driven hoist systems providing precise and powerful operation of sluice gates and radial gates.',
   },
 ]
@@ -137,11 +165,13 @@ export default function DamConstructionPage() {
         <DamHeroSlideshow />
 
         {/* Stats strip */}
-        <section className="bg-[#111111] py-10 px-6 md:px-12 lg:px-20">
-          <div className="max-w-7xl mx-auto">
+        <section className="relative overflow-hidden border-y border-white/15 bg-[linear-gradient(115deg,rgba(7,86,56,.96),rgba(14,92,61,.88),rgba(5,68,45,.96))] px-6 py-7 shadow-[inset_0_1px_0_rgba(255,255,255,.16)] backdrop-blur-xl md:px-12 md:py-9 lg:px-20">
+          <div aria-hidden className="absolute -left-24 top-1/2 h-52 w-52 -translate-y-1/2 rounded-full bg-[#f5a623]/15 blur-3xl" />
+          <div aria-hidden className="absolute -right-16 -top-20 h-48 w-48 rounded-full bg-white/10 blur-3xl" />
+          <div className="relative mx-auto max-w-7xl">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
               {stats.map((s) => (
-                <div key={s.label} className="flex flex-col items-center text-center">
+                <div key={s.label} className="flex flex-col items-center rounded-2xl border border-white/10 bg-white/[0.055] px-3 py-3 text-center shadow-[inset_0_1px_0_rgba(255,255,255,.1)] backdrop-blur-md">
                   <span
                     className="font-black text-[#f5a623] leading-none"
                     style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}
@@ -205,56 +235,14 @@ export default function DamConstructionPage() {
           </div>
         </section>
 
-        {/* Methodology */}
-        <section className="bg-[#f5efe0] py-24 px-6 md:px-12 lg:px-20">
-          <div className="max-w-7xl mx-auto">
-            <div className="text-center mb-16">
-              <div className="flex items-center justify-center gap-3 mb-4">
-                <div className="w-8 h-px bg-[#e85d3f]" />
-                <span className="text-[#e85d3f] font-semibold text-sm uppercase tracking-widest">
-                  Our Process
-                </span>
-                <div className="w-8 h-px bg-[#e85d3f]" />
-              </div>
-              <h2
-                className="font-black text-[#1a1a1a] text-balance leading-tight"
-                style={{ fontSize: 'clamp(1.8rem, 3vw, 2.8rem)' }}
-              >
-                Construction Methodology
-              </h2>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {methodology.map((m, i) => (
-                <div
-                  key={m.step}
-                  className="bg-white rounded-2xl p-7 flex flex-col gap-4 border border-[#e5e7eb]"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-[#111111] flex items-center justify-center flex-shrink-0">
-                      <span className="text-white font-black text-sm">0{i + 1}</span>
-                    </div>
-                    <span className="text-[#e85d3f] text-xs font-bold uppercase tracking-widest">
-                      {m.step}
-                    </span>
-                  </div>
-                  <h3 className="text-[#1a1a1a] font-extrabold text-base leading-snug">{m.title}</h3>
-                  <p className="text-[#6b7280] text-sm leading-relaxed text-pretty">{m.desc}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
+        <DamMethodology steps={methodology} />
 
         {/* Types of Gates & Water Control Structures */}
         <section className="py-24 px-6 md:px-12 lg:px-20 bg-white">
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-16">
-              <div className="flex items-center justify-center gap-3 mb-4">
-                <div className="w-8 h-px bg-[#e85d3f]" />
-                <span className="text-[#e85d3f] font-semibold text-sm uppercase tracking-widest">
-                  Our Expertise
-                </span>
-                <div className="w-8 h-px bg-[#e85d3f]" />
+              <div className="mb-5 flex justify-center">
+                <AnimatedSearchLabel text="Search dam gate expertise" />
               </div>
               <h2
                 className="font-black text-[#1a1a1a] text-balance leading-tight mb-4"
@@ -269,35 +257,58 @@ export default function DamConstructionPage() {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-              {damTypes.map((type) => (
+            <DamGateCarousel types={damTypes} />
+
+            <div className="hidden grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {damTypes.map((type, index) => (
                 <div
                   key={type.name}
-                  className="group relative bg-white border border-[#e5e7eb] rounded-2xl p-6 flex flex-col gap-4 hover:border-[#e85d3f]/50 hover:shadow-md transition-all duration-200 overflow-hidden"
+                  className="group relative flex flex-col gap-5 overflow-hidden rounded-3xl border border-[#dfe4e2] bg-[#fbfcfb] p-4 shadow-[0_20px_42px_-38px_rgba(14,92,61,.8)] transition-all duration-500 hover:-translate-y-1 hover:border-[#e85d3f]/50 hover:shadow-[0_26px_48px_-32px_rgba(232,93,63,.45)]"
                 >
                   {/* Top accent bar on hover */}
-                  <div className="absolute top-0 left-0 right-0 h-0.5 bg-[#e85d3f] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
+                  <div className="absolute left-0 right-0 top-0 h-1 origin-left scale-x-0 bg-[#e85d3f] transition-transform duration-500 group-hover:scale-x-100" />
 
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-[#111111] flex items-center justify-center flex-shrink-0">
-                      <Layers className="w-5 h-5 text-[#f5a623]" />
+                  <div className="flex items-center justify-between gap-3 px-2 pt-2">
+                    <div className="flex items-center gap-3">
+                      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[#111111] shadow-lg">
+                        <Layers className="h-5 w-5 text-[#f5a623]" />
+                      </div>
+                      <h3 className="text-sm font-extrabold leading-snug text-[#1a1a1a]">{type.name}</h3>
                     </div>
-                    <h3 className="text-[#1a1a1a] font-extrabold text-sm leading-snug">
-                      {type.name}
-                    </h3>
+                    <span className="rounded-full border border-[#0e5c3d]/10 bg-white px-2.5 py-1 text-[10px] font-bold tracking-widest text-[#0e5c3d]">{String(index + 1).padStart(2, '0')}</span>
                   </div>
 
-                  <p className="text-[#6b7280] text-sm leading-relaxed text-pretty flex-1">
+                  <p className="min-h-[4.5rem] px-2 text-sm leading-relaxed text-pretty text-[#6b7280]">
                     {type.desc}
                   </p>
 
                   {/* Image placeholder — ready for photos */}
-                  <div className="w-full h-36 rounded-xl bg-[#f5efe0] border border-dashed border-[#d1c5a8] flex flex-col items-center justify-center gap-2">
-                    <div className="w-8 h-8 rounded-full bg-[#e85d3f]/15 flex items-center justify-center">
-                      <Layers className="w-4 h-4 text-[#e85d3f]" />
+                  {type.video ? (
+                    <div className="relative aspect-video w-full overflow-hidden rounded-2xl bg-[#111111]">
+                      <video
+                        autoPlay
+                        muted
+                        loop
+                        playsInline
+                        preload="metadata"
+                        aria-label={`Video of ${type.name.toLowerCase()} works`}
+                        className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      >
+                        <source src={type.video} type="video/mp4" />
+                      </video>
+                      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#07100e]/70 via-transparent to-transparent" />
+                      <span className="pointer-events-none absolute bottom-3 left-3 rounded-full border border-white/15 bg-black/20 px-2.5 py-1 text-[9px] font-bold uppercase tracking-[0.14em] text-white/90 backdrop-blur-sm">
+                        {type.videoLabel ?? 'Site footage'}
+                      </span>
                     </div>
-                    <span className="text-[#9ca3af] text-xs font-medium">Image coming soon</span>
-                  </div>
+                  ) : (
+                    <div className="flex aspect-video w-full flex-col items-center justify-center gap-3 rounded-2xl border border-dashed border-[#d1c5a8] bg-[radial-gradient(circle_at_center,rgba(245,166,35,.15),transparent_60%),#f5efe0]">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#e85d3f]/15">
+                        <Layers className="h-5 w-5 text-[#e85d3f]" />
+                      </div>
+                      <span className="text-xs font-semibold text-[#9ca3af]">Project imagery in progress</span>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
@@ -317,12 +328,10 @@ export default function DamConstructionPage() {
         {/* Inquiry CTA */}
         <section id="contact" className="bg-[#111111] py-20 px-6 md:px-12 lg:px-20">
           <div className="max-w-3xl mx-auto text-center">
-            <h2
-              className="text-white font-black text-balance leading-tight mb-4"
-              style={{ fontSize: 'clamp(1.8rem, 3vw, 2.8rem)' }}
-            >
-              Ready to Start Your Dam Project?
-            </h2>
+            <LoopingLetterHeading
+              text="Ready to Start Your Dam Project?"
+              className="mb-4 text-balance text-3xl font-black leading-tight text-white sm:text-4xl md:text-5xl"
+            />
             <p className="text-white/65 text-base mb-10 text-pretty">
               Contact our team for a detailed consultation and free project quote. We respond within 24 hours.
             </p>

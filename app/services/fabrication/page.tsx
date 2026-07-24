@@ -1,6 +1,9 @@
 import FabricationHeroSlideshow from '@/components/fabrication-hero-slideshow'
 import FabricationGallerySection from '@/components/fabrication-gallery-section'
 import ServiceFaqSection from '@/components/service-faq-section'
+import DamMethodology from '@/components/dam-methodology'
+import ServiceStatsStrip from '@/components/service-stats-strip'
+import ServiceCta from '@/components/service-cta'
 import Navbar from '@/components/navbar'
 import Image from 'next/image'
 import { CheckCircle2, ArrowUpRight } from 'lucide-react'
@@ -86,7 +89,8 @@ export default function FabricationPage() {
         <FabricationHeroSlideshow />
 
         {/* Stats strip */}
-        <section className="bg-[#0e5c3d] py-10 px-6 md:px-12 lg:px-20">
+        <ServiceStatsStrip stats={stats} />
+        <section className="hidden bg-[#0e5c3d] py-10 px-6 md:px-12 lg:px-20">
           <div className="max-w-7xl mx-auto">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
               {stats.map((s) => (
@@ -156,7 +160,8 @@ export default function FabricationPage() {
         </section>
 
         {/* Methodology */}
-        <section className="bg-[#f5efe0] py-24 px-6 md:px-12 lg:px-20">
+        <DamMethodology steps={methodology} />
+        <section className="hidden bg-[#f5efe0] py-24 px-6 md:px-12 lg:px-20">
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-16">
               <div className="flex items-center justify-center gap-3 mb-4">
@@ -206,7 +211,8 @@ export default function FabricationPage() {
         />
 
         {/* Inquiry CTA */}
-        <section id="contact" className="bg-[#0e5c3d] py-20 px-6 md:px-12 lg:px-20">
+        <ServiceCta heading="Ready to Start Your Project?" description="Contact our team for a detailed consultation and free project quote. We respond within 24 hours." />
+        <section id="contact-legacy" className="hidden bg-[#0e5c3d] py-20 px-6 md:px-12 lg:px-20">
           <div className="max-w-3xl mx-auto text-center">
             <h2
               className="text-white font-black text-balance leading-tight mb-4"

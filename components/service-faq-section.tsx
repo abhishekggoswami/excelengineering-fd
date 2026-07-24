@@ -31,17 +31,6 @@ export default function ServiceFaqSection({
       className="relative overflow-hidden bg-[#f5efe0] py-24 md:py-32"
     >
       {/* Industrial line art background — pinned to bottom, full width */}
-      <div
-        className="pointer-events-none absolute bottom-0 left-0 right-0 h-[340px] bg-repeat-x bg-bottom"
-        style={{
-          backgroundImage:
-            "url('https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Gemini_Generated_Image_3uj7mz3uj7mz3uj7-removebg-preview-rbtCbMUPUYemRQIOBL5JX8Hkbt2lMS.png')",
-          backgroundSize: 'auto 340px',
-          opacity: 0.45,
-        }}
-        aria-hidden="true"
-      />
-
       {/* Content */}
       <div className="relative z-10 max-w-4xl mx-auto px-6 md:px-12">
         {/* Badge */}

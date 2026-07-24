@@ -130,21 +130,21 @@ export default function FabricationGallerySection() {
         </div>
 
         {/* 3-column masonry */}
-        <div className="columns-1 sm:columns-2 lg:columns-3 gap-4">
-          {FABRICATION_IMAGES.map((img, i) => (
+        <div className="-mx-6 overflow-hidden pb-3 md:-mx-12 lg:-mx-20">
+          <div className="dam-gallery-marquee-track gap-4 px-6 md:px-12 lg:px-20">
+          {[...FABRICATION_IMAGES, ...FABRICATION_IMAGES].map((img, i) => (
             <div
-              key={i}
-              className="relative group cursor-pointer overflow-hidden rounded-2xl bg-[#111] mb-4 break-inside-avoid"
-              onClick={() => openLightbox(i)}
+              key={`${img.title}-${i}`}
+              className="relative group aspect-[4/3] w-[16rem] shrink-0 cursor-pointer overflow-hidden rounded-2xl bg-[#111] shadow-[0_20px_35px_-24px_rgba(14,92,61,.7)] sm:w-[20rem] lg:w-[23rem]"
+              onClick={() => openLightbox(i % FABRICATION_IMAGES.length)}
             >
               <Image
                 src={img.src}
                 alt={img.alt}
-                width={600}
-                height={450}
+                fill
                 loading="lazy"
-                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                className="w-full h-auto block transition-transform duration-700 group-hover:scale-110"
+                sizes="(max-width: 640px) 256px, (max-width: 1024px) 320px, 368px"
+                className="object-cover transition-transform duration-700 group-hover:scale-110"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               <div className="absolute top-3 left-3 bg-[#0e5c3d]/80 backdrop-blur-sm text-white text-xs font-semibold px-3 py-1 rounded-full">
@@ -158,6 +158,7 @@ export default function FabricationGallerySection() {
               </div>
             </div>
           ))}
+          </div>
         </div>
       </div>
 
