@@ -73,19 +73,19 @@ export default function SiteFooter() {
         />
 
         <div className="relative max-w-7xl mx-auto px-6 md:px-12 lg:px-20 py-5 md:pl-[34%] lg:pl-[32%]">
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-x-2 gap-y-1 text-center">
-            <span className="text-[#1a1a1a]/70 font-semibold text-base md:text-lg">
+          <div className="flex flex-col items-center justify-center gap-2 text-center md:flex-row md:gap-4">
+            <span className="whitespace-nowrap text-sm font-semibold text-[#1a1a1a]/70 md:text-base">
               Have a tender and want to discuss?
             </span>
             <a
               href="tel:+919876543210"
-              className="group flex items-center gap-2 font-black text-base md:text-lg text-[#1a1a1a] hover:text-[#e85d3f] transition-colors"
+              className="group inline-flex shrink-0 items-center gap-2 whitespace-nowrap text-sm font-black text-[#1a1a1a] transition-colors hover:text-[#e85d3f] md:text-base"
             >
-              Call Us on
+              <span>Call Us on</span>
               <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-[#e85d3f] text-white group-hover:scale-110 transition-transform">
-                <Phone className="w-3.5 h-3.5" />
+                <Phone className="animate-phone-ring w-3.5 h-3.5" />
               </span>
-              <span className="text-[#e85d3f]">+91 98765 43210</span>
+              <span className="whitespace-nowrap text-[#e85d3f]">+91 98765 43210</span>
             </a>
           </div>
         </div>
@@ -242,7 +242,7 @@ export default function SiteFooter() {
                 aria-label={label}
                 className="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-white/40 hover:text-white hover:bg-white/10 hover:border-white/20 transition-all duration-200"
               >
-                <Icon className="w-3.5 h-3.5" />
+                <Icon />
               </a>
             ))}
           </div>

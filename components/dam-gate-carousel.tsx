@@ -1,7 +1,8 @@
 'use client'
 
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
-import { ArrowLeft, ArrowRight, Layers, Pause, Play } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Layers } from 'lucide-react'
+import Link from 'next/link'
 import { useEffect, useMemo, useState } from 'react'
 
 type GateType = {
@@ -13,47 +14,36 @@ type GateType = {
 
 const AUTO_ADVANCE_MS = 6200
 
-const cardsPerPage = (width: number) => {
-  if (width >= 1024) return Number.MAX_SAFE_INTEGER
-  if (width >= 640) return 2
-  return 1
-}
+const CARDS_PER_PAGE = 3
 
-export default function DamGateCarousel({ types }: { types: GateType[] }) {
-  const [perPage, setPerPage] = useState(3)
-  const [page, setPage] = useState(0)
-  const [isPlaying, setIsPlaying] = useState(true)
+export default function DamGateCarousel({ types, initialPage = 0 }: { types: GateType[]; initialPage?: number }) {
   const reduceMotion = useReducedMotion()
-
-  useEffect(() => {
-    const update = () => setPerPage(cardsPerPage(window.innerWidth))
-    update()
-    window.addEventListener('resize', update)
-    return () => window.removeEventListener('resize', update)
-  }, [])
 
   const pages = useMemo(() => {
     const result: GateType[][] = []
-    for (let index = 0; index < types.length; index += perPage) result.push(types.slice(index, index + perPage))
+    for (let index = 0; index < types.length; index += CARDS_PER_PAGE) result.push(types.slice(index, index + CARDS_PER_PAGE))
     return result
-  }, [perPage, types])
+  }, [types])
 
-  useEffect(() => setPage((current) => Math.min(current, Math.max(0, pages.length - 1))), [pages.length])
+  const safeInitialPage = Math.min(Math.max(initialPage, 0), Math.max(0, pages.length - 1))
+  const [page, setPage] = useState(safeInitialPage)
+
+  useEffect(() => setPage(safeInitialPage), [safeInitialPage])
 
   useEffect(() => {
-    if (!isPlaying || reduceMotion || pages.length < 2) return
+    if (reduceMotion || pages.length < 2) return
     const timer = window.setInterval(() => setPage((current) => (current + 1) % pages.length), AUTO_ADVANCE_MS)
     return () => window.clearInterval(timer)
-  }, [isPlaying, pages.length, reduceMotion])
+  }, [pages.length, reduceMotion])
 
-  const showPage = (next: number) => setPage((next + pages.length) % pages.length)
   const pageItems = pages[page] ?? []
+  const pageHref = (target: number) => `/services/dam-construction?gatePage=${target + 1}#gate-types`
 
   return (
     <div>
       <AnimatePresence mode="wait" initial={false}>
         <motion.div
-          key={`${perPage}-${page}`}
+          key={`gates-${page}`}
           initial={reduceMotion ? { opacity: 0 } : { opacity: 0, x: 36 }}
           animate={{ opacity: 1, x: 0 }}
           exit={reduceMotion ? { opacity: 0 } : { opacity: 0, x: -36 }}
@@ -61,7 +51,7 @@ export default function DamGateCarousel({ types }: { types: GateType[] }) {
           className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3"
         >
           {pageItems.map((type, index) => {
-            const itemNumber = page * perPage + index + 1
+            const itemNumber = page * CARDS_PER_PAGE + index + 1
             return (
               <article
                 key={type.name}
@@ -99,14 +89,13 @@ export default function DamGateCarousel({ types }: { types: GateType[] }) {
       {pages.length > 1 && <div className="mt-7 flex flex-col gap-4 border-t border-[#e5e7eb] pt-5 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-2" aria-label="Gate type pagination">
           {pages.map((_, index) => (
-            <button key={index} type="button" onClick={() => showPage(index)} aria-label={`Show gate type page ${index + 1}`} aria-current={page === index ? 'page' : undefined} className={`h-2.5 rounded-full transition-all duration-500 ${page === index ? 'w-9 bg-[#e85d3f]' : 'w-2.5 bg-[#0e5c3d]/25 hover:bg-[#0e5c3d]/50'}`} />
+            <Link key={index} href={pageHref(index)} aria-label={`Show gate type page ${index + 1}`} aria-current={page === index ? 'page' : undefined} className={`h-2.5 rounded-full transition-all duration-500 ${page === index ? 'w-9 bg-[#e85d3f]' : 'w-2.5 bg-[#0e5c3d]/25 hover:bg-[#0e5c3d]/50'}`} />
           ))}
           <span className="ml-2 text-xs font-bold uppercase tracking-widest text-[#6b7280]">Page {page + 1} of {pages.length}</span>
         </div>
         <div className="flex items-center gap-2 self-start sm:self-auto">
-          <button type="button" onClick={() => setIsPlaying((playing) => !playing)} aria-label={isPlaying ? 'Pause gate carousel' : 'Play gate carousel'} className="flex h-10 w-10 items-center justify-center rounded-full border border-[#0e5c3d]/15 bg-white text-[#0e5c3d] transition-colors hover:bg-[#0e5c3d] hover:text-white">{isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}</button>
-          <button type="button" onClick={() => showPage(page - 1)} aria-label="Previous gate types" className="flex h-10 w-10 items-center justify-center rounded-full border border-[#0e5c3d]/15 bg-white text-[#0e5c3d] transition-colors hover:bg-[#0e5c3d] hover:text-white"><ArrowLeft className="h-4 w-4" /></button>
-          <button type="button" onClick={() => showPage(page + 1)} aria-label="Next gate types" className="flex h-10 w-10 items-center justify-center rounded-full bg-[#0e5c3d] text-white transition-transform hover:scale-105"><ArrowRight className="h-4 w-4" /></button>
+          <Link href={pageHref((page - 1 + pages.length) % pages.length)} aria-label="Previous gate types" className="flex h-10 w-10 items-center justify-center rounded-full border border-[#0e5c3d]/15 bg-white text-[#0e5c3d] transition-colors hover:bg-[#0e5c3d] hover:text-white"><ArrowLeft className="h-4 w-4" /></Link>
+          <Link href={pageHref((page + 1) % pages.length)} aria-label="Next gate types" className="flex h-10 w-10 items-center justify-center rounded-full bg-[#0e5c3d] text-white transition-transform hover:scale-105"><ArrowRight className="h-4 w-4" /></Link>
         </div>
       </div>}
     </div>

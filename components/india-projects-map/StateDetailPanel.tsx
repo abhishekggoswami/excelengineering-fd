@@ -88,6 +88,26 @@ function StateView({ data }: { data: StateProjectData }) {
   )
 }
 
+function EmptyStateView({ stateName }: { stateName: string }) {
+  return (
+    <div className="flex flex-col gap-4">
+      <div className="flex items-center gap-2 text-[#e85d3f]">
+        <MapPin className="h-4 w-4" />
+        <span className="text-xs font-semibold uppercase tracking-widest">State map</span>
+      </div>
+      <div>
+        <h3 className="text-2xl font-black leading-tight text-[#1a1a1a]">{stateName}</h3>
+        <p className="mt-2 text-sm leading-relaxed text-[#1a1a1a]/60">
+          Road, city, and rail context is available for this state. No Excel Engineering project pin has been recorded here yet.
+        </p>
+      </div>
+      <div className="rounded-xl border border-dashed border-black/10 bg-[#f7f4ec] px-4 py-3 text-xs font-semibold text-[#1a1a1a]/55">
+        Select another state or return to India to explore project locations.
+      </div>
+    </div>
+  )
+}
+
 function DefaultView({ onStateSelect }: Pick<StateDetailPanelProps, 'onStateSelect'>) {
   return (
     <div>
@@ -107,10 +127,18 @@ function DefaultView({ onStateSelect }: Pick<StateDetailPanelProps, 'onStateSele
         <p className="mb-2 text-[10px] font-bold uppercase tracking-widest text-[#1a1a1a]/45">Projects by state</p>
         <div className="grid grid-cols-2 gap-2">
           {STATE_PROJECTS.map((state) => (
-            <button key={state.id} type="button" onClick={() => onStateSelect(state.name)} className="flex items-center justify-between gap-2 rounded-xl border border-black/5 bg-[#f7f4ec] px-3 py-2.5 text-left transition-colors hover:border-[#e85d3f]/35 hover:bg-[#fdf1ee]">
+            <Link
+              key={state.id}
+              href={`/?state=${encodeURIComponent(state.name)}#map`}
+              onClick={(event) => {
+                event.preventDefault()
+                onStateSelect(state.name)
+              }}
+              className="flex items-center justify-between gap-2 rounded-xl border border-black/5 bg-[#f7f4ec] px-3 py-2.5 text-left transition-colors hover:border-[#e85d3f]/35 hover:bg-[#fdf1ee]"
+            >
               <span className="truncate text-xs font-semibold text-[#1a1a1a]">{state.name}</span>
               <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-white px-1.5 text-[10px] font-black text-[#e85d3f]">{state.projects}</span>
-            </button>
+            </Link>
           ))}
         </div>
         <div className="mt-3 grid grid-cols-2 gap-2">
@@ -141,7 +169,7 @@ export default function StateDetailPanel({ activeName, selectedState, onStateSel
     <div data-map-panel aria-live="polite" className="relative min-h-0 overflow-hidden rounded-3xl border border-black/[0.07] bg-white p-5 shadow-[0_20px_60px_-25px_rgba(0,0,0,0.25)] sm:p-6 xl:min-h-[420px] xl:p-7">
       {/* coral accent corner */}
       <div className="pointer-events-none absolute -right-12 -top-12 h-32 w-32 rounded-full bg-[#e85d3f]/10 blur-2xl" />
-      {project ? <ProjectView data={project} /> : state ? <StateView data={state} /> : <DefaultView onStateSelect={onStateSelect} />}
+      {project ? <ProjectView data={project} /> : state ? <StateView data={state} /> : selectedState ? <EmptyStateView stateName={selectedState} /> : <DefaultView onStateSelect={onStateSelect} />}
     </div>
   )
 }

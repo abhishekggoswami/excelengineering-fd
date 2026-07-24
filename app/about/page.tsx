@@ -16,6 +16,8 @@ import {
 } from 'lucide-react'
 import ServiceFaqSection from '@/components/service-faq-section'
 import CtaBannerSection from '@/components/cta-banner-section'
+import Navbar from '@/components/navbar'
+import FounderSection from '@/components/founder-section'
 
 const stats = [
   { value: '25+', label: 'Years of Experience' },
@@ -100,25 +102,15 @@ export default function AboutPage() {
 
   return (
     <>
+      <Navbar />
+      <main>
       {/* ── Hero ─────────────────────────────────────────────────────── */}
-      <section className="relative min-h-[60vh] flex items-end overflow-hidden bg-[#1a1a1a]">
-        <Image
-          src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/IMG_0477-clean%20%281%29-unoYci1Mw6ClGmuhdBSvjlieqrfwjT.png"
-          alt="Excel Engineering dam project aerial view"
-          fill
-          priority
-          className="object-cover object-center opacity-40"
-        />
-        {/* Diagonal grid overlay */}
-        <div
-          className="pointer-events-none absolute inset-0"
-          style={{
-            backgroundImage:
-              'repeating-linear-gradient(135deg, rgba(255,255,255,0.02) 0px, rgba(255,255,255,0.02) 1px, transparent 1px, transparent 40px)',
-          }}
-          aria-hidden="true"
-        />
-        <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 lg:px-20 pb-20 pt-36 w-full">
+      <section className="company-video-hero relative flex min-h-[58svh] items-end overflow-hidden bg-[#102b25] sm:min-h-[62svh]">
+        <video autoPlay muted loop playsInline preload="metadata" poster="/images/hero-bg.png" className="absolute inset-0 h-full w-full object-cover opacity-90">
+          <source src="/videos/about-hero.mp4" type="video/mp4" />
+        </video>
+        <div className="absolute inset-0 bg-gradient-to-r from-[#06251c]/52 via-[#0b3328]/32 to-[#071d18]/18" />
+        <div className="company-hero-content relative z-10 max-w-7xl mx-auto px-6 md:px-12 lg:px-20 pb-20 pt-36 w-full">
           <div className="flex items-center gap-3 mb-5">
             <div className="w-8 h-px bg-[#e85d3f]" />
             <span className="text-[#e85d3f] font-semibold text-sm uppercase tracking-widest">
@@ -251,7 +243,7 @@ export default function AboutPage() {
               return (
                 <div
                   key={i}
-                  className="group bg-white rounded-2xl p-7 border border-[#e5d9c0] hover:border-[#e85d3f]/40 hover:shadow-lg transition-all duration-300 cursor-default"
+                  className="company-card-lift group cursor-default rounded-2xl border border-[#e5d9c0] bg-white p-7 transition-all duration-300 hover:border-[#e85d3f]/40 hover:shadow-lg"
                 >
                   <div className="w-12 h-12 rounded-xl bg-[#1a1a1a] group-hover:bg-[#e85d3f] transition-colors duration-300 flex items-center justify-center mb-5">
                     <Icon className="w-5 h-5 text-[#f5a623] group-hover:text-white transition-colors duration-300" />
@@ -266,7 +258,9 @@ export default function AboutPage() {
       </section>
 
       {/* ── Leadership ───────────────────────────────────────────────── */}
-      <section className="bg-white py-24 px-6 md:px-12 lg:px-20">
+      <FounderSection />
+
+      <section className="hidden bg-white py-24 px-6 md:px-12 lg:px-20">
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center gap-3 mb-12">
             <div className="w-8 h-px bg-[#e85d3f]" />
@@ -306,7 +300,7 @@ export default function AboutPage() {
       </section>
 
       {/* ── Timeline ─────────────────────────────────────────────────── */}
-      <section className="bg-[#1a1a1a] py-24 px-6 md:px-12 lg:px-20">
+      <section className="hidden bg-[#1a1a1a] py-24 px-6 md:px-12 lg:px-20">
         <div className="max-w-4xl mx-auto">
           <div className="flex items-center gap-3 mb-14">
             <div className="w-8 h-px bg-[#e85d3f]" />
@@ -365,6 +359,7 @@ export default function AboutPage() {
 
       {/* ── CTA ───────────────────────────────────────────────────────── */}
       <CtaBannerSection />
+      </main>
     </>
   )
 }

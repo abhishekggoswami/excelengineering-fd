@@ -1,6 +1,3 @@
-'use client'
-
-import { useState } from 'react'
 import { ArrowRight, ArrowDown, Settings } from 'lucide-react'
 
 interface Faq {
@@ -19,12 +16,6 @@ export default function ServiceFaqSection({
   heading = 'Frequently Asked Questions',
   subheading,
 }: ServiceFaqSectionProps) {
-  const [openIndex, setOpenIndex] = useState<number>(0)
-
-  const toggle = (index: number) => {
-    setOpenIndex(openIndex === index ? -1 : index)
-  }
-
   return (
     <section
       id="faq"
@@ -59,48 +50,24 @@ export default function ServiceFaqSection({
         {/* Accordion */}
         <div className="flex flex-col gap-3">
           {faqs.map((faq, index) => {
-            const isOpen = openIndex === index
             return (
-              <div key={index} className="rounded-xl overflow-hidden shadow-sm">
-                {/* Question row */}
-                <button
-                  onClick={() => toggle(index)}
-                  className={`w-full flex items-center justify-between gap-4 px-6 py-5 text-left transition-colors duration-200 ${
-                    isOpen
-                      ? 'bg-[#e85d3f] text-white'
-                      : 'bg-white text-[#1a1a1a] hover:bg-white/80'
-                  }`}
-                  aria-expanded={isOpen}
-                >
-                  <span className={`font-semibold text-base leading-snug ${isOpen ? 'text-white' : 'text-[#1a1a1a]'}`}>
+              <details key={index} className="group overflow-hidden rounded-xl shadow-sm" open={index === 0}>
+                <summary className="flex cursor-pointer touch-manipulation list-none items-center justify-between gap-4 bg-white px-6 py-5 text-left transition-colors duration-200 hover:bg-white/80 group-open:bg-[#e85d3f] group-open:hover:bg-[#e85d3f]">
+                  <span className="text-base font-semibold leading-snug text-[#1a1a1a] group-open:text-white">
                     {faq.q}
                   </span>
                   <span
-                    className={`flex-shrink-0 w-9 h-9 rounded-lg flex items-center justify-center transition-colors duration-200 ${
-                      isOpen
-                        ? 'bg-white/20 text-white border border-white/30'
-                        : 'bg-[#1a1a1a] text-white'
-                    }`}
+                    className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#1a1a1a] text-white transition-all duration-200 group-open:border group-open:border-white/30 group-open:bg-white/20 group-open:rotate-90"
                   >
-                    {isOpen ? (
-                      <ArrowDown className="w-4 h-4" />
-                    ) : (
-                      <ArrowRight className="w-4 h-4" />
-                    )}
+                    <ArrowRight className="h-4 w-4 group-open:hidden" />
+                    <ArrowDown className="hidden h-4 w-4 group-open:block" />
                   </span>
-                </button>
+                </summary>
 
-                {/* Answer panel */}
-                <div
-                  className={`overflow-hidden transition-all duration-300 ease-in-out ${
-                    isOpen ? 'max-h-96' : 'max-h-0'
-                  }`}
-                >
-                  <div className="bg-white px-6 py-6 border-t border-[#e5e7eb]">
-                    <p className="text-[#6b7280] text-sm leading-relaxed">{faq.a}</p>
-                  </div>
+                <div className="border-t border-[#e5e7eb] bg-white px-6 py-6">
+                  <p className="text-[#6b7280] text-sm leading-relaxed">{faq.a}</p>
                 </div>
-              </div>
+              </details>
             )
           })}
         </div>

@@ -50,6 +50,11 @@ export default function Navbar() {
     closeTimer.current = setTimeout(() => setOpenDropdown(null), 150)
   }
 
+  const closeDropdown = () => {
+    if (closeTimer.current) clearTimeout(closeTimer.current)
+    setOpenDropdown(null)
+  }
+
   return (
     /* Navbar is in normal document flow — NOT fixed — so the hero card sits below it */
     <header className="relative z-50 bg-[#faf9f6] border-b border-gray-100">
@@ -72,11 +77,29 @@ export default function Navbar() {
               link.children ? (
                 <div
                   key={link.label}
-                  className="relative"
+                  className="group relative"
                   onMouseEnter={() => handleMouseEnter(link.label)}
                   onMouseLeave={handleMouseLeave}
                 >
-                  <button className="flex items-center gap-1 text-[#1a1a1a] hover:text-[#e85d3f] font-semibold text-sm uppercase tracking-wide transition-colors">
+                  <button
+                    type="button"
+                    aria-haspopup="true"
+                    aria-expanded={openDropdown === link.label}
+                    aria-controls={`nav-dropdown-${link.label.toLowerCase()}`}
+                    onClick={() => handleMouseEnter(link.label)}
+                    onKeyDown={(event) => {
+                      if (event.key === 'ArrowDown') {
+                        event.preventDefault()
+                        handleMouseEnter(link.label)
+                      }
+
+                      if (event.key === 'Escape') {
+                        event.preventDefault()
+                        closeDropdown()
+                      }
+                    }}
+                    className="flex items-center gap-1 text-[#1a1a1a] hover:text-[#e85d3f] font-semibold text-sm uppercase tracking-wide transition-colors"
+                  >
                     {link.label}
                     <ChevronDown
                       className={`w-3.5 h-3.5 transition-transform duration-200 ${
@@ -89,7 +112,21 @@ export default function Navbar() {
                   <div className="absolute top-full left-0 w-full h-3" />
 
                   <div
-                    className={`absolute top-full left-0 mt-3 min-w-[200px] bg-white border border-gray-100 rounded-xl shadow-xl overflow-hidden transition-all duration-200 ${
+                    id={`nav-dropdown-${link.label.toLowerCase()}`}
+                    aria-label={`${link.label} navigation`}
+                    onFocus={() => handleMouseEnter(link.label)}
+                    onBlur={(event) => {
+                      if (!event.currentTarget.contains(event.relatedTarget as Node)) {
+                        closeDropdown()
+                      }
+                    }}
+                    onKeyDown={(event) => {
+                      if (event.key === 'Escape') {
+                        event.preventDefault()
+                        closeDropdown()
+                      }
+                    }}
+                    className={`absolute top-full left-0 z-[60] mt-3 min-w-[200px] bg-white border border-gray-100 rounded-xl shadow-xl overflow-hidden transition-all duration-200 group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:translate-y-0 group-focus-within:opacity-100 ${
                       openDropdown === link.label
                         ? 'opacity-100 translate-y-0 pointer-events-auto'
                         : 'opacity-0 -translate-y-2 pointer-events-none'
@@ -99,6 +136,7 @@ export default function Navbar() {
                       <Link
                         key={child.label}
                         href={child.href}
+                        onClick={closeDropdown}
                         className="block px-5 py-3 text-sm text-[#1a1a1a]/75 hover:text-[#1a1a1a] hover:bg-[#f5efe0] transition-colors font-medium border-b border-gray-50 last:border-0"
                       >
                         {child.label}
@@ -121,7 +159,7 @@ export default function Navbar() {
           {/* CTA */}
           <div className="hidden md:flex items-center">
             <Link
-              href="#contact"
+              href="/contact"
               className="group flex items-center gap-2 bg-[#e85d3f] hover:bg-[#d14f33] transition-colors text-white font-bold text-sm uppercase tracking-wide pl-5 pr-2 py-2 rounded-full shadow-sm"
             >
               Get Free Quote
@@ -176,7 +214,7 @@ export default function Navbar() {
             )
           )}
           <Link
-            href="#contact"
+            href="/contact"
             onClick={() => setMobileOpen(false)}
             className="mt-2 bg-[#e85d3f] text-white font-bold text-sm uppercase tracking-wide px-5 py-3 rounded-full text-center"
           >

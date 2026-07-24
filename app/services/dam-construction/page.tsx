@@ -155,7 +155,15 @@ const faqs = [
   },
 ]
 
-export default function DamConstructionPage() {
+export default async function DamConstructionPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ gatePage?: string | string[] }>
+}) {
+  const params = await searchParams
+  const requestedPage = Array.isArray(params.gatePage) ? params.gatePage[0] : params.gatePage
+  const gatePage = Math.max(0, Number.parseInt(requestedPage ?? '1', 10) - 1 || 0)
+
   return (
     <>
       <Navbar />
@@ -238,7 +246,7 @@ export default function DamConstructionPage() {
         <DamMethodology steps={methodology} />
 
         {/* Types of Gates & Water Control Structures */}
-        <section className="py-24 px-6 md:px-12 lg:px-20 bg-white">
+        <section id="gate-types" className="py-24 px-6 md:px-12 lg:px-20 bg-white">
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-16">
               <div className="mb-5 flex justify-center">
@@ -257,7 +265,7 @@ export default function DamConstructionPage() {
               </p>
             </div>
 
-            <DamGateCarousel types={damTypes} />
+            <DamGateCarousel key={gatePage} types={damTypes} initialPage={gatePage} />
 
             <div className="hidden grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {damTypes.map((type, index) => (

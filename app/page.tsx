@@ -9,8 +9,29 @@ import FaqSection from '@/components/faq-section'
 import CtaBannerSection from '@/components/cta-banner-section'
 import IndiaProjectsSection from '@/components/india-projects-map/IndiaProjectsSection'
 import PartnersSection from '@/components/partners-section'
+import { REAL_PROJECTS } from '@/components/india-projects-map/data'
+import indiaTopology from '@/public/india-states.topo.json'
 
-export default function Page() {
+const INDIA_STATE_NAMES = new Set(
+  (indiaTopology as unknown as { objects: { states: { geometries: Array<{ properties: { st_nm?: string } }> } } })
+    .objects.states.geometries
+    .map((state) => state.properties.st_nm)
+    .filter((name): name is string => Boolean(name)),
+)
+
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: Promise<{ state?: string | string[]; project?: string | string[] }>
+}) {
+  const params = await searchParams
+  const requestedState = Array.isArray(params.state) ? params.state[0] : params.state
+  const requestedProject = Array.isArray(params.project) ? params.project[0] : params.project
+  const initialState = requestedState && INDIA_STATE_NAMES.has(requestedState) ? requestedState : null
+  const initialProjectId = requestedProject && REAL_PROJECTS.some((project) => project.id === requestedProject)
+    ? requestedProject
+    : null
+
   return (
     <>
       <Navbar />
@@ -23,7 +44,7 @@ export default function Page() {
         <FounderSection />
         <FaqSection />
         <CtaBannerSection />
-        <IndiaProjectsSection />
+        <IndiaProjectsSection initialState={initialState} initialProjectId={initialProjectId} />
         <PartnersSection />
       </main>
     </>

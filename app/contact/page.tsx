@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { MapPin, Phone, Mail, Clock, ArrowUpRight, CheckCircle2, Send } from 'lucide-react'
 import ServiceFaqSection from '@/components/service-faq-section'
+import Navbar from '@/components/navbar'
 
 const contactDetails = [
   {
@@ -72,17 +73,15 @@ export default function ContactPage() {
 
   return (
     <>
+      <Navbar />
+      <main>
       {/* ── Hero ─────────────────────────────────────────────────────── */}
-      <section className="bg-[#1a1a1a] pt-36 pb-20 px-6 md:px-12 lg:px-20 relative overflow-hidden">
-        <div
-          className="pointer-events-none absolute inset-0"
-          style={{
-            backgroundImage:
-              'repeating-linear-gradient(135deg, rgba(255,255,255,0.025) 0px, rgba(255,255,255,0.025) 1px, transparent 1px, transparent 40px)',
-          }}
-          aria-hidden="true"
-        />
-        <div className="relative z-10 max-w-7xl mx-auto">
+      <section className="company-video-hero relative flex min-h-[58svh] items-end overflow-hidden px-6 pb-20 pt-32 sm:min-h-[62svh] md:px-12 lg:px-20">
+        <video autoPlay muted loop playsInline preload="metadata" poster="/images/hero-bg.png" className="absolute inset-0 h-full w-full object-cover opacity-90">
+          <source src="/videos/company-pages-hero.mp4" type="video/mp4" />
+        </video>
+        <div className="absolute inset-0 bg-gradient-to-r from-[#06251c]/52 via-[#0b3328]/32 to-[#071d18]/18" />
+          <div className="company-hero-content relative z-10 mx-auto w-full max-w-7xl">
           <div className="flex items-center gap-3 mb-5">
             <div className="w-8 h-px bg-[#e85d3f]" />
             <span className="text-[#e85d3f] font-semibold text-sm uppercase tracking-widest">
@@ -115,7 +114,7 @@ export default function ContactPage() {
               return (
                 <div
                   key={c.label}
-                  className="group bg-white rounded-2xl p-6 border border-[#e5d9c0] hover:border-[#e85d3f]/40 hover:shadow-md transition-all duration-200"
+                  className="company-card-lift group rounded-2xl border border-[#e5d9c0] bg-white p-6 transition-all duration-300 hover:border-[#e85d3f]/40 hover:shadow-md"
                 >
                   <div className="flex items-start gap-4">
                     <div className="w-11 h-11 rounded-xl bg-[#1a1a1a] group-hover:bg-[#e85d3f] transition-colors duration-200 flex items-center justify-center flex-shrink-0">
@@ -269,6 +268,7 @@ export default function ContactPage() {
         heading="Contact & Inquiries"
         subheading="Everything you need to know about reaching us and how we handle new project discussions."
       />
+      </main>
     </>
   )
 }

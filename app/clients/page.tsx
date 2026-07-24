@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { ArrowUpRight } from 'lucide-react'
 import ServiceFaqSection from '@/components/service-faq-section'
 import CtaBannerSection from '@/components/cta-banner-section'
+import Navbar from '@/components/navbar'
 
 const clients = [
   {
@@ -108,17 +109,15 @@ const faqs = [
 export default function ClientsPage() {
   return (
     <>
+      <Navbar />
+      <main>
       {/* ── Hero ─────────────────────────────────────────────────────── */}
-      <section className="bg-[#1a1a1a] pt-36 pb-20 px-6 md:px-12 lg:px-20 relative overflow-hidden">
-        <div
-          className="pointer-events-none absolute inset-0"
-          style={{
-            backgroundImage:
-              'repeating-linear-gradient(135deg, rgba(255,255,255,0.025) 0px, rgba(255,255,255,0.025) 1px, transparent 1px, transparent 40px)',
-          }}
-          aria-hidden="true"
-        />
-        <div className="relative z-10 max-w-7xl mx-auto">
+      <section className="company-video-hero relative flex min-h-[58svh] items-end overflow-hidden px-6 pb-20 pt-32 sm:min-h-[62svh] md:px-12 lg:px-20">
+        <video autoPlay muted loop playsInline preload="metadata" poster="/images/hero-bg.png" className="absolute inset-0 h-full w-full object-cover opacity-90">
+          <source src="/videos/company-pages-hero.mp4" type="video/mp4" />
+        </video>
+        <div className="absolute inset-0 bg-gradient-to-r from-[#06251c]/52 via-[#0b3328]/32 to-[#071d18]/18" />
+          <div className="company-hero-content relative z-10 mx-auto w-full max-w-7xl">
           <div className="flex items-center gap-3 mb-5">
             <div className="w-8 h-px bg-[#e85d3f]" />
             <span className="text-[#e85d3f] font-semibold text-sm uppercase tracking-widest">
@@ -192,7 +191,7 @@ export default function ClientsPage() {
             {clients.map((client) => (
               <div
                 key={client.name}
-                className="group bg-white rounded-2xl border border-[#e5d9c0] hover:border-[#e85d3f]/50 hover:shadow-lg transition-all duration-300 flex flex-col overflow-hidden"
+                className="company-card-lift group flex flex-col overflow-hidden rounded-2xl border border-[#e5d9c0] bg-white transition-all duration-300 hover:border-[#e85d3f]/50 hover:shadow-lg"
               >
                 {/* Logo area */}
                 <div className="flex items-center justify-center p-8 bg-white border-b border-[#e5d9c0] group-hover:border-[#e85d3f]/20 transition-colors min-h-[140px]">
@@ -267,6 +266,7 @@ export default function ClientsPage() {
 
       {/* ── CTA ───────────────────────────────────────────────────────── */}
       <CtaBannerSection />
+      </main>
     </>
   )
 }

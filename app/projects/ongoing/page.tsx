@@ -4,8 +4,7 @@ import Navbar from '@/components/navbar'
 import ServiceFaqSection from '@/components/service-faq-section'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useState } from 'react'
-import { ArrowUpRight, MapPin, Calendar, Building2, ChevronDown } from 'lucide-react'
+import { ArrowUpRight, MapPin, Building2 } from 'lucide-react'
 import { additionalProjects } from '@/lib/additional-projects'
 
 const stats = [
@@ -78,6 +77,47 @@ const projects: {
   },
 ]
 
+type OngoingProjectCard = {
+  title: string
+  location: string
+  client?: string
+  category: string
+  status: string
+  progress?: number
+  description: string
+  highlights: string[]
+  image: string
+  video?: string
+  href?: string
+}
+
+const projectMedia = [
+  'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/IMG_0475-clean-yvyIC0wscjKJZ5V3S18D8NvGTHfGRN.png',
+  'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/IMG_0481-clean%202-eXJnNCS3OECYkxw9QuiHopHlg3FMJi.png',
+  'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/IMG_0479-clean-Bf6zZ0GGD3FL3uy0urqoL0lTWF2IS3.png',
+]
+
+const projectVideos = Array.from(
+  { length: 9 },
+  (_, index) => `/videos/ongoing/project-${String(index + 1).padStart(2, '0')}.mp4`,
+)
+
+const allOngoingProjects: OngoingProjectCard[] = [
+  ...projects.map((project, index) => ({ ...project, video: projectVideos[index] })),
+  ...additionalOngoingProjects.map((project, index) => ({
+    title: project.title,
+    location: project.location,
+    client: project.client,
+    category: 'Hydro-Mechanical Works',
+    status: 'In Progress',
+    description: project.overview,
+    highlights: project.scope,
+    image: projectMedia[index % projectMedia.length],
+    video: projectVideos[projects.length + index],
+    href: `/projects/${project.slug}`,
+  })),
+]
+
 const faqs = [
   {
     q: 'What is the scope of work at the Madiya Dam project in Sagar, M.P.?',
@@ -104,13 +144,6 @@ const statusColor: Record<string, string> = {
 }
 
 export default function OngoingProjectsPage() {
-  const [activeCategory, setActiveCategory] = useState<Category>('All')
-  const categories: Category[] = ['All', 'Dam Construction', 'Fabrication', 'Irrigation', 'Infrastructure']
-
-  const filtered = activeCategory === 'All'
-    ? projects
-    : projects.filter((p) => p.category === activeCategory)
-
   return (
     <>
       <Navbar />
@@ -169,89 +202,90 @@ export default function OngoingProjectsPage() {
           </div>
         </section>
 
-        {/* Filter bar */}
-        <section className="py-10 px-6 md:px-12 lg:px-20 bg-white border-b border-[#e5e7eb]">
-          <div className="max-w-7xl mx-auto flex flex-wrap items-center gap-3">
-            <span className="text-[#6b7280] text-xs font-semibold uppercase tracking-widest mr-2">
-              Filter by:
+        {/* Project quote */}
+        <section className="border-b border-[#e5e7eb] bg-[#f7f4ec] px-6 py-10 md:px-12 lg:px-20">
+          <div className="mx-auto grid max-w-7xl gap-4 md:grid-cols-[auto_1fr] md:items-center md:gap-8">
+            <span className="w-fit rounded-full bg-[#e85d3f] px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] text-white">
+              {allOngoingProjects.length} active sites
             </span>
-            {categories.map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setActiveCategory(cat)}
-                className={`px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wide transition-all duration-200 border ${
-                  activeCategory === cat
-                    ? 'bg-[#e85d3f] text-white border-[#e85d3f] shadow-sm'
-                    : 'bg-white text-[#374151] border-[#e5e7eb] hover:border-[#e85d3f]/40 hover:text-[#e85d3f]'
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
-            <span className="ml-auto text-[#9ca3af] text-xs font-medium">
-              {filtered.length + (activeCategory === 'All' ? additionalOngoingProjects.length : 0)} project{filtered.length + (activeCategory === 'All' ? additionalOngoingProjects.length : 0) !== 1 ? 's' : ''}
-            </span>
+            <blockquote className="max-w-4xl text-lg font-semibold leading-relaxed text-[#1a1a1a] sm:text-xl">
+              “Built with precision at every stage — from design coordination and fabrication to safe, reliable commissioning.”
+            </blockquote>
           </div>
         </section>
 
         {/* Project cards */}
-        <section className="py-20 px-6 md:px-12 lg:px-20 bg-white">
-          <div className="max-w-7xl mx-auto flex flex-col gap-8">
-            {filtered.map((project, i) => (
-              <article
-                key={i}
-                className="group bg-white border border-[#e5e7eb] rounded-3xl overflow-hidden hover:shadow-lg hover:border-[#e85d3f]/30 transition-all duration-300"
-              >
-                <div className="grid grid-cols-1 lg:grid-cols-5 gap-0">
+        <section className="bg-white px-6 py-16 md:px-12 md:py-20 lg:px-20">
+          <div className="mx-auto max-w-7xl">
+            <div className="mb-8 flex flex-wrap items-end justify-between gap-3">
+              <div>
+                <div className="mb-3 flex items-center gap-3">
+                  <div className="h-px w-8 bg-[#e85d3f]" />
+                  <span className="text-xs font-semibold uppercase tracking-widest text-[#e85d3f]">Live delivery</span>
+                </div>
+                <h2 className="text-3xl font-black tracking-tight text-[#1a1a1a] sm:text-4xl">Projects in Progress</h2>
+              </div>
+              <p className="text-sm font-medium text-[#6b7280]">Each project receives the same engineering focus.</p>
+            </div>
 
-                  {/* Image */}
-                  <div className="lg:col-span-2 relative h-56 lg:h-auto min-h-[240px] overflow-hidden">
-                    <Image
-                      src={project.image}
-                      alt={project.title}
-                      fill
-                      loading="lazy"
-                      sizes="(max-width: 1024px) 100vw, 40vw"
-                      className="object-cover object-center group-hover:scale-105 transition-transform duration-500"
-                    />
-                    {/* Category pill */}
-                    <div className="absolute top-4 left-4">
-                      <span className="bg-black/50 backdrop-blur-sm text-white text-xs font-bold uppercase tracking-wide px-3 py-1.5 rounded-full">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+            {allOngoingProjects.map((project, i) => (
+              <article
+                key={`${project.title}-${i}`}
+                className="group flex h-full flex-col overflow-hidden rounded-2xl border border-[#e5e7eb] bg-white transition-all duration-300 hover:-translate-y-1 hover:border-[#e85d3f]/45 hover:shadow-xl"
+              >
+                  {/* Media: kept as a fixed 16:9 slot so supplied project videos can replace the covers without changing card layout. */}
+                  <div className="relative aspect-video overflow-hidden bg-[#102b25]">
+                    {project.video ? (
+                      <video
+                        autoPlay
+                        muted
+                        loop
+                        playsInline
+                        preload="metadata"
+                        poster={project.image}
+                        aria-label={`${project.title} project video`}
+                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      >
+                        <source src={project.video} type="video/mp4" />
+                      </video>
+                    ) : (
+                      <Image
+                        src={project.image}
+                        alt={project.title}
+                        fill
+                        loading="lazy"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+                        className="object-cover object-center transition-transform duration-500 group-hover:scale-105"
+                      />
+                    )}
+                    <div className="absolute left-4 top-4 flex flex-wrap gap-2">
+                      <span className="rounded-full bg-black/55 px-3 py-1.5 text-[10px] font-bold uppercase tracking-wide text-white backdrop-blur-sm">
                         {project.category}
+                      </span>
+                      <span className={`rounded-full border px-3 py-1.5 text-[10px] font-bold uppercase tracking-wide backdrop-blur-sm ${statusColor[project.status] ?? statusColor['In Progress']}`}>
+                        {project.status}
                       </span>
                     </div>
                   </div>
 
-                  {/* Content */}
-                  <div className="lg:col-span-3 p-8 flex flex-col gap-5">
-                    {/* Title row */}
-                    <div className="flex items-start justify-between gap-4">
-                      <h2 className="font-black text-[#1a1a1a] text-lg leading-snug text-balance flex-1">
-                        {project.title}
-                      </h2>
-                      <span className={`flex-shrink-0 text-xs font-bold uppercase tracking-wide px-3 py-1.5 rounded-full border ${statusColor[project.status]}`}>
-                        {project.status}
-                      </span>
-                    </div>
+                  <div className="flex flex-1 flex-col p-6">
+                    <h2 className="min-h-[3.5rem] text-xl font-black leading-snug text-[#1a1a1a]">
+                      {project.title}
+                    </h2>
 
-                    {/* Meta row */}
-                    <div className="flex flex-wrap gap-x-6 gap-y-2">
-                      <div className="flex items-center gap-1.5 text-[#6b7280] text-xs font-medium">
+                    <div className="mt-4 space-y-2">
+                      <div className="flex items-start gap-1.5 text-xs font-medium leading-snug text-[#6b7280]">
                         <MapPin className="w-3.5 h-3.5 flex-shrink-0" />
                         {project.location}
                       </div>
-                      <div className="flex items-center gap-1.5 text-[#6b7280] text-xs font-medium">
+                      {project.client && <div className="flex items-start gap-1.5 text-xs font-medium leading-snug text-[#6b7280]">
                         <Building2 className="w-3.5 h-3.5 flex-shrink-0" />
                         {project.client}
-                      </div>
-                      <div className="flex items-center gap-1.5 text-[#6b7280] text-xs font-medium">
-                        <Calendar className="w-3.5 h-3.5 flex-shrink-0" />
-                        {project.contractedBy}
-                      </div>
+                      </div>}
                     </div>
 
-                    {/* Progress bar */}
-                    <div>
+                    {typeof project.progress === 'number' && <div className="mt-5">
                       <div className="flex justify-between items-center mb-2">
                         <span className="text-[#374151] text-xs font-semibold uppercase tracking-wide">
                           Progress
@@ -264,43 +298,27 @@ export default function OngoingProjectsPage() {
                           style={{ width: `${project.progress}%` }}
                         />
                       </div>
-                    </div>
+                    </div>}
 
-                    <p className="text-[#6b7280] text-sm leading-relaxed text-pretty">
+                    <p className="mt-5 min-h-[5rem] text-sm leading-relaxed text-[#6b7280]">
                       {project.description}
                     </p>
 
-                    {/* Highlights */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                      {project.highlights.map((h) => (
+                    <div className="mt-5 space-y-2 border-t border-[#edf0ef] pt-5">
+                      {project.highlights.slice(0, 3).map((h) => (
                         <div key={h} className="flex items-start gap-2">
                           <div className="w-1.5 h-1.5 rounded-full bg-[#e85d3f] flex-shrink-0 mt-1.5" />
                           <span className="text-[#374151] text-xs font-medium leading-snug">{h}</span>
                         </div>
                       ))}
                     </div>
+
+                    {project.href && <Link href={project.href} className="mt-6 inline-flex w-fit items-center gap-2 text-xs font-bold uppercase tracking-wide text-[#e85d3f] transition-colors hover:text-[#bf422b]">
+                      View project <ArrowUpRight className="h-3.5 w-3.5" />
+                    </Link>}
                   </div>
-                </div>
               </article>
             ))}
-          </div>
-        </section>
-
-        <section className="bg-[#f7f4ec] px-6 pb-20 md:px-12 lg:px-20">
-          <div className="mx-auto max-w-7xl">
-            <div className="mb-7 flex items-center gap-3">
-              <div className="h-px w-8 bg-[#e85d3f]" />
-              <h2 className="text-xl font-black text-[#1a1a1a]">More Ongoing Works</h2>
-            </div>
-            <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
-              {additionalOngoingProjects.map((project) => (
-                <Link key={project.slug} href={`/projects/${project.slug}`} className="group rounded-2xl border border-[#e5d9c0] bg-white p-6 transition-all hover:border-[#e85d3f]/60 hover:shadow-md">
-                  <div className="mb-4 flex items-center justify-between gap-3"><span className="rounded-full bg-[#fdf1ee] px-3 py-1 text-[10px] font-bold uppercase tracking-wide text-[#e85d3f]">Ongoing</span><ArrowUpRight className="h-4 w-4 text-[#9ca3af] transition-colors group-hover:text-[#e85d3f]" /></div>
-                  <h3 className="text-lg font-black leading-snug text-[#1a1a1a]">{project.title}</h3>
-                  <p className="mt-3 flex items-start gap-1.5 text-xs font-medium leading-snug text-[#6b7280]"><MapPin className="mt-0.5 h-3.5 w-3.5 flex-shrink-0" />{project.location}</p>
-                  <p className="mt-4 text-sm leading-relaxed text-[#4b5563]">{project.mapDescription}</p>
-                </Link>
-              ))}
             </div>
           </div>
         </section>
@@ -325,7 +343,7 @@ export default function OngoingProjectsPage() {
               We take on new dam gate, fabrication, and irrigation projects throughout the year. Get in touch for a consultation.
             </p>
             <Link
-              href="#contact"
+              href="/contact"
               className="inline-flex items-center gap-2 bg-[#e85d3f] hover:bg-[#d14f33] transition-colors text-white font-bold text-sm uppercase tracking-wide px-8 py-4 rounded-full shadow-sm"
             >
               <ArrowUpRight className="w-4 h-4" />

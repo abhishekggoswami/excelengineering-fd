@@ -1,16 +1,25 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import IndiaMap from './IndiaMap'
 import StateDetailPanel from './StateDetailPanel'
 import { MAP_STATS } from './data'
 
-export default function IndiaProjectsSection() {
+export default function IndiaProjectsSection({
+  initialState = null,
+  initialProjectId = null,
+}: {
+  initialState?: string | null
+  initialProjectId?: string | null
+}) {
   // `hovered` tracks which real project pin is currently under the cursor.
   // Navigation on click is handled inside IndiaMap via router.push — panel
   // just shows a preview of the hovered project.
-  const [hovered, setHovered] = useState<string | null>(null)
-  const [selected, setSelected] = useState<string | null>(null)
+  const [hovered, setHovered] = useState<string | null>(initialProjectId)
+  const [selected, setSelected] = useState<string | null>(initialState)
+
+  useEffect(() => setSelected(initialState), [initialState])
+  useEffect(() => setHovered(initialProjectId), [initialProjectId])
 
   function handleSelect(name: string | null) {
     setSelected((cur) => (cur === name ? null : name))
@@ -53,6 +62,7 @@ export default function IndiaProjectsSection() {
             <IndiaMap
               hovered={hovered}
               selected={selected}
+              initialProjectId={initialProjectId}
               onHover={setHovered}
               onSelect={handleSelect}
             />

@@ -1,7 +1,3 @@
-'use client'
-
-import { useState, useEffect, Suspense } from 'react'
-import { useSearchParams, useRouter } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
 import { X, ChevronLeft, ChevronRight, ZoomIn, ArrowLeft } from 'lucide-react'
@@ -293,30 +289,23 @@ const CATEGORY_COUNTS = CATEGORIES.reduce<Record<string, number>>((acc, cat) => 
 
 // ─── Inner component (reads searchParams) ────────────────────────────────────
 
-function GalleryContent() {
-  const searchParams = useSearchParams()
-  const router = useRouter()
-  const initialCat = (searchParams.get('category') ?? 'All') as Category
+function GalleryContent({ params }: { params: { category?: string; image?: string } }) {
+  const initialCat = (params.category ?? 'All') as Category
   const validInitial = CATEGORIES.includes(initialCat) ? initialCat : 'All'
 
-  const [active, setActive] = useState<Category>(validInitial)
-  const [lightbox, setLightbox] = useState<number | null>(null)
-  const [visible, setVisible] = useState(false)
-
-  // Fade-in on mount
-  useEffect(() => { const t = setTimeout(() => setVisible(true), 50); return () => clearTimeout(t) }, [])
-
+  const active = validInitial
   const filtered = active === 'All' ? GALLERY_IMAGES : GALLERY_IMAGES.filter((img) => img.category === active)
-
-  const selectCat = (cat: Category) => {
-    setActive(cat)
-    router.replace(cat === 'All' ? '/gallery' : `/gallery?category=${encodeURIComponent(cat)}`, { scroll: false })
+  const requestedImage = Number.parseInt(params.image ?? '', 10)
+  const lightbox = Number.isInteger(requestedImage) && requestedImage >= 0 && requestedImage < filtered.length
+    ? requestedImage
+    : null
+  const galleryHref = (imageIndex?: number) => {
+    const params = new URLSearchParams()
+    if (active !== 'All') params.set('category', active)
+    if (imageIndex !== undefined) params.set('image', String(imageIndex))
+    const query = params.toString()
+    return query ? `/gallery?${query}` : '/gallery'
   }
-
-  const openLightbox = (i: number) => setLightbox(i)
-  const closeLightbox = () => setLightbox(null)
-  const prevImg = () => setLightbox((l) => (l !== null ? (l - 1 + filtered.length) % filtered.length : null))
-  const nextImg = () => setLightbox((l) => (l !== null ? (l + 1) % filtered.length : null))
 
   return (
     <>
@@ -369,9 +358,10 @@ function GalleryContent() {
                 const count = CATEGORY_COUNTS[cat]
                 const isActive = active === cat
                 return (
-                  <button
+                  <a
                     key={cat}
-                    onClick={() => selectCat(cat)}
+                    href={cat === 'All' ? '/gallery' : `/gallery?category=${encodeURIComponent(cat)}`}
+                    target="_self"
                     className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold whitespace-nowrap transition-all duration-200 flex-shrink-0 ${
                       isActive
                         ? 'bg-[#0e5c3d] text-white shadow-md'
@@ -386,7 +376,7 @@ function GalleryContent() {
                     >
                       {count}
                     </span>
-                  </button>
+                  </a>
                 )
               })}
             </div>
@@ -415,15 +405,14 @@ function GalleryContent() {
               <p className="text-[#9ca3af] text-sm">Check back soon — more photos are being added.</p>
             </div>
           ) : (
-            <div
-              className="columns-1 sm:columns-2 lg:columns-3 gap-4"
-              style={{ opacity: visible ? 1 : 0, transition: 'opacity 0.4s ease' }}
-            >
+            <div className="columns-1 gap-4 sm:columns-2 lg:columns-3">
               {filtered.map((img, i) => (
-                <div
+                <a
                   key={img.src}
-                  className="relative group cursor-pointer overflow-hidden rounded-2xl bg-[#1a1a1a] mb-4 break-inside-avoid"
-                  onClick={() => openLightbox(i)}
+                  href={galleryHref(i)}
+                  target="_self"
+                  aria-label={`Magnify ${img.title}`}
+                  className="group relative mb-4 block break-inside-avoid overflow-hidden rounded-2xl bg-[#1a1a1a] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#e85d3f]"
                 >
                   <Image
                     src={img.src}
@@ -435,22 +424,22 @@ function GalleryContent() {
                     className="w-full h-auto block transition-transform duration-700 group-hover:scale-110"
                   />
                   {/* Gradient overlay on hover */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0e5c3d]/85 via-[#0e5c3d]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0e5c3d]/85 via-[#0e5c3d]/20 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100" />
                   {/* Category tag */}
                   <div className="absolute top-3 left-3 bg-black/40 backdrop-blur-sm text-white text-xs font-semibold px-3 py-1 rounded-full">
                     {img.category}
                   </div>
                   {/* Zoom icon */}
-                  <div className="absolute top-3 right-3 w-9 h-9 rounded-full bg-white/15 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 scale-75 group-hover:scale-100">
+                  <div className="absolute right-3 top-3 flex h-9 w-9 scale-75 items-center justify-center rounded-full bg-white/15 opacity-0 backdrop-blur-sm transition-all duration-300 group-hover:scale-100 group-hover:opacity-100 group-focus-visible:scale-100 group-focus-visible:opacity-100">
                     <ZoomIn className="w-4 h-4 text-white" />
                   </div>
                   {/* Title on hover */}
-                  <div className="absolute inset-x-0 bottom-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <div className="absolute inset-x-0 bottom-0 p-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100">
                     <p className="text-white font-bold text-sm leading-snug text-pretty">
                       {img.title}
                     </p>
                   </div>
-                </div>
+                </a>
               ))}
             </div>
           )}
@@ -472,34 +461,29 @@ function GalleryContent() {
 
       {/* Lightbox */}
       {lightbox !== null && (
-        <div
-          className="fixed inset-0 z-[300] bg-black/96 flex items-center justify-center"
-          onClick={closeLightbox}
-        >
+        <div className="fixed inset-0 z-[300] flex items-center justify-center bg-black/96 p-3 sm:p-6">
           {/* Close */}
-          <button
-            onClick={closeLightbox}
+          <a
+            href={galleryHref()}
+            target="_self"
             aria-label="Close"
-            className="absolute top-5 right-5 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors z-10"
+            className="absolute right-3 top-3 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20 sm:right-5 sm:top-5"
           >
             <X className="w-5 h-5" />
-          </button>
+          </a>
 
           {/* Prev */}
-          <button
-            onClick={(e) => { e.stopPropagation(); prevImg() }}
+          <a
+            href={galleryHref((lightbox - 1 + filtered.length) % filtered.length)}
+            target="_self"
             aria-label="Previous"
-            className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors z-10"
+            className="absolute left-2 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20 sm:left-4 sm:h-12 sm:w-12"
           >
             <ChevronLeft className="w-6 h-6" />
-          </button>
+          </a>
 
           {/* Image */}
-          <div
-            className="relative w-full max-w-6xl mx-20"
-            style={{ aspectRatio: '16/10' }}
-            onClick={(e) => e.stopPropagation()}
-          >
+          <div className="relative mx-10 h-[min(72svh,44rem)] w-full max-w-6xl sm:mx-16">
             <Image
               src={filtered[lightbox].src}
               alt={filtered[lightbox].alt}
@@ -510,26 +494,27 @@ function GalleryContent() {
           </div>
 
           {/* Next */}
-          <button
-            onClick={(e) => { e.stopPropagation(); nextImg() }}
+          <a
+            href={galleryHref((lightbox + 1) % filtered.length)}
+            target="_self"
             aria-label="Next"
-            className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors z-10"
+            className="absolute right-2 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20 sm:right-4 sm:h-12 sm:w-12"
           >
             <ChevronRight className="w-6 h-6" />
-          </button>
+          </a>
 
           {/* Caption bar */}
-          <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent px-8 pb-6 pt-10">
-            <div className="max-w-6xl mx-auto flex items-center justify-between gap-4">
-              <div className="flex items-center gap-3">
+          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 to-transparent px-4 pb-4 pt-12 sm:px-8 sm:pb-6">
+            <div className="mx-auto flex max-w-6xl flex-col items-center gap-2 text-center sm:flex-row sm:justify-between sm:gap-4 sm:text-left">
+              <div className="flex min-w-0 items-center gap-2 sm:gap-3">
                 <span className="bg-[#0e5c3d] text-white text-xs font-semibold px-3 py-1 rounded-full">
                   {filtered[lightbox].category}
                 </span>
-                <span className="text-white font-semibold text-sm">
+                <span className="truncate text-sm font-semibold text-white">
                   {filtered[lightbox].title}
                 </span>
               </div>
-              <span className="text-white/50 text-sm font-mono flex-shrink-0">
+              <span className="shrink-0 font-mono text-sm text-white/50">
                 {String(lightbox + 1).padStart(2, '0')} / {String(filtered.length).padStart(2, '0')}
               </span>
             </div>
@@ -542,10 +527,10 @@ function GalleryContent() {
 
 // ─── Page wrapper with Suspense for useSearchParams ──────────────────────────
 
-export default function GalleryPage() {
-  return (
-    <Suspense>
-      <GalleryContent />
-    </Suspense>
-  )
+export default async function GalleryPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ category?: string; image?: string }>
+}) {
+  return <GalleryContent params={await searchParams} />
 }

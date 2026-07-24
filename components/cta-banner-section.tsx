@@ -18,7 +18,7 @@ export default function CtaBannerSection() {
         {/* Left — copy */}
         <div className="flex items-start gap-5">
           <div className="w-12 h-12 rounded-xl bg-white/15 border border-white/25 flex items-center justify-center flex-shrink-0">
-            <PhoneCall className="w-5 h-5 text-white" />
+            <PhoneCall className="animate-phone-ring w-5 h-5 text-white" />
           </div>
           <div>
             <p className="text-white/70 text-xs font-semibold uppercase tracking-widest mb-1">
@@ -34,7 +34,7 @@ export default function CtaBannerSection() {
         {/* Right — CTAs */}
         <div className="flex items-center gap-4 flex-shrink-0">
           <Link
-            href="#contact"
+            href="/contact"
             className="flex items-center gap-2 bg-white text-[#e85d3f] font-black text-sm uppercase tracking-wide px-7 py-3.5 rounded-full hover:bg-[#f5efe0] transition-colors duration-200 shadow-sm"
           >
             Get Free Quote
