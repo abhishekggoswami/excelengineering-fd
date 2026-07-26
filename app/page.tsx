@@ -6,7 +6,6 @@ import ServicesBento from '@/components/services-bento'
 import CoreServices from '@/components/core-services'
 import FounderSection from '@/components/founder-section'
 import FaqSection from '@/components/faq-section'
-import CtaBannerSection from '@/components/cta-banner-section'
 import IndiaProjectsSection from '@/components/india-projects-map/IndiaProjectsSection'
 import PartnersSection from '@/components/partners-section'
 import { REAL_PROJECTS } from '@/components/india-projects-map/data'
@@ -42,9 +41,8 @@ export default async function Page({
         <ServicesBento />
         <CoreServices />
         <FounderSection />
-        <FaqSection />
-        <CtaBannerSection />
         <IndiaProjectsSection initialState={initialState} initialProjectId={initialProjectId} />
+        <FaqSection />
         <PartnersSection />
       </main>
     </>

@@ -155,14 +155,7 @@ const faqs = [
   },
 ]
 
-export default async function DamConstructionPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ gatePage?: string | string[] }>
-}) {
-  const params = await searchParams
-  const requestedPage = Array.isArray(params.gatePage) ? params.gatePage[0] : params.gatePage
-  const gatePage = Math.max(0, Number.parseInt(requestedPage ?? '1', 10) - 1 || 0)
+export default function DamConstructionPage() {
 
   return (
     <>
@@ -173,13 +166,11 @@ export default async function DamConstructionPage({
         <DamHeroSlideshow />
 
         {/* Stats strip */}
-        <section className="relative overflow-hidden border-y border-white/15 bg-[linear-gradient(115deg,rgba(7,86,56,.96),rgba(14,92,61,.88),rgba(5,68,45,.96))] px-6 py-7 shadow-[inset_0_1px_0_rgba(255,255,255,.16)] backdrop-blur-xl md:px-12 md:py-9 lg:px-20">
-          <div aria-hidden className="absolute -left-24 top-1/2 h-52 w-52 -translate-y-1/2 rounded-full bg-[#f5a623]/15 blur-3xl" />
-          <div aria-hidden className="absolute -right-16 -top-20 h-48 w-48 rounded-full bg-white/10 blur-3xl" />
+        <section className="relative overflow-hidden bg-[#111111] px-6 py-10 md:px-12 lg:px-20">
           <div className="relative mx-auto max-w-7xl">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
               {stats.map((s) => (
-                <div key={s.label} className="flex flex-col items-center rounded-2xl border border-white/10 bg-white/[0.055] px-3 py-3 text-center shadow-[inset_0_1px_0_rgba(255,255,255,.1)] backdrop-blur-md">
+                <div key={s.label} className="flex flex-col items-center px-3 text-center">
                   <span
                     className="font-black text-[#f5a623] leading-none"
                     style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}
@@ -265,10 +256,10 @@ export default async function DamConstructionPage({
               </p>
             </div>
 
-            <DamGateCarousel key={gatePage} types={damTypes} initialPage={gatePage} />
+            <DamGateCarousel types={damTypes} />
 
             <div className="hidden grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-              {damTypes.map((type, index) => (
+              {damTypes.slice(0, 0).map((type, index) => (
                 <div
                   key={type.name}
                   className="group relative flex flex-col gap-5 overflow-hidden rounded-3xl border border-[#dfe4e2] bg-[#fbfcfb] p-4 shadow-[0_20px_42px_-38px_rgba(14,92,61,.8)] transition-all duration-500 hover:-translate-y-1 hover:border-[#e85d3f]/50 hover:shadow-[0_26px_48px_-32px_rgba(232,93,63,.45)]"
@@ -334,7 +325,7 @@ export default async function DamConstructionPage({
         />
 
         {/* Inquiry CTA */}
-        <section id="contact" className="bg-[#111111] py-20 px-6 md:px-12 lg:px-20">
+        <section id="contact" className="hidden">
           <div className="max-w-3xl mx-auto text-center">
             <LoopingLetterHeading
               text="Ready to Start Your Dam Project?"

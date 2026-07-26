@@ -1,8 +1,5 @@
 import Image from 'next/image'
-import Link from 'next/link'
-import { ArrowUpRight } from 'lucide-react'
 import ServiceFaqSection from '@/components/service-faq-section'
-import CtaBannerSection from '@/components/cta-banner-section'
 import Navbar from '@/components/navbar'
 
 const clients = [
@@ -85,8 +82,6 @@ const clients = [
   },
 ]
 
-const categories = ['All', 'Central PSU', 'State Government', 'State Authority', 'Prime Contractor', 'Central Government', 'National Initiative']
-
 const faqs = [
   {
     q: 'Which government bodies has Excel Engineering worked with?',
@@ -112,11 +107,12 @@ export default function ClientsPage() {
       <Navbar />
       <main>
       {/* ── Hero ─────────────────────────────────────────────────────── */}
-      <section className="company-video-hero relative flex min-h-[58svh] items-end overflow-hidden px-6 pb-20 pt-32 sm:min-h-[62svh] md:px-12 lg:px-20">
-        <video autoPlay muted loop playsInline preload="metadata" poster="/images/hero-bg.png" className="absolute inset-0 h-full w-full object-cover opacity-90">
+      <section className="company-video-hero relative flex min-h-[52svh] items-end overflow-hidden bg-[#111111] px-6 pb-20 pt-32 md:px-12 lg:px-20">
+        <video autoPlay muted loop playsInline preload="auto" className="absolute inset-0 h-full w-full object-cover">
           <source src="/videos/company-pages-hero.mp4" type="video/mp4" />
         </video>
         <div className="absolute inset-0 bg-gradient-to-r from-[#06251c]/52 via-[#0b3328]/32 to-[#071d18]/18" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#111111] via-[#111111]/45 to-transparent" />
           <div className="company-hero-content relative z-10 mx-auto w-full max-w-7xl">
           <div className="flex items-center gap-3 mb-5">
             <div className="w-8 h-px bg-[#e85d3f]" />
@@ -140,7 +136,7 @@ export default function ClientsPage() {
       </section>
 
       {/* ── Stats strip ───────────────────────────────────────────────── */}
-      <section className="bg-[#e85d3f]">
+      <section className="bg-[#111111]">
         <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20">
           <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-white/20">
             {[
@@ -149,9 +145,9 @@ export default function ClientsPage() {
               { value: '2',  label: 'Central PSUs Served' },
               { value: '3+', label: 'States Covered' },
             ].map((s) => (
-              <div key={s.label} className="py-8 px-6 text-center">
-                <p className="font-black text-white text-3xl leading-none mb-1">{s.value}</p>
-                <p className="text-white/70 text-xs uppercase tracking-widest font-semibold">{s.label}</p>
+              <div key={s.label} className="py-10 px-6 text-center">
+                <p className="font-black text-[#f5a623] text-3xl leading-none mb-1">{s.value}</p>
+                <p className="text-white/65 text-xs uppercase tracking-widest font-semibold">{s.label}</p>
               </div>
             ))}
           </div>
@@ -265,7 +261,6 @@ export default function ClientsPage() {
       />
 
       {/* ── CTA ───────────────────────────────────────────────────────── */}
-      <CtaBannerSection />
       </main>
     </>
   )

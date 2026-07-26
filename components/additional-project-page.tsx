@@ -1,8 +1,10 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { ArrowLeft, ArrowUpRight, Building2, CheckCircle2, Clock, MapPin } from 'lucide-react'
 import Navbar from '@/components/navbar'
 import ServiceFaqSection from '@/components/service-faq-section'
 import type { AdditionalProject } from '@/lib/additional-projects'
+import { completedProjectMedia } from '@/lib/completed-project-media'
 
 function DetailsRow({ label, value }: { label: string; value: string }) {
   return (
@@ -16,15 +18,26 @@ function DetailsRow({ label, value }: { label: string; value: string }) {
 export default function AdditionalProjectPage({ project }: { project: AdditionalProject }) {
   const completed = project.status === 'Completed'
   const accent = completed ? '#0e5c3d' : '#e85d3f'
+  const ctaAccent = completed ? '#e85d3f' : accent
   const statusLabel = completed ? 'Completed Project' : 'Ongoing Project'
+  const media = completed ? completedProjectMedia[project.slug] : undefined
 
   return (
     <>
       <Navbar />
       <main className="bg-[#f7f4ec]">
-        <section className="relative overflow-hidden bg-[#111111]">
-          <div className="pointer-events-none absolute inset-0 opacity-30" style={{ backgroundImage: 'radial-gradient(circle, rgba(255,255,255,.22) 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
-          <div className="absolute inset-0 bg-gradient-to-br from-[#0e5c3d]/70 via-[#111111] to-[#e85d3f]/35" />
+        <section className={`relative overflow-hidden ${completed ? 'flex min-h-[60vh] items-end bg-[#111111]' : 'bg-[#111111]'}`}>
+          {media ? (
+            <>
+              <Image src={media.src} alt={media.alt} fill priority sizes="100vw" className="object-cover object-center" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#111111] via-[#111111]/60 to-transparent" />
+            </>
+          ) : (
+            <>
+              <div className="pointer-events-none absolute inset-0 opacity-30" style={{ backgroundImage: 'radial-gradient(circle, rgba(255,255,255,.22) 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
+              <div className="absolute inset-0 bg-gradient-to-br from-[#0e5c3d]/70 via-[#111111] to-[#e85d3f]/35" />
+            </>
+          )}
           <Link
             href={completed ? '/projects/completed' : '/projects/ongoing'}
             className="absolute left-6 top-28 z-10 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-white/70 transition-colors hover:text-white md:left-12 lg:left-20"
@@ -47,10 +60,10 @@ export default function AdditionalProjectPage({ project }: { project: Additional
           </div>
         </section>
 
-        <div className="px-6 py-4 md:px-12 lg:px-20" style={{ background: accent }}>
+        <div className="px-6 py-4 md:px-12 lg:px-20" style={{ background: ctaAccent }}>
           <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 sm:flex-row">
             <p className="text-center text-sm font-semibold text-white sm:text-left">Hydro-mechanical, structural-steel and water-infrastructure execution.</p>
-            <Link href="/#contact" className="inline-flex flex-shrink-0 items-center gap-2 rounded-full bg-white px-5 py-2.5 text-xs font-bold uppercase tracking-wide transition-opacity hover:opacity-90" style={{ color: accent }}>
+            <Link href="/contact" className="inline-flex flex-shrink-0 items-center gap-2 rounded-full bg-white px-5 py-2.5 text-xs font-bold uppercase tracking-wide transition-opacity hover:opacity-90" style={{ color: ctaAccent }}>
               <ArrowUpRight className="h-3.5 w-3.5" />Get a Quote
             </Link>
           </div>
@@ -83,6 +96,15 @@ export default function AdditionalProjectPage({ project }: { project: Additional
                   ))}
                 </div>
               </div>
+
+              {media && (
+                <div>
+                  <h2 className="mb-5 text-xl font-black text-[#1a1a1a]">Project Photography</h2>
+                  <div className="relative h-64 overflow-hidden rounded-2xl sm:h-80">
+                    <Image src={media.src} alt={media.alt} fill sizes="(max-width: 1024px) 100vw, 66vw" className="object-cover object-center" />
+                  </div>
+                </div>
+              )}
             </div>
 
             <aside className="flex flex-col gap-6">

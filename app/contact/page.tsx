@@ -9,15 +9,15 @@ const contactDetails = [
   {
     icon: MapPin,
     label: 'Office Address',
-    lines: ['Excel Engineering', '30/5 Sector-H, Industries Area', 'Govindpura, Bhopal – 23', 'Madhya Pradesh, India'],
-    href: 'https://maps.google.com',
+    lines: ['Excel Engineering', 'Plot No. 30/5, Sector H', 'Govindpura Industrial Area, Bhopal', 'Madhya Pradesh 462023'],
+    href: 'https://www.google.com/maps/search/?api=1&query=23.2675686,77.4407158',
     cta: 'View on Map',
   },
   {
     icon: Phone,
     label: 'Phone',
-    lines: ['+91-0755-4939449', '+91-9425300449', '+91-8817867664'],
-    href: 'tel:+917554939449',
+    lines: ['+91 91796 62443'],
+    href: 'tel:+919179662443',
     cta: 'Call Now',
   },
   {
@@ -76,11 +76,12 @@ export default function ContactPage() {
       <Navbar />
       <main>
       {/* ── Hero ─────────────────────────────────────────────────────── */}
-      <section className="company-video-hero relative flex min-h-[58svh] items-end overflow-hidden px-6 pb-20 pt-32 sm:min-h-[62svh] md:px-12 lg:px-20">
-        <video autoPlay muted loop playsInline preload="metadata" poster="/images/hero-bg.png" className="absolute inset-0 h-full w-full object-cover opacity-90">
+      <section className="company-video-hero relative flex min-h-[52svh] items-end overflow-hidden bg-[#111111] px-6 pb-20 pt-32 md:px-12 lg:px-20">
+        <video autoPlay muted loop playsInline preload="auto" className="absolute inset-0 h-full w-full object-cover">
           <source src="/videos/company-pages-hero.mp4" type="video/mp4" />
         </video>
         <div className="absolute inset-0 bg-gradient-to-r from-[#06251c]/52 via-[#0b3328]/32 to-[#071d18]/18" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#111111] via-[#111111]/45 to-transparent" />
           <div className="company-hero-content relative z-10 mx-auto w-full max-w-7xl">
           <div className="flex items-center gap-3 mb-5">
             <div className="w-8 h-px bg-[#e85d3f]" />
@@ -104,11 +105,13 @@ export default function ContactPage() {
       </section>
 
       {/* ── Contact Cards + Form ──────────────────────────────────────── */}
-      <section className="bg-[#f5efe0] py-20 px-6 md:px-12 lg:px-20">
-        <div className="max-w-7xl mx-auto grid lg:grid-cols-5 gap-10">
+      <section className="relative overflow-hidden bg-[#e8eee9] px-6 py-20 md:px-12 lg:px-20">
+        <div aria-hidden className="absolute -left-24 top-1/2 h-72 w-72 -translate-y-1/2 rounded-full bg-[#0e5c3d]/15 blur-3xl" />
+        <div aria-hidden className="absolute -right-20 -top-20 h-72 w-72 rounded-full bg-[#f5a623]/20 blur-3xl" />
+        <div className="relative mx-auto flex max-w-3xl justify-center">
 
           {/* Left — contact info */}
-          <div className="lg:col-span-2 flex flex-col gap-5">
+          <div className="hidden">
             {contactDetails.map((c) => {
               const Icon = c.icon
               return (
@@ -148,8 +151,8 @@ export default function ContactPage() {
           </div>
 
           {/* Right — Form */}
-          <div className="lg:col-span-3">
-            <div className="bg-white rounded-3xl border border-[#e5d9c0] shadow-sm p-8 md:p-10">
+          <div className="w-full">
+            <div className="rounded-[2rem] border border-white/70 bg-white/55 p-8 shadow-[0_24px_70px_-40px_rgba(7,43,31,.55)] backdrop-blur-xl md:p-10">
               {formState === 'sent' ? (
                 <div className="flex flex-col items-center justify-center py-16 gap-5 text-center">
                   <div className="w-16 h-16 rounded-full bg-[#e85d3f]/10 flex items-center justify-center">
@@ -268,6 +271,33 @@ export default function ContactPage() {
         heading="Contact & Inquiries"
         subheading="Everything you need to know about reaching us and how we handle new project discussions."
       />
+
+      <section className="bg-white px-6 pb-10 pt-16 md:px-12 md:pb-12 lg:px-20">
+        <div className="mx-auto grid max-w-7xl gap-8 md:grid-cols-[1.1fr_.9fr] md:items-end">
+          <div>
+            <div className="mb-4 flex items-center gap-3"><div className="h-px w-8 bg-[#e85d3f]" /><span className="text-xs font-bold uppercase tracking-widest text-[#e85d3f]">Our location</span></div>
+            <h2 className="text-balance text-4xl font-black leading-none text-[#1a1a1a] sm:text-5xl">Visit Our Bhopal Office</h2>
+            <p className="mt-4 max-w-xl text-sm leading-relaxed text-[#667085]">Meet our engineering team at the Excel Engineering office in Govindpura Industrial Area. Call ahead to arrange a project discussion or a facility visit.</p>
+          </div>
+          <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2">
+            <div className="rounded-2xl border border-[#e5e7eb] bg-[#fbfcfb] p-4 shadow-sm"><p className="text-[10px] font-bold uppercase tracking-widest text-[#e85d3f]">Office address</p><p className="mt-2 text-sm font-semibold leading-relaxed text-[#1a1a1a]">Plot No. 30/5, Sector H<br />Govindpura Industrial Area, Bhopal</p></div>
+            <div className="rounded-2xl border border-[#e5e7eb] bg-[#fbfcfb] p-4 shadow-sm"><p className="text-[10px] font-bold uppercase tracking-widest text-[#e85d3f]">Call our office</p><a href="tel:+919179662443" className="mt-2 inline-flex items-center gap-2 text-sm font-extrabold text-[#0e5c3d] hover:text-[#e85d3f]"><Phone className="h-4 w-4" />+91 91796 62443</a></div>
+          </div>
+        </div>
+      </section>
+
+      <section className="relative min-h-[560px] overflow-hidden bg-[#111111] sm:min-h-[620px]" aria-labelledby="office-location-heading">
+        <iframe title="Excel Engineering office location" src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3665.326902367105!2d77.4407157753212!3d23.26756857900277!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMjPCsDE2JzAzLjMiTiA3N8KwMjYnMzUuOSJF!5e0!3m2!1sen!2sin!4v1784955610748!5m2!1sen!2sin" className="absolute inset-0 h-full w-full border-0 grayscale-[0.12]" allowFullScreen loading="lazy" referrerPolicy="strict-origin-when-cross-origin" />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-[#07100e]/55 via-transparent to-transparent" />
+        <div className="relative z-10 mx-auto flex min-h-[560px] max-w-7xl items-end px-6 py-8 md:min-h-[620px] md:px-12 md:py-12 lg:px-20">
+          <div className="pointer-events-auto w-full max-w-md rounded-[1.8rem] border border-white/30 bg-white/95 p-6 shadow-[0_22px_54px_-24px_rgba(0,0,0,.42)] backdrop-blur-md sm:p-8">
+            <div className="mb-4 flex items-center gap-3"><div className="h-px w-8 bg-[#e85d3f]" /><span className="text-xs font-bold uppercase tracking-widest text-[#e85d3f]">Our location</span></div>
+            <h2 id="office-location-heading" className="text-balance text-3xl font-black leading-tight text-[#1a1a1a]">Excel Engineering, Bhopal</h2>
+            <p className="mt-4 text-sm leading-relaxed text-[#5d6774]">Plot No. 30/5, Sector H, Govindpura Industrial Area, Bhopal, Madhya Pradesh 462023.</p>
+            <div className="mt-6 flex flex-wrap gap-3"><a href="tel:+919179662443" className="inline-flex items-center gap-2 rounded-full bg-[#0e5c3d] px-4 py-3 text-sm font-bold text-white transition-transform hover:-translate-y-0.5"><Phone className="h-4 w-4" />+91 91796 62443</a><a href="https://www.google.com/maps/search/?api=1&query=23.2675686,77.4407158" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-full border border-[#0e5c3d]/15 bg-white px-4 py-3 text-sm font-bold text-[#0e5c3d] transition-colors hover:border-[#e85d3f] hover:text-[#e85d3f]"><MapPin className="h-4 w-4" />Directions <ArrowUpRight className="h-4 w-4" /></a></div>
+          </div>
+        </div>
+      </section>
       </main>
     </>
   )

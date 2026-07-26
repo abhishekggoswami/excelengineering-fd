@@ -3,7 +3,6 @@
 import Navbar from '@/components/navbar'
 import ServiceFaqSection from '@/components/service-faq-section'
 import ServiceStatsStrip from '@/components/service-stats-strip'
-import ServiceCta from '@/components/service-cta'
 import DamMethodology from '@/components/dam-methodology'
 import { ArrowUpRight, Wrench, Users, Building2, Cpu } from 'lucide-react'
 import Image from 'next/image'
@@ -502,7 +501,7 @@ export default function InfrastructurePage() {
       <main className="bg-white">
 
         {/* Hero — sliding image background */}
-        <section className="relative min-h-[62vh] flex items-end pb-16 pt-40 px-6 md:px-12 lg:px-20 overflow-hidden">
+        <section className="relative flex min-h-[52svh] items-end overflow-hidden px-6 pb-16 pt-40 md:px-12 lg:px-20">
           <HeroSlideshow />
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-black/30 z-10" />
 
@@ -586,10 +585,6 @@ export default function InfrastructurePage() {
         />
 
         {/* CTA — orange background */}
-        <ServiceCta
-          heading="Partner with a Well-Equipped Team"
-          description="Reach out to discuss your project requirements. Our team responds within 24 hours."
-        />
 
         <section id="contact-legacy" className="hidden bg-[#e85d3f] py-20 px-6 md:px-12 lg:px-20">
           <div className="max-w-3xl mx-auto text-center">

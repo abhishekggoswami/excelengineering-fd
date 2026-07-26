@@ -15,7 +15,6 @@ import {
   ChevronUp,
 } from 'lucide-react'
 import ServiceFaqSection from '@/components/service-faq-section'
-import CtaBannerSection from '@/components/cta-banner-section'
 import Navbar from '@/components/navbar'
 import FounderSection from '@/components/founder-section'
 
@@ -105,11 +104,12 @@ export default function AboutPage() {
       <Navbar />
       <main>
       {/* ── Hero ─────────────────────────────────────────────────────── */}
-      <section className="company-video-hero relative flex min-h-[58svh] items-end overflow-hidden bg-[#102b25] sm:min-h-[62svh]">
-        <video autoPlay muted loop playsInline preload="metadata" poster="/images/hero-bg.png" className="absolute inset-0 h-full w-full object-cover opacity-90">
+      <section className="company-video-hero relative flex min-h-[52svh] items-end overflow-hidden bg-[#111111]">
+        <video autoPlay muted loop playsInline preload="auto" className="absolute inset-0 h-full w-full object-cover">
           <source src="/videos/about-hero.mp4" type="video/mp4" />
         </video>
         <div className="absolute inset-0 bg-gradient-to-r from-[#06251c]/52 via-[#0b3328]/32 to-[#071d18]/18" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#111111] via-[#111111]/45 to-transparent" />
         <div className="company-hero-content relative z-10 max-w-7xl mx-auto px-6 md:px-12 lg:px-20 pb-20 pt-36 w-full">
           <div className="flex items-center gap-3 mb-5">
             <div className="w-8 h-px bg-[#e85d3f]" />
@@ -358,7 +358,6 @@ export default function AboutPage() {
       />
 
       {/* ── CTA ───────────────────────────────────────────────────────── */}
-      <CtaBannerSection />
       </main>
     </>
   )

@@ -4,7 +4,7 @@ import Image from 'next/image'
 
 export default function FounderSection() {
   return (
-    <section className="bg-[#f5efe0] py-24 overflow-hidden">
+    <section className="overflow-hidden bg-white py-24">
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
 
         {/* Section badge */}
@@ -33,8 +33,8 @@ export default function FounderSection() {
 
             <div className="relative rounded-3xl overflow-hidden shadow-2xl">
               <Image
-                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Owner-1-TenLwtt7QwQ3DESRtVZqREfd8w0c2K.png"
-                alt="Founder and Managing Director of Excel Engineering seated at his executive desk"
+                src="/images/farook-khan.jpg"
+                alt="Mr. Farook Khan, Founder and Managing Director of Excel Engineering"
                 width={720}
                 height={540}
                 className="w-full h-auto object-cover"
@@ -49,7 +49,7 @@ export default function FounderSection() {
                     Founder &amp; Managing Director
                   </p>
                   <p className="text-white font-bold text-lg leading-tight">
-                    Excel Engineering
+                    Mr. Farook Khan
                   </p>
                 </div>
                 <div className="w-10 h-10 rounded-full bg-[#e85d3f] flex items-center justify-center shrink-0">

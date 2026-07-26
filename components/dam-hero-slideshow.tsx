@@ -3,7 +3,7 @@ import { ArrowLeft, ArrowUpRight, VolumeX } from 'lucide-react'
 
 export default function DamHeroSlideshow() {
   return (
-    <section className="relative flex min-h-[68svh] items-center overflow-hidden bg-[#111111] sm:min-h-[72svh] lg:min-h-[75vh]">
+    <section className="relative flex min-h-[52svh] items-center overflow-hidden bg-[#111111]">
       <video
         autoPlay
         muted

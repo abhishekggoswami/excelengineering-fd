@@ -1,32 +1,26 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
 import { ArrowRight, Play, ChevronLeft, ChevronRight } from 'lucide-react'
 
 const SLIDES = [
   {
-    src: '/images/dam-hero-1.png',
-    alt: 'Aerial view of a completed dam with blue radial gates and full green reservoir',
-    label: 'Reservoir & Spillway Works',
-    sublabel: 'Dam Construction Since 1999',
+    src: '/videos/home-hero-1.mp4',
+    label: 'Water Infrastructure in Motion',
+    sublabel: 'Excel Engineering Since 1999',
   },
   {
-    src: '/images/dam-hero-2.png',
-    alt: 'Eye-level view of dam face with yellow gantry crane, blue steel gates and concrete piers',
-    label: 'Radial Gate Installations',
-    sublabel: 'Precision Gate Engineering',
-  },
-  {
-    src: '/images/dam-hero-3.png',
-    alt: 'Ground-level view of dam under construction with large red flap gates and turquoise water',
-    label: 'Flap Gate & Barrage Structures',
-    sublabel: '25+ Years of Engineering Excellence',
+    src: '/videos/home-hero-2.mp4',
+    label: 'Precision at Every Stage',
+    sublabel: 'Engineering Built to Last',
   },
 ]
 
-const INTERVAL = 5500
+const FALLBACK_INTERVAL = 18000
+
+// Videos advance naturally on `ended`; this prevents a stalled download from
+// leaving the hero on a single frame indefinitely.
 
 export default function HeroSection() {
   const [current, setCurrent] = useState(0)
@@ -35,7 +29,7 @@ export default function HeroSection() {
   const [isPaused, setIsPaused] = useState(false)
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
-  const goTo = (index: number) => {
+  const goTo = useCallback((index: number) => {
     if (isAnimating || index === current) return
     setIsAnimating(true)
     setPrev(current)
@@ -44,16 +38,16 @@ export default function HeroSection() {
       setPrev(null)
       setIsAnimating(false)
     }, 1100)
-  }
+  }, [current, isAnimating])
 
-  const next = () => goTo((current + 1) % SLIDES.length)
-  const goBack = () => goTo((current - 1 + SLIDES.length) % SLIDES.length)
+  const next = useCallback(() => goTo((current + 1) % SLIDES.length), [current, goTo])
+  const goBack = useCallback(() => goTo((current - 1 + SLIDES.length) % SLIDES.length), [current, goTo])
 
   useEffect(() => {
     if (isPaused) return
-    timerRef.current = setTimeout(next, INTERVAL)
+    timerRef.current = setTimeout(next, FALLBACK_INTERVAL)
     return () => { if (timerRef.current) clearTimeout(timerRef.current) }
-  }, [current, isPaused])
+  }, [current, isPaused, next])
 
   const slide = SLIDES[current]
 
@@ -68,21 +62,18 @@ export default function HeroSection() {
       {/* Outgoing slide — fades out (no Ken Burns, already fading so animation won't be visible) */}
       {prev !== null && (
         <div className="absolute inset-0 slide-fade-out" style={{ zIndex: 1 }}>
-          <Image src={SLIDES[prev].src} alt="" fill sizes="100vw" className="object-cover object-center" loading="lazy" />
+          <video autoPlay muted playsInline preload="auto" className="h-full w-full object-cover" aria-hidden="true">
+            <source src={SLIDES[prev].src} type="video/mp4" />
+          </video>
           <div className="absolute inset-0 bg-black/55" />
         </div>
       )}
 
       {/* Incoming / active slide — fades in with Ken Burns zoom */}
       <div key={current} className="absolute inset-0 slide-fade-in" style={{ zIndex: 2 }}>
-        <Image
-          src={slide.src}
-          alt={slide.alt}
-          fill
-          priority={current === 0}
-          sizes="100vw"
-          className="object-cover object-center slide-kenburns"
-        />
+        <video autoPlay muted playsInline preload="auto" onEnded={next} className="h-full w-full object-cover slide-kenburns" aria-label={`${slide.label} project video`}>
+          <source src={slide.src} type="video/mp4" />
+        </video>
         <div className="absolute inset-0 bg-black/55" />
       </div>
 

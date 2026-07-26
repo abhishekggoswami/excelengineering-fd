@@ -1,11 +1,12 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { X, ChevronLeft, ChevronRight, ZoomIn, ArrowLeft } from 'lucide-react'
+import { X, ChevronLeft, ChevronRight, ArrowLeft, Maximize2, Search, ZoomIn } from 'lucide-react'
 import Navbar from '@/components/navbar'
+import GalleryExperience from '@/components/gallery-experience'
 
 // ─── Data ────────────────────────────────────────────────────────────────────
 
-const CATEGORIES = ['All', 'Cranes', 'Dam Construction', 'Fabrication', 'Irrigation', 'Offices', 'Factory'] as const
+const CATEGORIES = ['All', 'Dam Construction', 'Fabrication', 'Irrigation', 'Offices', 'Factory', 'Cranes'] as const
 type Category = (typeof CATEGORIES)[number]
 
 interface GalleryImage {
@@ -287,15 +288,64 @@ const CATEGORY_COUNTS = CATEGORIES.reduce<Record<string, number>>((acc, cat) => 
   return acc
 }, {})
 
+const HERO_COLLAGE = Array.from({ length: 108 }, (_, index) => GALLERY_IMAGES[index % GALLERY_IMAGES.length])
+
+const categoryPreview = (category: Category) =>
+  category === 'All'
+    ? GALLERY_IMAGES[0]
+    : GALLERY_IMAGES.find((image) => image.category === category) ?? GALLERY_IMAGES[0]
+
+const galleryCarouselScript = [
+  '(() => {',
+  "  const root = document.getElementById('gallery-photo-carousel')",
+  "  if (!root || root.dataset.initialized === 'true') return",
+  "  root.dataset.initialized = 'true'",
+  "  const track = root.querySelector('[data-gallery-track]')",
+  "  const count = Number(root.dataset.count || '1')",
+  "  const counter = root.querySelector('[data-gallery-counter]')",
+  "  const dots = Array.from(root.querySelectorAll('[data-gallery-index]'))",
+  '  let index = 0; let timer',
+  '  const render = (nextIndex) => {',
+  '    index = ((nextIndex % count) + count) % count',
+  "    track.style.transform = 'translate3d(-' + (index * 100) + '%, 0, 0)'",
+  "    if (counter) counter.textContent = String(index + 1).padStart(2, '0') + ' / ' + String(count).padStart(2, '0')",
+  "    dots.forEach((dot, dotIndex) => dot.classList.toggle('bg-[#e85d3f]', dotIndex === index))",
+  "    dots.forEach((dot, dotIndex) => dot.classList.toggle('bg-[#0e5c3d]/20', dotIndex !== index))",
+  '  }',
+  '  const start = () => { window.clearInterval(timer); timer = window.setInterval(() => render(index + 1), 4200) }',
+  "  root.addEventListener('click', (event) => {",
+  "    const control = event.target.closest('[data-gallery-action]')",
+  '    if (!control) return',
+  '    const action = control.dataset.galleryAction',
+  "    if (action === 'next') render(index + 1)",
+  "    if (action === 'previous') render(index - 1)",
+  "    if (action === 'index') render(Number(control.dataset.galleryIndex))",
+  '    start()',
+  '  })',
+  "  root.addEventListener('pointerenter', () => window.clearInterval(timer))",
+  "  root.addEventListener('pointerleave', start)",
+  '  render(0); start()',
+  '})()',
+].join('\n')
+
 // ─── Inner component (reads searchParams) ────────────────────────────────────
 
-function GalleryContent({ params }: { params: { category?: string; image?: string } }) {
-  const initialCat = (params.category ?? 'All') as Category
-  const validInitial = CATEGORIES.includes(initialCat) ? initialCat : 'All'
+function GalleryContent({ params }: { params: { category?: string; image?: string; slide?: string; search?: string } }) {
+  const initialCat = (params.category ?? 'Dam Construction') as Category
+  const validInitial = CATEGORIES.includes(initialCat) ? initialCat : 'Dam Construction'
 
   const active = validInitial
-  const filtered = active === 'All' ? GALLERY_IMAGES : GALLERY_IMAGES.filter((img) => img.category === active)
+  const searchQuery = params.search?.trim() ?? ''
+  const normalizedSearch = searchQuery.toLowerCase()
+  const filtered = (active === 'All' ? GALLERY_IMAGES : GALLERY_IMAGES.filter((img) => img.category === active)).filter((image) => {
+    if (!normalizedSearch) return true
+    return [image.title, image.alt, image.category].some((value) => value.toLowerCase().includes(normalizedSearch))
+  })
   const requestedImage = Number.parseInt(params.image ?? '', 10)
+  const requestedSlide = Number.parseInt(params.slide ?? '', 10)
+  const initialSlide = filtered.length > 0 && Number.isInteger(requestedSlide)
+    ? ((requestedSlide % filtered.length) + filtered.length) % filtered.length
+    : 0
   const lightbox = Number.isInteger(requestedImage) && requestedImage >= 0 && requestedImage < filtered.length
     ? requestedImage
     : null
@@ -313,20 +363,28 @@ function GalleryContent({ params }: { params: { category?: string; image?: strin
       <main className="bg-white min-h-screen">
 
         {/* Page header */}
-        <section className="bg-[#0e5c3d] pt-32 pb-16 px-6 md:px-12 lg:px-20 relative overflow-hidden">
-          {/* Subtle industrial line-art tint */}
-          <div
-            className="absolute inset-0 opacity-5 bg-repeat-x bg-bottom pointer-events-none"
-            style={{
-              backgroundImage:
-                'url(https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Gemini_Generated_Image_3uj7mz3uj7mz3uj7-removebg-preview-rbtCbMUPUYemRQIOBL5JX8Hkbt2lMS.png)',
-              backgroundSize: 'auto 220px',
-            }}
-          />
-          <div className="max-w-7xl mx-auto relative z-10">
+        <section className="relative flex min-h-[60svh] items-end overflow-hidden bg-[#111111] px-6 pb-12 pt-28 md:min-h-[64svh] md:px-12 lg:px-20">
+          <div aria-hidden="true" className="absolute inset-0 grid grid-cols-12 grid-rows-[repeat(9,minmax(0,1fr))] gap-px opacity-95">
+            {HERO_COLLAGE.map((image, index) => (
+              <div
+                key={image.src + index}
+                className="relative min-h-0 overflow-hidden bg-[#1a1a1a]"
+                style={{
+                  backgroundImage: "url('https://hebbkx1anhila5yf.public.blob.vercel-storage.com/IMG_0473-clean-4fJFBB6zfOeQq5j0rugkbqkL4Xl5EJ.png')",
+                  backgroundPosition: 'center',
+                  backgroundSize: 'cover',
+                }}
+              >
+                <Image src={image.src} alt="" fill unoptimized sizes="12vw" className="object-cover" />
+              </div>
+            ))}
+          </div>
+          <div aria-hidden="true" className="absolute inset-0 bg-black/50" />
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,.16)_0%,rgba(0,0,0,.68)_100%)]" />
+          <div className="mx-auto max-w-7xl relative z-10">
             <Link
               href="/"
-              className="inline-flex items-center gap-2 text-white/60 hover:text-white text-sm font-medium mb-8 transition-colors"
+              className="mb-8 inline-flex items-center gap-2 text-sm font-medium text-white/70 transition-colors hover:text-white"
             >
               <ArrowLeft className="w-4 h-4" />
               Back to Home
@@ -350,8 +408,38 @@ function GalleryContent({ params }: { params: { category?: string; image?: strin
           </div>
         </section>
 
+        <GalleryExperience images={GALLERY_IMAGES} initialCategory={active} initialIndex={initialSlide} searchQuery={searchQuery} />
+
+        <section className="hidden">
+          <div className="mx-auto max-w-7xl px-5 py-5 sm:px-6 md:px-12 lg:px-20">
+            <div className="mb-4 flex items-center justify-center gap-2 text-sm font-semibold text-[#374151]">
+              <Search className="h-4 w-4 text-[#e85d3f]" />
+              <span>Browse project photography</span>
+            </div>
+            <div className="flex items-stretch gap-3 overflow-x-auto pb-1 scrollbar-none">
+              {CATEGORIES.map((cat) => {
+                const count = CATEGORY_COUNTS[cat]
+                const isActive = active === cat
+                const preview = categoryPreview(cat)
+                return (
+                  <a
+                    key={cat}
+                    href={cat === 'All' ? '/gallery' : '/gallery?category=' + encodeURIComponent(cat)}
+                    className={'group relative flex w-28 shrink-0 items-end overflow-hidden rounded-xl border p-3 text-left shadow-sm transition-all duration-300 sm:w-32 ' + (isActive ? 'border-[#0e5c3d] ring-2 ring-[#0e5c3d]/15' : 'border-[#e5e7eb] hover:-translate-y-1 hover:border-[#e85d3f]/60')}
+                  >
+                    <Image src={preview.src} alt="" fill sizes="128px" className="object-cover transition-transform duration-500 group-hover:scale-110" />
+                    <div className={'absolute inset-0 ' + (isActive ? 'bg-[#0e5c3d]/50' : 'bg-black/45 group-hover:bg-black/30')} />
+                    <span className="relative z-10 text-xs font-bold leading-tight text-white">{cat}</span>
+                    <span className="relative z-10 ml-auto rounded-full bg-white/90 px-1.5 py-0.5 text-[10px] font-black text-[#0e5c3d]">{count}</span>
+                  </a>
+                )
+              })}
+            </div>
+          </div>
+        </section>
+
         {/* Filter bar */}
-        <section className="sticky top-[64px] z-30 bg-white border-b border-[#e5e7eb] shadow-sm">
+        <section className="hidden">
           <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20">
             <div className="flex items-center gap-2 overflow-x-auto py-4 scrollbar-none">
               {CATEGORIES.map((cat) => {
@@ -384,7 +472,7 @@ function GalleryContent({ params }: { params: { category?: string; image?: strin
         </section>
 
         {/* Gallery grid */}
-        <section className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20 py-14">
+        <section className="hidden">
 
           {/* Category label + count */}
           <div className="flex items-center justify-between mb-8">
@@ -456,6 +544,69 @@ function GalleryContent({ params }: { params: { category?: string; image?: strin
               </p>
             </div>
           )}
+        </section>
+
+        <section className="hidden">
+          <div className="mx-auto max-w-7xl">
+            <div className="mb-10 flex flex-col gap-4 text-center sm:mb-14">
+              <div className="mx-auto flex items-center gap-3"><div className="h-px w-8 bg-[#e85d3f]" /><span className="text-sm font-semibold uppercase tracking-widest text-[#e85d3f]">{active} collection</span><div className="h-px w-8 bg-[#e85d3f]" /></div>
+              <h2 className="text-balance text-3xl font-black text-[#1a1a1a] sm:text-4xl">Stories from the field</h2>
+              <p className="mx-auto max-w-xl text-pretty text-[#6b7280]">Each photograph takes centre stage, then makes way for the next moment from Excel Engineering.</p>
+            </div>
+
+            {filtered.length === 0 ? (
+              <div className="rounded-3xl border border-dashed border-[#d7d0c1] bg-white px-6 py-20 text-center">
+                <p className="text-lg font-bold text-[#374151]">Photos coming soon</p>
+                <p className="mt-2 text-sm text-[#6b7280]">We are preparing this project collection.</p>
+              </div>
+            ) : (
+              <div id="gallery-photo-carousel" data-count={filtered.length}>
+                <div className="overflow-visible">
+                  <div data-gallery-track className="flex will-change-transform transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none">
+                    {filtered.map((_, index) => (
+                      <article key={index} className="grid min-w-full grid-cols-1 items-center gap-3 px-0 md:grid-cols-5 md:gap-4 lg:gap-5">
+                        {[-2, -1, 0, 1, 2].map((offset) => {
+                          const imageIndex = (index + offset + filtered.length) % filtered.length
+                          const image = filtered[imageIndex]
+                          const center = offset === 0
+                          return (
+                            <a
+                              key={offset}
+                              href={galleryHref(imageIndex)}
+                              aria-label={'Magnify ' + image.title}
+                              className={(center ? 'relative order-1 block md:order-none md:col-span-1 md:scale-110 md:z-10 ' : 'relative hidden md:block ') + 'group overflow-hidden rounded-2xl bg-[#1a1a1a] shadow-[0_18px_45px_-24px_rgba(14,92,61,.7)] transition-transform duration-500'}
+                            >
+                              <div className={center ? 'relative aspect-[4/5] sm:aspect-[16/10] md:aspect-[4/5]' : 'relative aspect-[4/5]'}>
+                                <Image src={image.src} alt={image.alt} fill sizes={center ? '(max-width: 768px) 92vw, 24vw' : '18vw'} className="object-cover transition-transform duration-700 group-hover:scale-105" />
+                                <div className={'absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent ' + (center ? 'opacity-100' : 'opacity-35')} />
+                                {center && (
+                                  <div className="absolute inset-x-0 bottom-0 p-5 text-white sm:p-6">
+                                    <span className="mb-2 inline-flex rounded-full bg-white/15 px-3 py-1 text-[10px] font-bold uppercase tracking-widest backdrop-blur-sm">{image.category}</span>
+                                    <p className="text-balance text-lg font-black leading-tight sm:text-xl">{image.title}</p>
+                                  </div>
+                                )}
+                                <span className="absolute right-3 top-3 flex h-10 w-10 items-center justify-center rounded-full bg-white/90 text-[#0e5c3d] opacity-0 transition-opacity duration-300 group-hover:opacity-100"><Maximize2 className="h-4 w-4" /></span>
+                              </div>
+                            </a>
+                          )
+                        })}
+                      </article>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="mt-10 flex items-center justify-center gap-4">
+                  <button type="button" data-gallery-action="previous" aria-label="Previous gallery image" className="flex h-11 w-11 items-center justify-center rounded-full border border-[#0e5c3d]/20 bg-white text-[#0e5c3d] transition-colors hover:bg-[#0e5c3d] hover:text-white"><ChevronLeft className="h-5 w-5" /></button>
+                  <div className="flex items-center gap-1.5">
+                    {filtered.slice(0, Math.min(filtered.length, 10)).map((image, index) => <button key={image.src} type="button" data-gallery-action="index" data-gallery-index={index} aria-label={'Show ' + image.title} className={'h-2 w-2 rounded-full ' + (index === 0 ? 'bg-[#e85d3f]' : 'bg-[#0e5c3d]/20')} />)}
+                  </div>
+                  <span data-gallery-counter className="min-w-14 text-center text-xs font-bold tracking-widest text-[#6b7280]">01 / {String(filtered.length).padStart(2, '0')}</span>
+                  <button type="button" data-gallery-action="next" aria-label="Next gallery image" className="flex h-11 w-11 items-center justify-center rounded-full bg-[#0e5c3d] text-white transition-transform hover:scale-105"><ChevronRight className="h-5 w-5" /></button>
+                </div>
+                <script dangerouslySetInnerHTML={{ __html: galleryCarouselScript }} />
+              </div>
+            )}
+          </div>
         </section>
       </main>
 
@@ -530,7 +681,7 @@ function GalleryContent({ params }: { params: { category?: string; image?: strin
 export default async function GalleryPage({
   searchParams,
 }: {
-  searchParams: Promise<{ category?: string; image?: string }>
+  searchParams: Promise<{ category?: string; image?: string; slide?: string; search?: string }>
 }) {
   return <GalleryContent params={await searchParams} />
 }

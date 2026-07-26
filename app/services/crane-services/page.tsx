@@ -3,7 +3,6 @@ import CraneGallerySection from '@/components/crane-gallery-section'
 import ServiceFaqSection from '@/components/service-faq-section'
 import DamMethodology from '@/components/dam-methodology'
 import ServiceStatsStrip from '@/components/service-stats-strip'
-import ServiceCta from '@/components/service-cta'
 import Navbar from '@/components/navbar'
 import Image from 'next/image'
 import { CheckCircle2, ArrowUpRight } from 'lucide-react'
@@ -212,7 +211,6 @@ export default function CraneServicesPage() {
         />
 
         {/* Inquiry CTA */}
-        <ServiceCta heading="Ready to Start Your Project?" description="Contact our team for a detailed consultation and free project quote. We respond within 24 hours." />
         <section id="contact-legacy" className="hidden bg-[#0e5c3d] py-20 px-6 md:px-12 lg:px-20">
           <div className="max-w-3xl mx-auto text-center">
             <h2

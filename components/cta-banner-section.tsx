@@ -3,7 +3,7 @@ import { ArrowUpRight, PhoneCall } from 'lucide-react'
 
 export default function CtaBannerSection() {
   return (
-    <section className="bg-[#e85d3f] overflow-hidden relative">
+    <section className="cta-orange-flow overflow-hidden relative">
       {/* Subtle diagonal texture lines */}
       <div
         className="pointer-events-none absolute inset-0"
@@ -40,12 +40,12 @@ export default function CtaBannerSection() {
             Get Free Quote
             <ArrowUpRight className="w-4 h-4" />
           </Link>
-          <a
-            href="tel:+917554939449"
+          <Link
+            href="/contact"
             className="flex items-center gap-2 bg-transparent border-2 border-white/40 text-white font-bold text-sm uppercase tracking-wide px-7 py-3 rounded-full hover:bg-white/10 hover:border-white/70 transition-all duration-200"
           >
-            Call Us
-          </a>
+            Contact Us
+          </Link>
         </div>
       </div>
     </section>

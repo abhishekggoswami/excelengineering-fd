@@ -106,20 +106,14 @@
   }
 }
 
-/* Shared curved landing edge: every first section below the navbar enters as a raised panel. */
+/* Shared curved landing edge: every first section below the navbar is stable from first paint. */
 main > :first-child {
   position: relative;
   isolation: isolate;
-  margin-inline: 4px;
-  overflow: clip;
+  margin-inline: 0;
+  overflow: hidden;
   border-radius: 1.5rem 1.5rem 0 0;
   box-shadow: 0 -1px 0 rgba(232, 93, 63, 0.18), 0 -16px 32px -32px rgba(14, 92, 61, 0.65);
-  animation: pageHeroReveal 720ms cubic-bezier(0.22, 1, 0.36, 1) both;
-}
-
-@keyframes pageHeroReveal {
-  from { clip-path: inset(12% 0 0 round 1.5rem 1.5rem 0 0); opacity: 0.7; transform: translateY(-10px); }
-  to { clip-path: inset(0 0 0 round 1.5rem 1.5rem 0 0); opacity: 1; transform: translateY(0); }
 }
 
 @keyframes damHeroOrb {
@@ -254,14 +248,32 @@ main > :first-child {
   animation: ctaHeadingShine 4.5s ease-in-out infinite;
 }
 
+@keyframes ctaOrangeFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.cta-orange-flow {
+  background: linear-gradient(115deg, #e84f36 0%, #f36543 35%, #ee6d45 60%, #d94c32 100%);
+  background-size: 240% 240%;
+  animation: ctaOrangeFlow 10s ease-in-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  main > :first-child,
   .dam-hero-orb,
   .dam-process-card,
   .dam-process-glow,
   .dam-process-number,
   .dam-gallery-marquee-track,
   .cta-heading-flow,
+  .cta-orange-flow,
   .animate-phone-ring,
   .company-hero-content > *,
   .section-typing-label::after {
@@ -270,7 +282,7 @@ main > :first-child {
 }
 
 @media (max-width: 639px) {
-  main > :first-child { margin-inline: 2px; border-radius: 1rem 1rem 0 0; }
+  main > :first-child { margin-inline: 0; border-radius: 1rem 1rem 0 0; }
   .section-typing-label { width: 15rem; }
 }
 

@@ -19,25 +19,20 @@ export default function CompanyPageHero({
   actionHref = '/contact',
 }: CompanyPageHeroProps) {
   return (
-    <section className="relative isolate flex min-h-[58svh] items-end overflow-hidden bg-[#102b25] sm:min-h-[62svh]">
+    <section className="relative isolate flex min-h-[52svh] items-end overflow-hidden bg-[#111111]">
       <video
         autoPlay
         muted
         loop
         playsInline
         preload="metadata"
-        poster="/images/hero-bg.png"
         className="absolute inset-0 h-full w-full object-cover"
         aria-hidden="true"
       >
         <source src="/videos/company-pages-hero.mp4" type="video/mp4" />
       </video>
       <div className="absolute inset-0 bg-gradient-to-r from-[#071d18]/90 via-[#0b3328]/68 to-[#071d18]/38" />
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 opacity-30"
-        style={{ backgroundImage: 'repeating-linear-gradient(135deg, rgba(255,255,255,0.08) 0 1px, transparent 1px 42px)' }}
-      />
+      <div className="absolute inset-0 bg-gradient-to-t from-[#111111] via-[#111111]/45 to-transparent" />
       <div className="relative z-10 mx-auto w-full max-w-7xl px-6 pb-14 pt-28 sm:px-10 sm:pb-16 md:px-12 lg:px-20 lg:pb-20">
         <div className="mb-5 flex items-center gap-3">
           <span className="h-px w-8 bg-[#e85d3f]" />

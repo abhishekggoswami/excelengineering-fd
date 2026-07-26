@@ -1,4 +1,5 @@
 import { ArrowRight, ArrowDown, Settings } from 'lucide-react'
+import CtaBannerSection from '@/components/cta-banner-section'
 
 interface Faq {
   q: string
@@ -19,11 +20,11 @@ export default function ServiceFaqSection({
   return (
     <section
       id="faq"
-      className="relative overflow-hidden bg-[#f5efe0] py-24 md:py-32"
+      className="relative overflow-hidden bg-[#f5efe0]"
     >
       {/* Industrial line art background — pinned to bottom, full width */}
       {/* Content */}
-      <div className="relative z-10 max-w-4xl mx-auto px-6 md:px-12">
+      <div className="relative z-10 mx-auto max-w-4xl px-6 py-24 md:px-12 md:py-32">
         {/* Badge */}
         <div className="flex justify-center mb-6">
           <div className="inline-flex items-center gap-2 bg-[#1a1a1a] text-white text-xs font-semibold uppercase tracking-widest px-4 py-2 rounded-full">
@@ -71,6 +72,18 @@ export default function ServiceFaqSection({
             )
           })}
         </div>
+      </div>
+      <div
+        aria-hidden="true"
+        className="pointer-events-none relative z-0 -mt-20 h-[340px] bg-repeat-x bg-bottom opacity-45"
+        style={{
+          backgroundImage:
+            "url('https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Gemini_Generated_Image_3uj7mz3uj7mz3uj7-removebg-preview-rbtCbMUPUYemRQIOBL5JX8Hkbt2lMS.png')",
+          backgroundSize: 'auto 340px',
+        }}
+      />
+      <div className="relative z-10">
+        <CtaBannerSection />
       </div>
     </section>
   )
