@@ -1,20 +1,20 @@
-'use client'
-
 import Navbar from '@/components/navbar'
 import ServiceFaqSection from '@/components/service-faq-section'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useState } from 'react'
-import { ArrowUpRight, MapPin, Calendar, Building2, ChevronDown } from 'lucide-react'
+import { ArrowUpRight, Building2, ChevronLeft, ChevronRight, MapPin } from 'lucide-react'
+import { additionalProjects } from '@/lib/additional-projects'
 
 const stats = [
-  { value: '2',    label: 'Active Projects' },
-  { value: '2+',   label: 'States Covered' },
+  { value: '10',   label: 'Active Projects' },
+  { value: '4',    label: 'States Covered' },
   { value: '25+',  label: 'Years of Experience' },
   { value: '100%', label: 'On-Time Delivery Target' },
 ]
 
 type Category = 'All' | 'Dam Construction' | 'Fabrication' | 'Irrigation' | 'Infrastructure'
+
+const additionalOngoingProjects = additionalProjects.filter((project) => project.status === 'Ongoing')
 
 const projects: {
   title: string
@@ -75,6 +75,51 @@ const projects: {
   },
 ]
 
+type OngoingProjectCard = {
+  title: string
+  location: string
+  client?: string
+  category: string
+  status: string
+  progress?: number
+  description: string
+  highlights: string[]
+  image: string
+  video?: string
+  href?: string
+}
+
+const projectMedia = [
+  'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/IMG_0475-clean-yvyIC0wscjKJZ5V3S18D8NvGTHfGRN.png',
+  'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/IMG_0481-clean%202-eXJnNCS3OECYkxw9QuiHopHlg3FMJi.png',
+  'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/IMG_0479-clean-Bf6zZ0GGD3FL3uy0urqoL0lTWF2IS3.png',
+]
+
+const projectVideos = Array.from(
+  { length: 10 },
+  (_, index) => `/videos/ongoing/project-${String(index + 1).padStart(2, '0')}.mp4`,
+)
+
+const allOngoingProjects: OngoingProjectCard[] = [
+  ...projects.map((project, index) => ({
+    ...project,
+    video: projectVideos[index],
+    href: index === 0 ? '/projects/madiya-dam' : '/projects/hiran-irrigation',
+  })),
+  ...additionalOngoingProjects.map((project, index) => ({
+    title: project.title,
+    location: project.location,
+    client: project.client,
+    category: 'Hydro-Mechanical Works',
+    status: 'In Progress',
+    description: project.overview,
+    highlights: project.scope,
+    image: projectMedia[index % projectMedia.length],
+    video: projectVideos[projects.length + index],
+    href: `/projects/${project.slug}`,
+  })),
+]
+
 const faqs = [
   {
     q: 'What is the scope of work at the Madiya Dam project in Sagar, M.P.?',
@@ -94,20 +139,91 @@ const faqs = [
   },
 ]
 
-const statusColor: Record<string, string> = {
-  'In Progress':   'bg-[#e85d3f]/10 text-[#e85d3f] border-[#e85d3f]/25',
-  'Mobilisation':  'bg-[#f5a623]/10 text-[#c27f00] border-[#f5a623]/30',
-  'Tendering':     'bg-[#1a1a1a]/8 text-[#374151] border-[#374151]/20',
+const mobileCarouselScript = `
+  (() => {
+    const root = document.getElementById('ongoing-mobile-carousel')
+    if (!root || root.dataset.initialized === 'true') return
+
+    root.dataset.initialized = 'true'
+    const track = root.querySelector('[data-carousel-track]')
+    const count = Number(root.dataset.count || '1')
+    const status = root.querySelector('[data-carousel-status]')
+    const dots = Array.from(root.querySelectorAll('[data-carousel-index]'))
+    let index = 0
+    let timer
+
+    const render = (nextIndex) => {
+      index = ((nextIndex % count) + count) % count
+      track.style.transform = 'translate3d(-' + (index * 100) + '%, 0, 0)'
+      dots.forEach((dot, dotIndex) => {
+        const active = dotIndex === index
+        dot.setAttribute('aria-current', active ? 'true' : 'false')
+        dot.classList.toggle('w-6', active)
+        dot.classList.toggle('bg-[#e85d3f]', active)
+        dot.classList.toggle('w-2', !active)
+        dot.classList.toggle('bg-[#cdded8]', !active)
+      })
+      if (status) status.textContent = 'Project ' + (index + 1) + ' of ' + count
+    }
+
+    const startTimer = () => {
+      window.clearInterval(timer)
+      timer = window.setInterval(() => render(index + 1), 5000)
+    }
+
+    root.addEventListener('click', (event) => {
+      const control = event.target.closest('[data-carousel-action]')
+      if (!control) return
+      const action = control.dataset.carouselAction
+      if (action === 'previous') render(index - 1)
+      if (action === 'next') render(index + 1)
+      if (action === 'index') render(Number(control.dataset.carouselIndex))
+      startTimer()
+    })
+
+    root.addEventListener('pointerdown', () => window.clearInterval(timer), { passive: true })
+    root.addEventListener('pointerup', startTimer, { passive: true })
+    render(0)
+    startTimer()
+  })()
+`
+
+function ProjectCard({ project }: { project: OngoingProjectCard }) {
+  return (
+    <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-[#e5e7eb] bg-white transition-all duration-300 hover:-translate-y-1 hover:border-[#e85d3f]/45 hover:shadow-xl">
+      <div className="relative aspect-video overflow-hidden bg-[#102b25]">
+        {project.video ? (
+          <video autoPlay muted loop playsInline preload="metadata" aria-label={`${project.title} project video`} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105">
+            <source src={project.video} type="video/mp4" />
+          </video>
+        ) : (
+          <Image src={project.image} alt={project.title} fill loading="lazy" sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw" className="object-cover object-center transition-transform duration-500 group-hover:scale-105" />
+        )}
+      </div>
+
+      <div className="flex flex-1 flex-col p-6">
+        <h2 className="min-h-[3.5rem] text-xl font-black leading-snug text-[#1a1a1a]">{project.title}</h2>
+        <div className="mt-4 space-y-2">
+          <div className="flex items-start gap-1.5 text-xs font-medium leading-snug text-[#6b7280]"><MapPin className="h-3.5 w-3.5 flex-shrink-0" />{project.location}</div>
+          {project.client && <div className="flex items-start gap-1.5 text-xs font-medium leading-snug text-[#6b7280]"><Building2 className="h-3.5 w-3.5 flex-shrink-0" />{project.client}</div>}
+        </div>
+
+        {typeof project.progress === 'number' && <div className="mt-5">
+          <div className="mb-2 flex items-center justify-between"><span className="text-xs font-semibold uppercase tracking-wide text-[#374151]">Progress</span><span className="text-xs font-black text-[#e85d3f]">{project.progress}%</span></div>
+          <div className="h-2 w-full overflow-hidden rounded-full bg-[#f5efe0]"><div className="h-full rounded-full bg-[#e85d3f] transition-all duration-700" style={{ width: `${project.progress}%` }} /></div>
+        </div>}
+
+        <p className="mt-5 min-h-[5rem] text-sm leading-relaxed text-[#6b7280]">{project.description}</p>
+        <div className="mt-5 space-y-2 border-t border-[#edf0ef] pt-5">
+          {project.highlights.slice(0, 3).map((highlight) => <div key={highlight} className="flex items-start gap-2"><div className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-[#e85d3f]" /><span className="text-xs font-medium leading-snug text-[#374151]">{highlight}</span></div>)}
+        </div>
+        {project.href && <Link href={project.href} className="mt-6 inline-flex w-fit items-center gap-2 text-xs font-bold uppercase tracking-wide text-[#e85d3f] transition-colors hover:text-[#bf422b]">View project <ArrowUpRight className="h-3.5 w-3.5" /></Link>}
+      </div>
+    </article>
+  )
 }
 
 export default function OngoingProjectsPage() {
-  const [activeCategory, setActiveCategory] = useState<Category>('All')
-  const categories: Category[] = ['All', 'Dam Construction', 'Fabrication', 'Irrigation', 'Infrastructure']
-
-  const filtered = activeCategory === 'All'
-    ? projects
-    : projects.filter((p) => p.category === activeCategory)
-
   return (
     <>
       <Navbar />
@@ -115,15 +231,19 @@ export default function OngoingProjectsPage() {
 
         {/* Hero */}
         <section className="relative min-h-[52vh] flex items-end">
-          <div className="absolute inset-0">
-            <Image
+          <div className="absolute inset-0 bg-[#102b25]">
+            <video autoPlay muted loop playsInline preload="auto" className="h-full w-full object-cover" aria-label="Ongoing projects construction video">
+              <source src="/videos/ongoing-projects-hero.mp4" type="video/mp4" />
+            </video>
+            {/* Legacy image fallback removed: the hero is video-only. */}
+            {false && <Image
               src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/IMG_0479-clean-Bf6zZ0GGD3FL3uy0urqoL0lTWF2IS3.png"
               alt="Excel Engineering active construction site — dam gates and hoists"
               fill
               priority
               sizes="100vw"
-              className="object-cover object-center"
-            />
+              className="hidden"
+            />}
             <div className="absolute inset-0 bg-gradient-to-t from-[#111111] via-[#111111]/55 to-transparent" />
           </div>
           <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 lg:px-20 pb-16 pt-36">
@@ -166,89 +286,108 @@ export default function OngoingProjectsPage() {
           </div>
         </section>
 
-        {/* Filter bar */}
-        <section className="py-10 px-6 md:px-12 lg:px-20 bg-white border-b border-[#e5e7eb]">
-          <div className="max-w-7xl mx-auto flex flex-wrap items-center gap-3">
-            <span className="text-[#6b7280] text-xs font-semibold uppercase tracking-widest mr-2">
-              Filter by:
+        {/* Project quote */}
+        <section className="border-b border-[#e5e7eb] bg-[#f7f4ec] px-6 py-10 md:px-12 lg:px-20">
+          <div className="mx-auto grid max-w-7xl gap-4 md:grid-cols-[auto_1fr] md:items-center md:gap-8">
+            <span className="w-fit rounded-full bg-[#e85d3f] px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] text-white">
+              {allOngoingProjects.length} active sites
             </span>
-            {categories.map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setActiveCategory(cat)}
-                className={`px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wide transition-all duration-200 border ${
-                  activeCategory === cat
-                    ? 'bg-[#e85d3f] text-white border-[#e85d3f] shadow-sm'
-                    : 'bg-white text-[#374151] border-[#e5e7eb] hover:border-[#e85d3f]/40 hover:text-[#e85d3f]'
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
-            <span className="ml-auto text-[#9ca3af] text-xs font-medium">
-              {filtered.length} project{filtered.length !== 1 ? 's' : ''}
-            </span>
+            <blockquote className="max-w-4xl text-center text-lg font-semibold leading-relaxed text-[#1a1a1a] sm:text-xl">
+              “Built with precision at every stage — from design coordination and fabrication to safe, reliable commissioning.”
+            </blockquote>
           </div>
         </section>
 
         {/* Project cards */}
-        <section className="py-20 px-6 md:px-12 lg:px-20 bg-white">
-          <div className="max-w-7xl mx-auto flex flex-col gap-8">
-            {filtered.map((project, i) => (
-              <article
-                key={i}
-                className="group bg-white border border-[#e5e7eb] rounded-3xl overflow-hidden hover:shadow-lg hover:border-[#e85d3f]/30 transition-all duration-300"
-              >
-                <div className="grid grid-cols-1 lg:grid-cols-5 gap-0">
+        <section className="bg-white px-6 py-16 md:px-12 md:py-20 lg:px-20">
+          <div className="mx-auto max-w-7xl">
+            <div className="mb-8 flex flex-wrap items-end justify-between gap-3">
+              <div>
+                <div className="mb-3 flex items-center gap-3">
+                  <div className="h-px w-8 bg-[#e85d3f]" />
+                  <span className="text-xs font-semibold uppercase tracking-widest text-[#e85d3f]">Live delivery</span>
+                </div>
+                <h2 className="text-3xl font-black tracking-tight text-[#1a1a1a] sm:text-4xl">Projects in Progress</h2>
+              </div>
+              <p className="text-sm font-medium text-[#6b7280]">Each project receives the same engineering focus.</p>
+            </div>
 
-                  {/* Image */}
-                  <div className="lg:col-span-2 relative h-56 lg:h-auto min-h-[240px] overflow-hidden">
-                    <Image
-                      src={project.image}
-                      alt={project.title}
-                      fill
-                      loading="lazy"
-                      sizes="(max-width: 1024px) 100vw, 40vw"
-                      className="object-cover object-center group-hover:scale-105 transition-transform duration-500"
-                    />
-                    {/* Category pill */}
-                    <div className="absolute top-4 left-4">
-                      <span className="bg-black/50 backdrop-blur-sm text-white text-xs font-bold uppercase tracking-wide px-3 py-1.5 rounded-full">
-                        {project.category}
-                      </span>
+            <div id="ongoing-mobile-carousel" className="md:hidden" data-count={allOngoingProjects.length}>
+              <div className="overflow-hidden rounded-2xl">
+                <div data-carousel-track className="flex will-change-transform transition-transform duration-500 ease-out motion-reduce:transition-none">
+                  {allOngoingProjects.map((project) => (
+                    <div key={project.title} className="w-full min-w-full">
+                      <ProjectCard project={project} />
                     </div>
+                  ))}
+                </div>
+              </div>
+              <nav className="mt-6 flex items-center justify-between gap-4" aria-label="Ongoing project card navigation">
+                <button type="button" data-carousel-action="previous" className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-[#d9e1df] text-[#0e5c3d] transition-colors hover:border-[#0e5c3d] hover:bg-[#0e5c3d] hover:text-white" aria-label="Show previous project">
+                  <ChevronLeft className="h-5 w-5" />
+                </button>
+                <div className="flex items-center gap-1.5" aria-label="Project pagination">
+                  {allOngoingProjects.map((project, index) => (
+                    <button key={project.title} type="button" data-carousel-action="index" data-carousel-index={index} className={`h-2 rounded-full transition-all ${index === 0 ? 'w-6 bg-[#e85d3f]' : 'w-2 bg-[#cdded8]'}`} aria-current={index === 0 ? 'true' : 'false'} aria-label={`Show project ${index + 1}: ${project.title}`} />
+                  ))}
+                </div>
+                <button type="button" data-carousel-action="next" className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-[#d9e1df] text-[#0e5c3d] transition-colors hover:border-[#0e5c3d] hover:bg-[#0e5c3d] hover:text-white" aria-label="Show next project">
+                  <ChevronRight className="h-5 w-5" />
+                </button>
+              </nav>
+              <p data-carousel-status className="mt-3 text-center text-xs font-semibold uppercase tracking-widest text-[#6b7280]" aria-live="polite">Project 1 of {allOngoingProjects.length}</p>
+              <script dangerouslySetInnerHTML={{ __html: mobileCarouselScript }} />
+            </div>
+
+            <div className="hidden gap-6 md:grid md:grid-cols-2 xl:grid-cols-3">
+            {allOngoingProjects.map((project, i) => (
+              <article
+                key={`${project.title}-${i}`}
+                className="group flex h-full flex-col overflow-hidden rounded-2xl border border-[#e5e7eb] bg-white transition-all duration-300 hover:-translate-y-1 hover:border-[#e85d3f]/45 hover:shadow-xl"
+              >
+                  {/* Media: kept as a fixed 16:9 slot so supplied project videos can replace the covers without changing card layout. */}
+                  <div className="relative aspect-video overflow-hidden bg-[#102b25]">
+                    {project.video ? (
+                      <video
+                        autoPlay
+                        muted
+                        loop
+                        playsInline
+                        preload="metadata"
+                        aria-label={`${project.title} project video`}
+                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      >
+                        <source src={project.video} type="video/mp4" />
+                      </video>
+                    ) : (
+                      <Image
+                        src={project.image}
+                        alt={project.title}
+                        fill
+                        loading="lazy"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+                        className="object-cover object-center transition-transform duration-500 group-hover:scale-105"
+                      />
+                    )}
                   </div>
 
-                  {/* Content */}
-                  <div className="lg:col-span-3 p-8 flex flex-col gap-5">
-                    {/* Title row */}
-                    <div className="flex items-start justify-between gap-4">
-                      <h2 className="font-black text-[#1a1a1a] text-lg leading-snug text-balance flex-1">
-                        {project.title}
-                      </h2>
-                      <span className={`flex-shrink-0 text-xs font-bold uppercase tracking-wide px-3 py-1.5 rounded-full border ${statusColor[project.status]}`}>
-                        {project.status}
-                      </span>
-                    </div>
+                  <div className="flex flex-1 flex-col p-6">
+                    <h2 className="min-h-[3.5rem] text-xl font-black leading-snug text-[#1a1a1a]">
+                      {project.title}
+                    </h2>
 
-                    {/* Meta row */}
-                    <div className="flex flex-wrap gap-x-6 gap-y-2">
-                      <div className="flex items-center gap-1.5 text-[#6b7280] text-xs font-medium">
+                    <div className="mt-4 space-y-2">
+                      <div className="flex items-start gap-1.5 text-xs font-medium leading-snug text-[#6b7280]">
                         <MapPin className="w-3.5 h-3.5 flex-shrink-0" />
                         {project.location}
                       </div>
-                      <div className="flex items-center gap-1.5 text-[#6b7280] text-xs font-medium">
+                      {project.client && <div className="flex items-start gap-1.5 text-xs font-medium leading-snug text-[#6b7280]">
                         <Building2 className="w-3.5 h-3.5 flex-shrink-0" />
                         {project.client}
-                      </div>
-                      <div className="flex items-center gap-1.5 text-[#6b7280] text-xs font-medium">
-                        <Calendar className="w-3.5 h-3.5 flex-shrink-0" />
-                        {project.contractedBy}
-                      </div>
+                      </div>}
                     </div>
 
-                    {/* Progress bar */}
-                    <div>
+                    {typeof project.progress === 'number' && <div className="mt-5">
                       <div className="flex justify-between items-center mb-2">
                         <span className="text-[#374151] text-xs font-semibold uppercase tracking-wide">
                           Progress
@@ -261,25 +400,28 @@ export default function OngoingProjectsPage() {
                           style={{ width: `${project.progress}%` }}
                         />
                       </div>
-                    </div>
+                    </div>}
 
-                    <p className="text-[#6b7280] text-sm leading-relaxed text-pretty">
+                    <p className="mt-5 min-h-[5rem] text-sm leading-relaxed text-[#6b7280]">
                       {project.description}
                     </p>
 
-                    {/* Highlights */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                      {project.highlights.map((h) => (
+                    <div className="mt-5 space-y-2 border-t border-[#edf0ef] pt-5">
+                      {project.highlights.slice(0, 3).map((h) => (
                         <div key={h} className="flex items-start gap-2">
                           <div className="w-1.5 h-1.5 rounded-full bg-[#e85d3f] flex-shrink-0 mt-1.5" />
                           <span className="text-[#374151] text-xs font-medium leading-snug">{h}</span>
                         </div>
                       ))}
                     </div>
+
+                    {project.href && <Link href={project.href} className="mt-6 inline-flex w-fit items-center gap-2 text-xs font-bold uppercase tracking-wide text-[#e85d3f] transition-colors hover:text-[#bf422b]">
+                      View project <ArrowUpRight className="h-3.5 w-3.5" />
+                    </Link>}
                   </div>
-                </div>
               </article>
             ))}
+            </div>
           </div>
         </section>
 
@@ -291,7 +433,7 @@ export default function OngoingProjectsPage() {
         />
 
         {/* CTA */}
-        <section className="bg-[#111111] py-20 px-6 md:px-12 lg:px-20">
+        <section className="hidden">
           <div className="max-w-3xl mx-auto text-center">
             <h2
               className="text-white font-black text-balance leading-tight mb-4"
@@ -303,7 +445,7 @@ export default function OngoingProjectsPage() {
               We take on new dam gate, fabrication, and irrigation projects throughout the year. Get in touch for a consultation.
             </p>
             <Link
-              href="#contact"
+              href="/contact"
               className="inline-flex items-center gap-2 bg-[#e85d3f] hover:bg-[#d14f33] transition-colors text-white font-bold text-sm uppercase tracking-wide px-8 py-4 rounded-full shadow-sm"
             >
               <ArrowUpRight className="w-4 h-4" />

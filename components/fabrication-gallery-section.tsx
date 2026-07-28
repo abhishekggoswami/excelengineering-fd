@@ -3,6 +3,8 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import { X, ChevronLeft, ChevronRight, ZoomIn } from 'lucide-react'
+import ProximityHeading from '@/components/proximity-heading'
+import ScrollReveal from '@/components/scroll-reveal'
 
 const FABRICATION_IMAGES = [
   {
@@ -106,48 +108,57 @@ export default function FabricationGallerySection() {
   const nextImg = () => setLightbox((l) => (l !== null ? (l + 1) % FABRICATION_IMAGES.length : null))
 
   return (
-    <section className="py-24 px-6 md:px-12 lg:px-20 bg-[#1a1a1a]">
+    <section className="bg-[#f5efe0] px-6 py-24 md:px-12 lg:px-20">
       <div className="max-w-7xl mx-auto">
 
         {/* Section header */}
-        <div className="text-center mb-14">
-          <div className="flex items-center justify-center gap-3 mb-4">
+        <div className="mb-14 flex flex-col justify-between gap-6 md:flex-row md:items-end">
+          <div>
+          <div className="mb-4 flex items-center gap-3">
             <div className="w-8 h-px bg-[#e85d3f]" />
             <span className="text-[#e85d3f] font-semibold text-sm uppercase tracking-widest">
-              Project Photography
+              Project Gallery
             </span>
-            <div className="w-8 h-px bg-[#e85d3f]" />
           </div>
           <h2
-            className="font-black text-white text-balance leading-tight"
+            className="text-balance font-black leading-tight text-[#1a1a1a]"
             style={{ fontSize: 'clamp(1.8rem, 3vw, 2.8rem)' }}
           >
-            Fabrication Works Gallery
+            <ProximityHeading>Fabrication Works in Action</ProximityHeading>
           </h2>
-          <p className="text-white/50 text-base mt-3 max-w-xl mx-auto text-pretty">
+          <ScrollReveal className="mt-3 max-w-lg">
+          <p className="text-pretty text-base text-[#6b7280]">
             Real photography from our fabrication facility — machining, welding, assembly, and quality inspection.
           </p>
+          </ScrollReveal>
+          </div>
+          <a
+            href="/gallery?category=Fabrication"
+            className="inline-flex flex-shrink-0 items-center gap-2 rounded-full bg-[#111111] px-6 py-3 text-sm font-bold uppercase tracking-wide text-white transition-colors hover:bg-[#1a1a1a]"
+          >
+            View Full Gallery
+          </a>
         </div>
 
         {/* 3-column masonry */}
-        <div className="columns-1 sm:columns-2 lg:columns-3 gap-4">
-          {FABRICATION_IMAGES.map((img, i) => (
+        <div className="-mx-6 overflow-hidden pb-3 md:-mx-12 lg:-mx-20">
+          <div className="dam-gallery-marquee-track gap-4 px-6 md:px-12 lg:px-20">
+          {[...FABRICATION_IMAGES, ...FABRICATION_IMAGES].map((img, i) => (
             <div
-              key={i}
-              className="relative group cursor-pointer overflow-hidden rounded-2xl bg-[#111] mb-4 break-inside-avoid"
-              onClick={() => openLightbox(i)}
+              key={`${img.title}-${i}`}
+              className="relative group aspect-[4/3] w-[16rem] shrink-0 cursor-pointer overflow-hidden rounded-2xl bg-[#111] shadow-[0_20px_35px_-24px_rgba(14,92,61,.7)] sm:w-[20rem] lg:w-[23rem]"
+              onClick={() => openLightbox(i % FABRICATION_IMAGES.length)}
             >
               <Image
                 src={img.src}
                 alt={img.alt}
-                width={600}
-                height={450}
+                fill
                 loading="lazy"
-                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                className="w-full h-auto block transition-transform duration-700 group-hover:scale-110"
+                sizes="(max-width: 640px) 256px, (max-width: 1024px) 320px, 368px"
+                className="object-cover transition-transform duration-700 group-hover:scale-110"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              <div className="absolute top-3 left-3 bg-[#0e5c3d]/80 backdrop-blur-sm text-white text-xs font-semibold px-3 py-1 rounded-full">
+              <div className="absolute left-3 top-3 rounded-full bg-black/45 px-3 py-1 text-xs font-semibold text-white backdrop-blur-sm">
                 {img.tag}
               </div>
               <div className="absolute inset-0 flex flex-col justify-end p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -158,6 +169,7 @@ export default function FabricationGallerySection() {
               </div>
             </div>
           ))}
+          </div>
         </div>
       </div>
 

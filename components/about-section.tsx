@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 
-// Cycling dam project images clipped inside the "25" letterforms
+// Project imagery arranged as a three-panel collage inside the "25" letterforms.
 const CLIP_IMAGES = [
   '/images/dam-hero-1.png',
   '/images/dam-hero-2.png',
@@ -19,8 +19,10 @@ const PILLS = [
 
 export default function AboutSection() {
   const sectionRef = useRef<HTMLDivElement>(null)
-  const [visible, setVisible] = useState(false)
-  const [imgIndex, setImgIndex] = useState(0)
+  // Render content immediately so it is reliable in previews, print captures and
+  // browsers that defer IntersectionObserver callbacks. The section remains fully
+  // animated where the observer is available, but it can never stay invisible.
+  const [visible, setVisible] = useState(true)
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -34,14 +36,6 @@ export default function AboutSection() {
     )
     if (sectionRef.current) observer.observe(sectionRef.current)
     return () => observer.disconnect()
-  }, [])
-
-  useEffect(() => {
-    const t = setInterval(
-      () => setImgIndex((i) => (i + 1) % CLIP_IMAGES.length),
-      7000
-    )
-    return () => clearInterval(t)
   }, [])
 
   const fade = (delay: number, extra?: string) => ({
@@ -125,18 +119,17 @@ export default function AboutSection() {
           <span
             style={{
               display: 'block',
-              fontSize: 'clamp(6rem, 18vw, 13rem)',
+              fontSize: 'clamp(7.25rem, 20vw, 15rem)',
               fontWeight: 900,
               lineHeight: 1,
               letterSpacing: '-0.04em',
-              backgroundImage: `url(${CLIP_IMAGES[imgIndex]})`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
+              backgroundImage: `url(${CLIP_IMAGES[0]}), url(${CLIP_IMAGES[1]}), url(${CLIP_IMAGES[2]})`,
+              backgroundSize: '34% 100%, 33% 100%, 33% 100%',
+              backgroundPosition: 'left center, center center, right center',
+              backgroundRepeat: 'no-repeat',
               WebkitBackgroundClip: 'text',
               backgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
-              /* smooth crossfade by transitioning background-image via opacity trick */
-              transition: 'opacity 1s',
             }}
           >
             25
@@ -193,28 +186,6 @@ export default function AboutSection() {
       </div>
 
       {/* ── Static line art — bottom strip, no animation ─────────── */}
-      <div
-        className="pointer-events-none relative mt-8 w-full"
-        style={{
-          height: 'clamp(100px, 16vw, 200px)',
-          opacity: visible ? 1 : 0,
-          transition: 'opacity 1s ease 0.8s',
-        }}
-        aria-hidden="true"
-      >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Gemini_Generated_Image_bnyo45bnyo45bnyo-removebg-preview-Oy6GEnQRdZzaqw4KKSHJ2lYsfKY6kG.png"
-          alt=""
-          loading="lazy"
-          className="h-full w-full object-cover object-bottom"
-        />
-        {/* Left and right soft fades */}
-        <div className="absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-[#f7f4ec] to-transparent" />
-        <div className="absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-[#f7f4ec] to-transparent" />
-        {/* Top fade blends into section */}
-        <div className="absolute inset-x-0 top-0 h-10 bg-gradient-to-b from-[#f7f4ec] to-transparent" />
-      </div>
     </section>
   )
 }

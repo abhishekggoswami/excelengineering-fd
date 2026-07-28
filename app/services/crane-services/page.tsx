@@ -1,6 +1,10 @@
 import CraneHeroSlideshow from '@/components/crane-hero-slideshow'
 import CraneGallerySection from '@/components/crane-gallery-section'
 import ServiceFaqSection from '@/components/service-faq-section'
+import DamMethodology from '@/components/dam-methodology'
+import ServiceStatsStrip from '@/components/service-stats-strip'
+import ProximityHeading from '@/components/proximity-heading'
+import ScrollReveal from '@/components/scroll-reveal'
 import Navbar from '@/components/navbar'
 import Image from 'next/image'
 import { CheckCircle2, ArrowUpRight } from 'lucide-react'
@@ -86,7 +90,8 @@ export default function CraneServicesPage() {
         <CraneHeroSlideshow />
 
         {/* Stats strip */}
-        <section className="bg-[#0e5c3d] py-10 px-6 md:px-12 lg:px-20">
+        <ServiceStatsStrip stats={stats} />
+        <section className="hidden bg-[#0e5c3d] py-10 px-6 md:px-12 lg:px-20">
           <div className="max-w-7xl mx-auto">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
               {stats.map((s) => (
@@ -121,8 +126,9 @@ export default function CraneServicesPage() {
                   className="font-black text-[#1a1a1a] text-balance leading-tight mb-6"
                   style={{ fontSize: 'clamp(1.8rem, 3vw, 2.8rem)' }}
                 >
-                  Key Capabilities &amp; Expertise
+                  <ProximityHeading>Key Capabilities &amp; Expertise</ProximityHeading>
                 </h2>
+                <ScrollReveal>
                 <p className="text-[#6b7280] text-base leading-relaxed mb-10 text-pretty">
                   Excel Engineering operates one of the region&apos;s most capable crane fleets,
                   providing mobile, hydraulic, crawler, and all-terrain cranes for projects
@@ -132,6 +138,7 @@ export default function CraneServicesPage() {
                   valid certifications and every lift is planned by our dedicated rigging and lift
                   engineering team.
                 </p>
+                </ScrollReveal>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {capabilities.map((cap) => (
                     <div key={cap} className="flex items-start gap-3">
@@ -142,7 +149,7 @@ export default function CraneServicesPage() {
                 </div>
               </div>
 
-              <div className="relative h-[480px] rounded-3xl overflow-hidden">
+              <div className="relative h-[320px] overflow-hidden rounded-3xl sm:h-[420px] lg:h-[480px]">
                 <Image
                   src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Vehicle-6-AWWblz5lHTdToFCikQTXdKelNh1Z4X.png"
                   alt="Excel Engineering crane working inside dam intake structure"
@@ -157,7 +164,12 @@ export default function CraneServicesPage() {
         </section>
 
         {/* Methodology */}
-        <section className="bg-[#f5efe0] py-24 px-6 md:px-12 lg:px-20">
+        <DamMethodology
+          steps={methodology}
+          heading="Crane Operation Methodology"
+          description="Four coordinated stages keep every lift engineered, controlled, documented, and safe."
+        />
+        <section className="hidden bg-[#f5efe0] py-24 px-6 md:px-12 lg:px-20">
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-16">
               <div className="flex items-center justify-center gap-3 mb-4">
@@ -207,7 +219,7 @@ export default function CraneServicesPage() {
         />
 
         {/* Inquiry CTA */}
-        <section id="contact" className="bg-[#0e5c3d] py-20 px-6 md:px-12 lg:px-20">
+        <section id="contact-legacy" className="hidden bg-[#0e5c3d] py-20 px-6 md:px-12 lg:px-20">
           <div className="max-w-3xl mx-auto text-center">
             <h2
               className="text-white font-black text-balance leading-tight mb-4"

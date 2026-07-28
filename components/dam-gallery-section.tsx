@@ -3,6 +3,8 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import { X, ChevronLeft, ChevronRight, ZoomIn } from 'lucide-react'
+import ProximityHeading from '@/components/proximity-heading'
+import ScrollReveal from '@/components/scroll-reveal'
 
 const DAM_IMAGES = [
   {
@@ -77,11 +79,13 @@ export default function DamGallerySection() {
               className="font-black text-[#1a1a1a] text-balance leading-tight"
               style={{ fontSize: 'clamp(1.8rem, 3vw, 2.8rem)' }}
             >
-              Dam Construction in Action
+              <ProximityHeading>Dam Construction in Action</ProximityHeading>
             </h2>
-            <p className="text-[#6b7280] text-base mt-3 max-w-lg text-pretty">
+            <ScrollReveal className="mt-3 max-w-lg">
+            <p className="text-[#6b7280] text-base text-pretty">
               Real project photography from Excel Engineering dam construction sites — barrages, gravity dams, radial gates, and reservoir structures across India.
             </p>
+            </ScrollReveal>
           </div>
           <a
             href="/gallery?category=Dam+Construction"
@@ -92,21 +96,21 @@ export default function DamGallerySection() {
         </div>
 
         {/* Masonry columns — zero gaps by design */}
-        <div className="columns-1 sm:columns-2 gap-4">
-          {DAM_IMAGES.map((img, i) => (
+        <div className="-mx-6 overflow-hidden pb-3 md:-mx-12 lg:-mx-20">
+          <div className="dam-gallery-marquee-track gap-4 px-6 md:px-12 lg:px-20">
+          {[...DAM_IMAGES, ...DAM_IMAGES].map((img, i) => (
             <div
-              key={i}
-              className="relative group cursor-pointer overflow-hidden rounded-2xl bg-[#1a1a1a] mb-4 break-inside-avoid"
-              onClick={() => openLightbox(i)}
+              key={`${img.title}-${i}`}
+              className="group relative aspect-[4/3] w-[16rem] shrink-0 cursor-pointer overflow-hidden rounded-2xl bg-[#1a1a1a] shadow-[0_20px_35px_-24px_rgba(14,92,61,.7)] sm:w-[20rem] lg:w-[23rem]"
+              onClick={() => openLightbox(i % DAM_IMAGES.length)}
             >
               <Image
                 src={img.src}
                 alt={img.alt}
-                width={600}
-                height={450}
+                fill
                 loading="lazy"
-                sizes="(max-width: 640px) 100vw, 50vw"
-                className="w-full h-auto block transition-transform duration-700 group-hover:scale-110"
+                sizes="(max-width: 640px) 256px, (max-width: 1024px) 320px, 368px"
+                className="object-cover transition-transform duration-700 group-hover:scale-110"
               />
               {/* Hover overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -124,6 +128,7 @@ export default function DamGallerySection() {
               </div>
             </div>
           ))}
+          </div>
         </div>
       </div>
 

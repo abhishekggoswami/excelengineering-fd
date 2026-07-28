@@ -106,6 +106,142 @@
   }
 }
 
+/* Shared curved landing edge: every first section below the navbar is stable from first paint. */
+main > :first-child {
+  position: relative;
+  isolation: isolate;
+  margin-inline: 0;
+  overflow: hidden;
+  border-radius: 1.5rem 1.5rem 0 0;
+  box-shadow: 0 -1px 0 rgba(232, 93, 63, 0.18), 0 -16px 32px -32px rgba(14, 92, 61, 0.65);
+}
+
+@keyframes damHeroOrb {
+  0%, 100% { transform: scale(1) translate3d(0, 0, 0); opacity: 0.3; }
+  50% { transform: scale(1.16) translate3d(-18px, 12px, 0); opacity: 0.7; }
+}
+
+.dam-hero-orb { animation: damHeroOrb 7s ease-in-out infinite; }
+
+@keyframes damProcessSpotlight {
+  0%, 5% { border-color: #e5e7eb; box-shadow: 0 0 0 rgba(232, 93, 63, 0); transform: translateY(0); }
+  8%, 22% { border-color: rgba(232, 93, 63, 0.85); box-shadow: 0 24px 42px -27px rgba(232, 93, 63, 0.7); transform: translateY(-9px); }
+  28%, 100% { border-color: #e5e7eb; box-shadow: 0 0 0 rgba(232, 93, 63, 0); transform: translateY(0); }
+}
+
+@keyframes damProcessGlow {
+  0%, 5% { opacity: 0; }
+  8%, 22% { opacity: 1; }
+  28%, 100% { opacity: 0; }
+}
+
+@keyframes damProcessNumber {
+  0%, 5% { background: #111111; color: #ffffff; transform: rotate(0deg); }
+  8%, 22% { background: #e85d3f; color: #ffffff; transform: rotate(-5deg) scale(1.08); }
+  28%, 100% { background: #111111; color: #ffffff; transform: rotate(0deg); }
+}
+
+.dam-process-card { animation: damProcessSpotlight 12s ease-in-out infinite; }
+.dam-process-glow { background: linear-gradient(135deg, rgba(232, 93, 63, 0.11), transparent 52%); animation: damProcessGlow 12s ease-in-out infinite; }
+.dam-process-number { animation: damProcessNumber 12s ease-in-out infinite; }
+.dam-process-card > * { animation-delay: inherit; }
+.dam-process-glow, .dam-process-number { animation-delay: inherit; }
+
+@keyframes damGalleryMarquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.dam-gallery-marquee-track {
+  display: flex;
+  width: max-content;
+  animation: damGalleryMarquee 42s linear infinite;
+  will-change: transform;
+}
+
+@keyframes ctaHeadingShine {
+  0%, 20% { background-position: 120% 0; }
+  55%, 100% { background-position: -30% 0; }
+}
+
+@keyframes phoneRing {
+  0%, 84%, 100% { transform: rotate(0deg); }
+  87% { transform: rotate(18deg); }
+  90% { transform: rotate(-15deg); }
+  93% { transform: rotate(11deg); }
+  96% { transform: rotate(-7deg); }
+}
+
+.animate-phone-ring {
+  transform-origin: 50% 80%;
+  animation: phoneRing 2.6s ease-in-out infinite;
+}
+
+@keyframes companyHeroRise {
+  from { opacity: 0; transform: translate3d(0, 22px, 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+.company-hero-content > * {
+  animation: companyHeroRise 700ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.company-hero-content > *:nth-child(1) { animation-delay: 90ms; }
+.company-hero-content > *:nth-child(2) { animation-delay: 180ms; }
+.company-hero-content > *:nth-child(3) { animation-delay: 270ms; }
+.company-hero-content > *:nth-child(4) { animation-delay: 360ms; }
+
+.company-card-lift {
+  transform: translateZ(0);
+}
+.company-card-lift:hover {
+  transform: translateY(-6px);
+}
+
+.cta-heading-flow {
+  background: linear-gradient(108deg, #ffffff 30%, #ffffff 43%, #f5a623 50%, #ffffff 57%, #ffffff 70%);
+  background-size: 240% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: ctaHeadingShine 4.5s ease-in-out infinite;
+}
+
+@keyframes ctaOrangeFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.cta-orange-flow {
+  background: linear-gradient(115deg, #e84f36 0%, #f36543 35%, #ee6d45 60%, #d94c32 100%);
+  background-size: 240% 240%;
+  animation: ctaOrangeFlow 10s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dam-hero-orb,
+  .dam-process-card,
+  .dam-process-glow,
+  .dam-process-number,
+  .dam-gallery-marquee-track,
+  .cta-heading-flow,
+  .cta-orange-flow,
+  .animate-phone-ring,
+  .company-hero-content > * {
+    animation: none;
+  }
+}
+
+@media (max-width: 639px) {
+  main > :first-child { margin-inline: 0; border-radius: 1rem 1rem 0 0; }
+}
+
 /* ── Shared slideshow / hero animations ─────────────────────────────────── */
 
 /* Generic Ken Burns zoom — used by hero + all service slideshows */
@@ -190,4 +326,171 @@
 @keyframes partnersScroll {
   0%   { transform: translateX(0); }
   100% { transform: translateX(-50%); }
+}
+@keyframes scroll-float-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(115%) scaleY(1.65) scaleX(.82);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scaleY(1) scaleX(1);
+  }
+}
+
+@keyframes scroll-paragraph-reveal {
+  from { opacity: 0; transform: translateY(22px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scroll-heading-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(46px);
+    clip-path: inset(0 0 100% 0);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@supports (animation-timeline: view()) {
+  .scroll-float-character {
+    animation: scroll-float-reveal linear both;
+    animation-timeline: view();
+    animation-range: entry 0% cover 45%;
+  }
+
+  .scroll-float-root {
+    animation: scroll-heading-reveal linear both;
+    animation-timeline: view();
+    animation-range: entry 0% cover 42%;
+    will-change: opacity, transform, clip-path;
+  }
+
+  .scroll-float-character:nth-child(2n) { animation-range: entry 4% cover 49%; }
+
+  .scroll-float-character:nth-child(3n) { animation-range: entry 8% cover 53%; }
+
+  .scroll-reveal-native {
+    animation: scroll-paragraph-reveal linear both;
+    animation-timeline: view();
+    animation-range: entry 0% cover 35%;
+  }
+}
+@keyframes bento-text-sheen {
+  0%,
+  72%,
+  100% {
+    background-position: 115% 50%;
+  }
+  86% {
+    background-position: -15% 50%;
+  }
+}
+
+.bento-text-sheen,
+.bento-text-sheen-light {
+  background-size: 240% 100%;
+  background-position: 115% 50%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  animation: bento-text-sheen 5.4s ease-in-out infinite;
+}
+
+.bento-text-sheen {
+  background-image: linear-gradient(105deg, #1a1a1a 0%, #1a1a1a 42%, #e85d3f 50%, #0e5c3d 58%, #1a1a1a 66%);
+}
+
+.bento-text-sheen-light {
+  background-image: linear-gradient(105deg, #ffffff 0%, #ffffff 42%, #f5a623 50%, #ffffff 58%, #ffffff 66%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bento-text-sheen,
+  .bento-text-sheen-light {
+    animation: none;
+    background-position: 0 50%;
+  }
+}
+@keyframes hero-heading-typewriter {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+.hero-heading-typewriter {
+  animation: hero-heading-typewriter 3.8s steps(48, end) 0.3s both;
+  will-change: clip-path;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-heading-typewriter {
+    animation: none;
+    clip-path: none;
+  }
+}
+
+@keyframes section-heading-alive {
+  from {
+    opacity: 0.72;
+    transform: translateY(12px);
+    filter: blur(2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes service-copy-arrive {
+  from { opacity: 0.78; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes leadership-ring-drift {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(-14px, 12px, 0) scale(1.06); }
+}
+
+@keyframes leadership-ring-drift-reverse {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1.02); }
+  50% { transform: translate3d(18px, -10px, 0) scale(.96); }
+}
+
+.service-copy-panel > * {
+  animation: service-copy-arrive .85s cubic-bezier(.22, 1, .36, 1) both;
+}
+
+.leadership-ring-one {
+  animation: leadership-ring-drift 9s ease-in-out infinite;
+}
+
+.leadership-ring-two {
+  animation: leadership-ring-drift-reverse 11s ease-in-out infinite;
+}
+
+@supports (animation-timeline: view()) {
+  main section h2 {
+    animation: section-heading-alive linear both;
+    animation-timeline: view();
+    animation-range: entry 5% cover 34%;
+    will-change: opacity, transform, filter;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .service-copy-panel > *,
+  .leadership-ring-one,
+  .leadership-ring-two,
+  main section h2 {
+    animation: none;
+  }
 }

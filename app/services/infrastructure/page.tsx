@@ -2,6 +2,8 @@
 
 import Navbar from '@/components/navbar'
 import ServiceFaqSection from '@/components/service-faq-section'
+import ServiceStatsStrip from '@/components/service-stats-strip'
+import DamMethodology from '@/components/dam-methodology'
 import { ArrowUpRight, Wrench, Users, Building2, Cpu } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -358,89 +360,7 @@ const faqs = [
 // ── Animated sections ────────────────────────────────────────────────────────
 
 function StatsStrip() {
-  const { ref, visible } = useReveal()
-  return (
-    <section
-      ref={ref}
-      className="bg-[#7c3a1e] border-t border-white/10 py-10 px-6 md:px-12 lg:px-20"
-    >
-      <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-          {stats.map((s, i) => (
-            <div
-              key={s.label}
-              className="flex flex-col items-center text-center transition-all duration-700"
-              style={{
-                opacity: visible ? 1 : 0,
-                transform: visible ? 'translateY(0)' : 'translateY(32px)',
-                transitionDelay: `${i * 100}ms`,
-              }}
-            >
-              <span
-                className="font-black text-[#f5a623] leading-none"
-                style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}
-              >
-                {s.value}
-              </span>
-              <span className="text-white/65 text-xs uppercase tracking-wide mt-2 font-medium">
-                {s.label}
-              </span>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  )
-}
-
-function DepartmentsSection() {
-  const { ref, visible } = useReveal()
-  return (
-    <section ref={ref} className="py-24 px-6 md:px-12 lg:px-20 bg-white">
-      <div className="max-w-7xl mx-auto">
-        <div
-          className="text-center mb-16 transition-all duration-700"
-          style={{ opacity: visible ? 1 : 0, transform: visible ? 'translateY(0)' : 'translateY(28px)' }}
-        >
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <div className="w-8 h-px bg-[#e85d3f]" />
-            <span className="text-[#e85d3f] font-semibold text-sm uppercase tracking-widest">
-              Organisational Structure
-            </span>
-            <div className="w-8 h-px bg-[#e85d3f]" />
-          </div>
-          <h2
-            className="font-black text-[#1a1a1a] text-balance leading-tight"
-            style={{ fontSize: 'clamp(1.8rem, 3vw, 2.8rem)' }}
-          >
-            Departments &amp; Divisions
-          </h2>
-        </div>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {departments.map((d, i) => {
-            const Icon = d.icon
-            return (
-              <div
-                key={d.title}
-                className="group bg-[#fafafa] border border-[#e5e7eb] rounded-2xl p-6 hover:border-[#e85d3f]/40 hover:shadow-lg transition-all duration-300"
-                style={{
-                  opacity: visible ? 1 : 0,
-                  transform: visible ? 'translateY(0)' : 'translateY(40px)',
-                  transition: `opacity 700ms ${i * 120}ms, transform 700ms ${i * 120}ms, box-shadow 300ms, border-color 300ms`,
-                }}
-              >
-                <div className="w-11 h-11 rounded-xl bg-[#f5efe0] group-hover:bg-[#e85d3f] transition-colors duration-300 flex items-center justify-center mb-5">
-                  <Icon className="w-5 h-5 text-[#e85d3f] group-hover:text-white transition-colors duration-300" />
-                </div>
-                <h3 className="font-black text-[#1a1a1a] text-base mb-3 leading-tight">{d.title}</h3>
-                <p className="text-[#6b7280] text-sm leading-relaxed">{d.desc}</p>
-              </div>
-            )
-          })}
-        </div>
-      </div>
-    </section>
-  )
+  return <ServiceStatsStrip stats={stats} />
 }
 
 function StrengthsSection() {
@@ -581,7 +501,7 @@ export default function InfrastructurePage() {
       <main className="bg-white">
 
         {/* Hero — sliding image background */}
-        <section className="relative min-h-[62vh] flex items-end pb-16 pt-40 px-6 md:px-12 lg:px-20 overflow-hidden">
+        <section className="relative flex min-h-[52svh] items-end overflow-hidden px-6 pb-16 pt-40 md:px-12 lg:px-20">
           <HeroSlideshow />
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-black/30 z-10" />
 
@@ -640,8 +560,16 @@ export default function InfrastructurePage() {
         {/* Sticky Scroll — Capabilities showcase */}
         <StickyScrollSection />
 
-        {/* Departments */}
-        <DepartmentsSection />
+        <DamMethodology
+          eyebrow="Organisational Structure"
+          heading="Departments & Divisions"
+          description="Four focused teams working together to keep every project coordinated, capable, and accountable."
+          steps={departments.map((department, index) => ({
+            step: `Division ${String(index + 1).padStart(2, '0')}`,
+            title: department.title,
+            desc: department.desc,
+          }))}
+        />
 
         {/* Organisational Strengths — columns swapped */}
         <StrengthsSection />
@@ -657,7 +585,8 @@ export default function InfrastructurePage() {
         />
 
         {/* CTA — orange background */}
-        <section id="contact" className="bg-[#e85d3f] py-20 px-6 md:px-12 lg:px-20">
+
+        <section id="contact-legacy" className="hidden bg-[#e85d3f] py-20 px-6 md:px-12 lg:px-20">
           <div className="max-w-3xl mx-auto text-center">
             <h2
               className="text-white font-black text-balance leading-tight mb-4"
