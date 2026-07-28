@@ -23,7 +23,7 @@ const navLinks = [
       { label: 'Completed Projects', href: '/projects/completed' },
     ],
   },
-  { label: 'Gallery', href: '/gallery' },
+  { label: 'Showcase', href: '/gallery' },
   {
     label: 'Company',
     href: '#company',
