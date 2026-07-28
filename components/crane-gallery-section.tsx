@@ -3,6 +3,8 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import { X, ChevronLeft, ChevronRight, ZoomIn } from 'lucide-react'
+import ProximityHeading from '@/components/proximity-heading'
+import ScrollReveal from '@/components/scroll-reveal'
 
 const CRANE_IMAGES = [
   {
@@ -79,15 +81,17 @@ export default function CraneGallerySection() {
               className="font-black text-[#1a1a1a] text-balance leading-tight"
               style={{ fontSize: 'clamp(1.8rem, 3vw, 2.8rem)' }}
             >
-              Crane Operations in Action
+              <ProximityHeading>Crane Operations in Action</ProximityHeading>
             </h2>
+            <ScrollReveal className="mt-3 max-w-lg">
             <p className="text-[#6b7280] text-base mt-3 max-w-lg text-pretty">
               Real project photography from Excel Engineering crane operations across infrastructure, industrial, and civil construction sites.
             </p>
+            </ScrollReveal>
           </div>
           <a
             href="/gallery?category=cranes"
-            className="inline-flex items-center gap-2 bg-[#0e5c3d] hover:bg-[#0a4a31] text-white font-bold text-sm uppercase tracking-wide px-6 py-3 rounded-full transition-colors flex-shrink-0"
+            className="inline-flex flex-shrink-0 items-center gap-2 rounded-full bg-[#111111] px-6 py-3 text-sm font-bold uppercase tracking-wide text-white transition-colors hover:bg-[#1a1a1a]"
           >
             View Full Gallery
           </a>
@@ -111,9 +115,9 @@ export default function CraneGallerySection() {
                 className="object-cover transition-transform duration-700 group-hover:scale-110"
               />
               {/* Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0e5c3d]/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
               {/* Tag pill */}
-              <div className="absolute top-3 left-3 bg-[#0e5c3d]/80 backdrop-blur-sm text-white text-xs font-semibold px-3 py-1 rounded-full">
+              <div className="absolute left-3 top-3 rounded-full bg-black/45 px-3 py-1 text-xs font-semibold text-white backdrop-blur-sm">
                 {img.tag}
               </div>
               {/* Hover title */}

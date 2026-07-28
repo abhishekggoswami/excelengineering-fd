@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { ArrowLeft, ArrowUpRight, VolumeX } from 'lucide-react'
+import { ArrowLeft, ArrowUpRight } from 'lucide-react'
 
 export default function DamHeroSlideshow() {
   return (
@@ -41,13 +41,9 @@ export default function DamHeroSlideshow() {
         </p>
 
         <div className="mt-9 flex flex-wrap items-center gap-4">
-          <Link href="#contact" className="inline-flex items-center gap-2 rounded-full bg-[#e85d3f] px-6 py-3.5 text-sm font-bold uppercase tracking-wide text-white transition-colors hover:bg-[#d14f33]">
+          <Link href="/contact" className="inline-flex items-center gap-2 rounded-full bg-[#e85d3f] px-6 py-3.5 text-sm font-bold uppercase tracking-wide text-white transition-all hover:-translate-y-0.5 hover:bg-[#d14f33] hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white">
             Start a project <ArrowUpRight className="h-4 w-4" />
           </Link>
-          <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/20 px-4 py-3 text-xs font-semibold uppercase tracking-wider text-white/70 backdrop-blur-sm">
-            <VolumeX className="h-3.5 w-3.5" />
-            Film playing silently
-          </div>
         </div>
       </div>
 

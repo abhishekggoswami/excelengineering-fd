@@ -2,7 +2,6 @@ import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
 import { Barlow } from 'next/font/google'
 import SiteFooter from '@/components/site-footer'
-import GlobalSectionEyebrowAnimation from '@/components/global-section-eyebrow-animation'
 import './globals.css'
 
 const barlow = Barlow({
@@ -32,7 +31,6 @@ export default function RootLayout({
     <html lang="en" className={`${barlow.variable} bg-background`}>
       <body className="font-sans antialiased">
         {children}
-        <GlobalSectionEyebrowAnimation />
         <SiteFooter />
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>

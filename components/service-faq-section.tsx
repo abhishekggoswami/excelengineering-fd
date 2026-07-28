@@ -1,5 +1,8 @@
-import { ArrowRight, ArrowDown, Settings } from 'lucide-react'
+import { ArrowRight, ArrowDown } from 'lucide-react'
 import CtaBannerSection from '@/components/cta-banner-section'
+import ScrollFloat from '@/components/scroll-float'
+import ScrollReveal from '@/components/scroll-reveal'
+import ProximityHeading from '@/components/proximity-heading'
 
 interface Faq {
   q: string
@@ -10,12 +13,14 @@ interface ServiceFaqSectionProps {
   faqs: Faq[]
   heading?: string
   subheading?: string
+  headingEffect?: 'scroll' | 'proximity'
 }
 
 export default function ServiceFaqSection({
   faqs,
   heading = 'Frequently Asked Questions',
   subheading,
+  headingEffect = 'proximity',
 }: ServiceFaqSectionProps) {
   return (
     <section
@@ -26,25 +31,30 @@ export default function ServiceFaqSection({
       {/* Content */}
       <div className="relative z-10 mx-auto max-w-4xl px-6 py-24 md:px-12 md:py-32">
         {/* Badge */}
-        <div className="flex justify-center mb-6">
-          <div className="inline-flex items-center gap-2 bg-[#1a1a1a] text-white text-xs font-semibold uppercase tracking-widest px-4 py-2 rounded-full">
-            <Settings className="w-3.5 h-3.5 text-[#e85d3f]" />
-            Frequently Asked Questions
+        <div className="mb-6 flex justify-center">
+          <div className="flex items-center gap-3">
+            <span className="h-px w-8 bg-[#e85d3f]" />
+            <span className="text-sm font-semibold uppercase tracking-widest text-[#e85d3f]">Frequently Asked Questions</span>
+            <span className="h-px w-8 bg-[#e85d3f]" />
           </div>
         </div>
 
         {/* Heading */}
-        <div className="text-center mb-4">
-          <h2 className="text-4xl md:text-5xl font-extrabold text-[#1a1a1a] leading-tight text-balance">
-            {heading}
+        <div className="mb-4 text-center">
+          <h2 className="mx-auto max-w-4xl break-words text-3xl font-extrabold leading-[1.08] text-[#1a1a1a] sm:text-4xl md:text-5xl">
+            {headingEffect === 'proximity' ? (
+              <ProximityHeading>{heading}</ProximityHeading>
+            ) : (
+              <ScrollFloat>{heading}</ScrollFloat>
+            )}
           </h2>
         </div>
 
         {/* Optional subtitle */}
         {subheading && (
-          <p className="text-center text-[#6b7280] text-base leading-relaxed max-w-2xl mx-auto mb-14 text-pretty">
-            {subheading}
-          </p>
+          <ScrollReveal className="mx-auto mb-14 max-w-2xl">
+            <p className="text-center text-base leading-relaxed text-[#6b7280] text-pretty">{subheading}</p>
+          </ScrollReveal>
         )}
         {!subheading && <div className="mb-14" />}
 

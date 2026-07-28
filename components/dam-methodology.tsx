@@ -1,4 +1,6 @@
 import { ArrowRight } from 'lucide-react'
+import ProximityHeading from '@/components/proximity-heading'
+import ScrollReveal from '@/components/scroll-reveal'
 
 type MethodologyStep = {
   step: string
@@ -28,12 +30,12 @@ export default function DamMethodology({
             <span className="text-sm font-semibold uppercase tracking-widest text-[#e85d3f]">{eyebrow}</span>
             <span className="h-px w-8 bg-[#e85d3f]" />
           </div>
-          <h2 className="text-balance font-black leading-tight text-[#1a1a1a]" style={{ fontSize: 'clamp(1.8rem, 3vw, 2.8rem)' }}>
-            {heading}
+          <h2 className="font-black leading-tight text-[#1a1a1a]" style={{ fontSize: 'clamp(1.8rem, 3vw, 2.8rem)' }}>
+            <ProximityHeading>{heading}</ProximityHeading>
           </h2>
-          <p className="mx-auto mt-3 max-w-xl text-pretty text-sm leading-relaxed text-[#6b7280]">
-            {description}
-          </p>
+          <ScrollReveal className="mx-auto mt-3 max-w-xl">
+            <p className="text-pretty text-sm leading-relaxed text-[#6b7280]">{description}</p>
+          </ScrollReveal>
         </div>
 
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">

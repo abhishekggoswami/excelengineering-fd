@@ -18,6 +18,110 @@ type LatLngBounds = [[number, number], [number, number]]
 
 const FIT_PAD = 26
 
+type MapCity = {
+  name: string
+  coordinates: [number, number]
+  labelOffset?: [number, number]
+  priority?: 'primary' | 'secondary'
+}
+
+type RoadLink = {
+  from: string
+  to: string
+  hierarchy: 'primary' | 'secondary'
+  bend?: number
+}
+
+const STATE_CITY_LABELS: Record<string, MapCity[]> = {
+  'Madhya Pradesh': [
+    { name: 'Bhopal', coordinates: [77.41, 23.26], labelOffset: [7, -7] },
+    { name: 'Indore', coordinates: [75.86, 22.72], labelOffset: [7, -6] },
+    { name: 'Gwalior', coordinates: [78.18, 26.22], labelOffset: [7, -7] },
+    { name: 'Jabalpur', coordinates: [79.95, 23.18], labelOffset: [8, 14] },
+    { name: 'Sagar', coordinates: [78.74, 23.84], labelOffset: [7, 15], priority: 'secondary' },
+    { name: 'Satna', coordinates: [80.83, 24.58], labelOffset: [7, -7] },
+    { name: 'Dhar', coordinates: [75.30, 22.60], labelOffset: [7, -7], priority: 'secondary' },
+    { name: 'Datia', coordinates: [78.46, 25.67], labelOffset: [7, -6], priority: 'secondary' },
+  ],
+  Rajasthan: [
+    { name: 'Jaipur', coordinates: [75.79, 26.91] },
+    { name: 'Jaisalmer', coordinates: [70.92, 26.92] },
+    { name: 'Jodhpur', coordinates: [73.02, 26.24] },
+    { name: 'Udaipur', coordinates: [73.68, 24.59] },
+    { name: 'Kota', coordinates: [75.86, 25.18] },
+  ],
+  Odisha: [
+    { name: 'Bhubaneswar', coordinates: [85.82, 20.30] },
+    { name: 'Khordha', coordinates: [85.62, 20.18] },
+    { name: 'Cuttack', coordinates: [85.88, 20.46] },
+    { name: 'Sambalpur', coordinates: [83.97, 21.47] },
+  ],
+  Gujarat: [
+    { name: 'Ahmedabad', coordinates: [72.57, 23.02] },
+    { name: 'Gandhinagar', coordinates: [72.64, 23.22] },
+    { name: 'Vadodara', coordinates: [73.18, 22.31] },
+    { name: 'Rajkot', coordinates: [70.80, 22.30] },
+    { name: 'Surat', coordinates: [72.83, 21.17] },
+  ],
+  Maharashtra: [
+    { name: 'Mumbai', coordinates: [72.88, 19.08] },
+    { name: 'Pune', coordinates: [73.86, 18.52] },
+    { name: 'Nagpur', coordinates: [79.09, 21.15] },
+    { name: 'Bhandara', coordinates: [79.65, 21.17] },
+    { name: 'Nashik', coordinates: [73.79, 19.99] },
+  ],
+}
+
+const STATE_ROAD_LINKS: Record<string, RoadLink[]> = {
+  'Madhya Pradesh': [
+    { from: 'Dhar', to: 'Indore', hierarchy: 'secondary', bend: -0.03 },
+    { from: 'Indore', to: 'Bhopal', hierarchy: 'primary', bend: 0.06 },
+    { from: 'Bhopal', to: 'Sagar', hierarchy: 'primary', bend: -0.05 },
+    { from: 'Sagar', to: 'Jabalpur', hierarchy: 'primary', bend: 0.04 },
+    { from: 'Jabalpur', to: 'Satna', hierarchy: 'primary', bend: -0.04 },
+    { from: 'Gwalior', to: 'Datia', hierarchy: 'secondary', bend: 0.03 },
+    { from: 'Datia', to: 'Sagar', hierarchy: 'secondary', bend: -0.07 },
+    { from: 'Bhopal', to: 'Gwalior', hierarchy: 'primary', bend: 0.1 },
+    { from: 'Sagar', to: 'Satna', hierarchy: 'secondary', bend: 0.05 },
+  ],
+  Rajasthan: [
+    { from: 'Jaisalmer', to: 'Jodhpur', hierarchy: 'primary', bend: 0.05 },
+    { from: 'Jodhpur', to: 'Jaipur', hierarchy: 'primary', bend: -0.06 },
+    { from: 'Jaipur', to: 'Kota', hierarchy: 'primary', bend: 0.04 },
+    { from: 'Jodhpur', to: 'Udaipur', hierarchy: 'secondary', bend: 0.05 },
+    { from: 'Udaipur', to: 'Kota', hierarchy: 'secondary', bend: -0.04 },
+  ],
+  Odisha: [
+    { from: 'Sambalpur', to: 'Cuttack', hierarchy: 'primary', bend: -0.06 },
+    { from: 'Cuttack', to: 'Bhubaneswar', hierarchy: 'primary', bend: 0.02 },
+    { from: 'Bhubaneswar', to: 'Khordha', hierarchy: 'secondary', bend: -0.02 },
+  ],
+  Gujarat: [
+    { from: 'Rajkot', to: 'Ahmedabad', hierarchy: 'primary', bend: 0.06 },
+    { from: 'Ahmedabad', to: 'Gandhinagar', hierarchy: 'secondary', bend: -0.02 },
+    { from: 'Ahmedabad', to: 'Vadodara', hierarchy: 'primary', bend: -0.04 },
+    { from: 'Vadodara', to: 'Surat', hierarchy: 'primary', bend: 0.03 },
+  ],
+  Maharashtra: [
+    { from: 'Mumbai', to: 'Pune', hierarchy: 'primary', bend: -0.04 },
+    { from: 'Mumbai', to: 'Nashik', hierarchy: 'primary', bend: 0.05 },
+    { from: 'Nashik', to: 'Nagpur', hierarchy: 'primary', bend: -0.08 },
+    { from: 'Pune', to: 'Nagpur', hierarchy: 'secondary', bend: 0.09 },
+    { from: 'Nagpur', to: 'Bhandara', hierarchy: 'secondary', bend: -0.02 },
+  ],
+}
+
+function curvedRoadPath(a: [number, number], b: [number, number], bend = 0.05) {
+  const dx = b[0] - a[0]
+  const dy = b[1] - a[1]
+  const distance = Math.hypot(dx, dy) || 1
+  const offsetX = (-dy / distance) * distance * bend
+  const offsetY = (dx / distance) * distance * bend
+  const controlX = (a[0] + b[0]) / 2 + offsetX
+  const controlY = (a[1] + b[1]) / 2 + offsetY
+  return `M ${a[0]} ${a[1]} Q ${controlX} ${controlY} ${b[0]} ${b[1]}`
+}
+
 const mapProjection = geoMercator()
   .scale(1180)
   .center([82.5, 22.6])
@@ -70,10 +174,10 @@ function geometryBounds(geometry: any): LatLngBounds {
 export default function IndiaMap({ hovered, selected, initialProjectId = null, onHover, onSelect }: IndiaMapProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const [size, setSize] = useState({ w: 800, h: 860 })
-  // Kept inert while URL-backed project selection provides the reliable popup.
-  // The previous runtime Leaflet popup can therefore never appear late or intercept a pin click.
-  const [activeProject] = useState<RealProject | null>(null)
-  const [pinPoint] = useState<{ x: number; y: number } | null>(null)
+  const [activeProjectId, setActiveProjectId] = useState<string | null>(initialProjectId)
+
+  useEffect(() => setActiveProjectId(initialProjectId), [initialProjectId])
+  useEffect(() => setActiveProjectId(null), [selected])
 
   // Track the pixel size of the map box so the outline clip-path (generated in
   // CSS px) matches the container exactly.
@@ -90,7 +194,9 @@ export default function IndiaMap({ hovered, selected, initialProjectId = null, o
   const selectedState = selected ? baseStates.find((item) => item.name === selected) : null
   const selData = selected ? STATE_BY_NAME[selected] : null
   const selBounds = selectedState?.bounds ?? null
-  const fallbackProject = initialProjectId ? REAL_PROJECTS.find((project) => project.id === initialProjectId) ?? null : null
+  const fallbackProject = activeProjectId
+    ? REAL_PROJECTS.find((project) => project.id === activeProjectId) ?? null
+    : null
 
   // The state geometry produces the exact outline and keeps each project pin
   // in its known site position, independently of road-tile loading timing.
@@ -117,6 +223,15 @@ export default function IndiaMap({ hovered, selected, initialProjectId = null, o
         ? Math.max(16, popupPoint[1] - popupHeight - 27)
         : Math.min(size.h - popupHeight - 16, popupPoint[1] + 27))
     : 16
+  // Legacy popup markup below is intentionally disabled; these aliases keep
+  // the old block type-safe until it is removed during the next map cleanup.
+  const activeProject = fallbackProject
+  const pinPoint = popupPoint ? { x: popupPoint[0], y: popupPoint[1] } : null
+  const selectedCities = selected ? STATE_CITY_LABELS[selected] ?? [] : []
+  const selectedRoads = selected ? STATE_ROAD_LINKS[selected] ?? [] : []
+  const cityByName = new Map(selectedCities.map((city) => [city.name, city]))
+  const stateClipId = `state-map-clip-${selected?.replace(/[^a-z0-9]/gi, '-').toLowerCase()}`
+  const terrainPatternId = `state-terrain-${selected?.replace(/[^a-z0-9]/gi, '-').toLowerCase()}`
 
   return (
     <div ref={containerRef} className="relative w-full">
@@ -170,7 +285,10 @@ export default function IndiaMap({ hovered, selected, initialProjectId = null, o
                     onPointerLeave={() => onHover(null)}
                   >
                     <g transform={`translate(${x}, ${y})`} className="cursor-pointer [pointer-events:all]">
-                      <circle r={active ? 8 : 6} fill="none" stroke={fill} strokeWidth={1.2} opacity={0.5} />
+                      <circle r="6" fill="none" stroke={fill} strokeWidth={1.4} opacity={0.58}>
+                        <animate attributeName="r" values="5;13;5" dur="2.2s" repeatCount="indefinite" />
+                        <animate attributeName="opacity" values="0.7;0.05;0.7" dur="2.2s" repeatCount="indefinite" />
+                      </circle>
                       <g transform="translate(-6,-17)">
                         <path d="M6 17C6 17 12 9.2 12 5.4C12 2.4 9.3 0 6 0C2.7 0 0 2.4 0 5.4C0 9.2 6 17 6 17Z" fill={fill} stroke="#ffffff" strokeWidth={1.4} />
                         <circle cx={6} cy={5.4} r={2.2} fill="#ffffff" />
@@ -200,22 +318,73 @@ export default function IndiaMap({ hovered, selected, initialProjectId = null, o
                   preserveAspectRatio="none"
                 >
                   <defs>
-                    <clipPath id={`state-map-clip-${selected?.replace(/[^a-z0-9]/gi, '-').toLowerCase()}`}>
+                    <clipPath id={stateClipId}>
                       <path d={clip} />
                     </clipPath>
+                    <pattern id={terrainPatternId} width="54" height="42" patternUnits="userSpaceOnUse">
+                      <path
+                        d="M-10 30 C 1 20, 13 36, 27 26 S 48 23, 64 32"
+                        fill="none"
+                        stroke="#b8cec0"
+                        strokeWidth="0.7"
+                        opacity="0.2"
+                      />
+                    </pattern>
                   </defs>
-                  <g clipPath={`url(#state-map-clip-${selected?.replace(/[^a-z0-9]/gi, '-').toLowerCase()})`}>
+                  <g clipPath={`url(#${stateClipId})`}>
                     <rect width={size.w} height={size.h} fill="#edf5ef" />
-                    <path d={`M ${size.w * 0.02} ${size.h * 0.74} C ${size.w * 0.24} ${size.h * 0.44}, ${size.w * 0.42} ${size.h * 0.76}, ${size.w * 0.98} ${size.h * 0.28}`} fill="none" stroke="#d3e0d6" strokeWidth="14" opacity="0.78" />
-                    <path d={`M ${size.w * 0.1} ${size.h * 0.78} C ${size.w * 0.26} ${size.h * 0.46}, ${size.w * 0.54} ${size.h * 0.76}, ${size.w * 0.96} ${size.h * 0.31}`} fill="none" stroke="#f8fbf8" strokeWidth="8" />
-                    <path d={`M ${size.w * 0.13} ${size.h * 0.2} C ${size.w * 0.31} ${size.h * 0.47}, ${size.w * 0.67} ${size.h * 0.18}, ${size.w * 0.92} ${size.h * 0.64}`} fill="none" stroke="#d5e3da" strokeWidth="11" opacity="0.82" />
-                    <path d={`M ${size.w * 0.13} ${size.h * 0.2} C ${size.w * 0.31} ${size.h * 0.47}, ${size.w * 0.67} ${size.h * 0.18}, ${size.w * 0.92} ${size.h * 0.64}`} fill="none" stroke="#ffffff" strokeWidth="5" />
-                    <path d={`M ${size.w * 0.31} ${size.h * 0.04} C ${size.w * 0.43} ${size.h * 0.31}, ${size.w * 0.3} ${size.h * 0.62}, ${size.w * 0.62} ${size.h * 0.96}`} fill="none" stroke="#b8d8c6" strokeWidth="4" strokeDasharray="10 9" opacity="0.9" />
-                    <path d={`M ${size.w * 0.05} ${size.h * 0.47} C ${size.w * 0.36} ${size.h * 0.37}, ${size.w * 0.66} ${size.h * 0.48}, ${size.w * 0.95} ${size.h * 0.4}`} fill="none" stroke="#b8d8c6" strokeWidth="4" strokeDasharray="10 9" opacity="0.9" />
-                    {Array.from({ length: 28 }, (_, index) => {
-                      const x = ((index * 83 + 49) % 1000) / 1000 * size.w
-                      const y = ((index * 137 + 71) % 1000) / 1000 * size.h
-                      return <circle key={index} cx={x} cy={y} r={index % 6 === 0 ? 3.2 : 1.7} fill={index % 6 === 0 ? '#8aa997' : '#bfd4c5'} opacity={0.85} />
+                    <rect width={size.w} height={size.h} fill={`url(#${terrainPatternId})`} />
+                    {selectedRoads.map((road) => {
+                      const fromCity = cityByName.get(road.from)
+                      const toCity = cityByName.get(road.to)
+                      const from = fromCity ? detailProjection?.(fromCity.coordinates) : null
+                      const to = toCity ? detailProjection?.(toCity.coordinates) : null
+                      if (!from || !to) return null
+                      const path = curvedRoadPath(from, to, road.bend)
+                      const primary = road.hierarchy === 'primary'
+                      return (
+                        <g key={`${road.from}-${road.to}`} fill="none" strokeLinecap="round">
+                          <path
+                            d={path}
+                            stroke={primary ? '#bdcdc2' : '#cad8cf'}
+                            strokeWidth={primary ? 5 : 2.7}
+                            opacity={primary ? 0.68 : 0.62}
+                          />
+                          <path
+                            d={path}
+                            stroke={primary ? '#fffdf7' : '#f9f7f0'}
+                            strokeWidth={primary ? 2.1 : 1}
+                            opacity={primary ? 0.94 : 0.86}
+                          />
+                        </g>
+                      )
+                    })}
+                    {selectedCities.map((city) => {
+                      const point = detailProjection?.(city.coordinates)
+                      if (!point) return null
+                      const [labelX, labelY] = city.labelOffset ?? [7, -6]
+                      return (
+                        <g
+                          key={city.name}
+                          transform={`translate(${point[0]}, ${point[1]})`}
+                          className={city.priority === 'secondary' ? 'hidden sm:block' : undefined}
+                        >
+                          <circle r="3" fill="#174f3b" stroke="#fffdf7" strokeWidth="1.5" />
+                          <text
+                            x={labelX}
+                            y={labelY}
+                            fill="#284c3f"
+                            fontSize={Math.max(9, Math.min(11.5, size.w / 66))}
+                            fontWeight="650"
+                            paintOrder="stroke"
+                            stroke="#edf5ef"
+                            strokeWidth="3.5"
+                            strokeLinejoin="round"
+                          >
+                            {city.name}
+                          </text>
+                        </g>
+                      )
                     })}
                   </g>
                 </svg>
@@ -235,19 +404,47 @@ export default function IndiaMap({ hovered, selected, initialProjectId = null, o
                     const [x, y] = point
                     const fill = project.status === 'Completed' ? '#0e5c3d' : '#e85d3f'
                     return (
-                      <a
+                      <g
                         key={project.id}
-                        href={`/?state=${encodeURIComponent(selected ?? '')}&project=${encodeURIComponent(project.id)}#map`}
+                        transform={`translate(${x}, ${y})`}
                         aria-label={`Open details for ${project.title}`}
-                        className="pointer-events-auto"
+                        className="group pointer-events-auto cursor-pointer outline-none"
+                        role="button"
+                        tabIndex={0}
+                        onMouseDown={(event) => event.preventDefault()}
+                        onClick={(event) => {
+                          event.preventDefault()
+                          event.stopPropagation()
+                          setActiveProjectId(project.id)
+                          onHover(project.id)
+                        }}
+                        onKeyDown={(event) => {
+                          if (event.key === 'Enter' || event.key === ' ') {
+                            event.preventDefault()
+                            setActiveProjectId(project.id)
+                            onHover(project.id)
+                          }
+                        }}
                       >
-                        <g transform={`translate(${x}, ${y})`} className="cursor-pointer">
+                        <circle r="8" fill="none" stroke={fill} strokeWidth="2" opacity="0.65">
+                          <animate attributeName="r" values="8;19;8" dur="2s" repeatCount="indefinite" />
+                          <animate attributeName="opacity" values="0.7;0.04;0.7" dur="2s" repeatCount="indefinite" />
+                        </circle>
+                        <g>
+                          <circle
+                            r="16"
+                            fill="none"
+                            stroke={fill}
+                            strokeWidth="2"
+                            opacity="0"
+                            className="transition-opacity duration-200 group-hover:opacity-30 group-focus-visible:opacity-70"
+                          />
                           <circle r="11" fill={fill} opacity="0.14" />
                           <path d="M0 10C0 10 7 -0.2 7 -4.5C7 -8.1 3.9 -11 0 -11C-3.9 -11 -7 -8.1 -7 -4.5C-7 -0.2 0 10 0 10Z" fill={fill} stroke="#ffffff" strokeWidth="1.6" />
                           <circle cy="-4.5" r="2.4" fill="#ffffff" />
-                          <title>{project.title}</title>
+                          <title>{`${project.title} — ${project.location}`}</title>
                         </g>
-                      </a>
+                      </g>
                     )
                   })}
                 </svg>
@@ -268,13 +465,17 @@ export default function IndiaMap({ hovered, selected, initialProjectId = null, o
                     className="absolute inset-x-0 top-0 h-1.5 rounded-t-2xl"
                     style={{ background: fallbackProject.status === 'Completed' ? '#0e5c3d' : '#e85d3f' }}
                   />
-                  <Link
-                    href={`/?state=${encodeURIComponent(selected ?? '')}#map`}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setActiveProjectId(null)
+                      onHover(null)
+                    }}
                     aria-label="Close project preview"
                     className="absolute right-3 top-3 rounded-full bg-black/[0.05] px-2 py-1 text-[10px] font-bold text-[#555] transition-colors hover:bg-black/10"
                   >
                     Close
-                  </Link>
+                  </button>
                   <span
                     className="mt-1 inline-block rounded px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider"
                     style={{
@@ -295,7 +496,7 @@ export default function IndiaMap({ hovered, selected, initialProjectId = null, o
                 </div>
               )}
 
-              {activeProject && pinPoint && (
+              {false && (
                 <div
                   className="pointer-events-auto absolute z-[1400] w-64 rounded-2xl bg-white shadow-2xl ring-1 ring-black/10"
                   style={{
@@ -362,7 +563,7 @@ export default function IndiaMap({ hovered, selected, initialProjectId = null, o
               )}
 
               {/* header chip */}
-              <div className="pointer-events-none absolute left-3 top-3 z-[1200] flex max-w-[calc(100%-6rem)] items-center gap-2 rounded-full bg-white/95 px-3 py-2 shadow-md backdrop-blur sm:left-4 sm:top-4 sm:px-4">
+              <div className="pointer-events-none absolute left-3 top-3 z-[1200] flex max-w-[calc(100%-6rem)] items-center gap-2 rounded-full bg-white/95 px-3 py-2 shadow-md backdrop-blur sm:left-4 sm:top-4 sm:px-4 xl:hidden">
                 <span className="relative flex h-2.5 w-2.5">
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#e85d3f]/60" />
                   <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-[#e85d3f]" />

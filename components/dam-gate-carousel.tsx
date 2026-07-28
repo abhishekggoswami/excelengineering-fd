@@ -1,4 +1,4 @@
-import { ArrowLeft, ArrowRight, ArrowUpRight, Layers } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Layers } from 'lucide-react'
 
 type GateType = {
   name: string
@@ -25,7 +25,7 @@ function GateCard({ type, index, mobile = false }: { type: GateType; index: numb
       <div className="px-2 pb-2 pt-4">
         <div className="flex items-start gap-3"><div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-[#111111] shadow-md"><Layers className="h-4 w-4 text-[#f5a623]" /></div><div className="min-w-0"><p className="text-[10px] font-bold uppercase tracking-[0.15em] text-[#e85d3f]">Gate engineering</p><h3 className="mt-1 text-base font-extrabold leading-snug text-[#1a1a1a]">{type.name}</h3></div></div>
         <p className="mt-4 min-h-[3.75rem] text-sm leading-relaxed text-[#6b7280]">{type.desc}</p>
-        <div className="mt-4 flex items-center justify-between border-t border-[#e9ece9] pt-3 text-xs font-bold uppercase tracking-[0.12em] text-[#0e5c3d]"><span>Excel Engineering</span><ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" /></div>
+        <div className="mt-4 border-t border-[#e9ece9] pt-3 text-xs font-bold uppercase tracking-[0.12em] text-[#0e5c3d]">Excel Engineering</div>
       </div>
     </article>
   )

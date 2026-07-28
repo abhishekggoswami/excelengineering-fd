@@ -124,11 +124,11 @@ export const additionalProjects: AdditionalProject[] = [
     location: 'Sewda, District Datia, Madhya Pradesh',
     state: 'Madhya Pradesh',
     coordinates: [78.13, 25.67],
-    status: 'Completed',
+    status: 'Ongoing',
     client: 'Bhugan Infracon Pvt. Ltd.',
     specification: 'MS structural bridge fabrication and erection',
     quantity: 'Base scope: approximately 97.71 MT; extended scope: approximately 137 MT of fabricated structural steel',
-    overview: 'Excel Engineering completed the supply, fabrication and erection of an MS Structural Bridge for the Sewda Water Supply Project. The later extended scope added elastomeric bearing pads and approximately 137 MT of fabricated structural steel to the project record.',
+    overview: 'Excel Engineering is executing the supply, fabrication and erection of an MS Structural Bridge for the Sewda Water Supply Project, including the extended scope with elastomeric bearing pads and approximately 137 MT of fabricated structural steel.',
     scope: [
       'Complete structural-steel fabrication, precision welding and assembly',
       'Surface preparation, primer coating and aluminium painting',
@@ -136,7 +136,7 @@ export const additionalProjects: AdditionalProject[] = [
       'Supply and installation of nuts, bolts, washers and fastening materials',
       'Extended scope: elastomeric bearing pads and additional structural steel works',
     ],
-    mapDescription: 'Completed MS structural bridge package for the Sewda Water Supply Project.',
+    mapDescription: 'Ongoing MS structural bridge package for the Sewda Water Supply Project.',
   },
   {
     slug: 'judi-irrigation-project',

@@ -193,7 +193,7 @@ function ProjectCard({ project }: { project: OngoingProjectCard }) {
     <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-[#e5e7eb] bg-white transition-all duration-300 hover:-translate-y-1 hover:border-[#e85d3f]/45 hover:shadow-xl">
       <div className="relative aspect-video overflow-hidden bg-[#102b25]">
         {project.video ? (
-          <video autoPlay muted loop playsInline preload="metadata" poster={project.image} aria-label={`${project.title} project video`} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105">
+          <video autoPlay muted loop playsInline preload="metadata" aria-label={`${project.title} project video`} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105">
             <source src={project.video} type="video/mp4" />
           </video>
         ) : (
@@ -235,14 +235,15 @@ export default function OngoingProjectsPage() {
             <video autoPlay muted loop playsInline preload="auto" className="h-full w-full object-cover" aria-label="Ongoing projects construction video">
               <source src="/videos/ongoing-projects-hero.mp4" type="video/mp4" />
             </video>
-            <Image
+            {/* Legacy image fallback removed: the hero is video-only. */}
+            {false && <Image
               src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/IMG_0479-clean-Bf6zZ0GGD3FL3uy0urqoL0lTWF2IS3.png"
               alt="Excel Engineering active construction site — dam gates and hoists"
               fill
               priority
               sizes="100vw"
               className="hidden"
-            />
+            />}
             <div className="absolute inset-0 bg-gradient-to-t from-[#111111] via-[#111111]/55 to-transparent" />
           </div>
           <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 lg:px-20 pb-16 pt-36">
@@ -353,7 +354,6 @@ export default function OngoingProjectsPage() {
                         loop
                         playsInline
                         preload="metadata"
-                        poster={project.image}
                         aria-label={`${project.title} project video`}
                         className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                       >

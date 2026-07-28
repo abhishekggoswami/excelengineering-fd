@@ -1,3 +1,5 @@
+import CountUp from '@/components/count-up'
+
 const STATS = [
   {
     label: 'Completed Projects',
@@ -43,7 +45,7 @@ function StatCard({ stat, index }: { stat: (typeof STATS)[0]; index: number }) {
       } ${index === 0 ? 'pl-0' : ''} ${isLast ? 'lg:pr-0' : ''}`}
     >
       {/* Label + description */}
-      <div className="pb-6">
+      <div className="flex-1 pb-6">
         <h3 className="text-[#1a1a1a] font-extrabold uppercase tracking-wide text-sm mb-3">
           {stat.label}
         </h3>
@@ -57,13 +59,10 @@ function StatCard({ stat, index }: { stat: (typeof STATS)[0]; index: number }) {
 
       {/* Real business figure: visible before any client scripts load. */}
       <div>
-        <span
-          className="font-extrabold leading-none tabular-nums"
-          style={{ fontSize: 'clamp(2.4rem, 4.5vw, 3.8rem)', color: '#f5a623' }}
-        >
-          {stat.end}
-          {stat.suffix}
-        </span>
+        <CountUp
+          value={`${stat.end}${stat.suffix}`}
+          className="text-[clamp(2.4rem,4.5vw,3.8rem)] font-extrabold leading-none tabular-nums text-[#f5a623]"
+        />
       </div>
     </div>
   )

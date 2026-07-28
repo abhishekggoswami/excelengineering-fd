@@ -1,10 +1,12 @@
 import DamHeroSlideshow from '@/components/dam-hero-slideshow'
 import DamGallerySection from '@/components/dam-gallery-section'
 import DamMethodology from '@/components/dam-methodology'
-import AnimatedSearchLabel from '@/components/animated-search-label'
 import DamGateCarousel from '@/components/dam-gate-carousel'
 import LoopingLetterHeading from '@/components/looping-letter-heading'
 import ServiceFaqSection from '@/components/service-faq-section'
+import ServiceStatsStrip from '@/components/service-stats-strip'
+import ProximityHeading from '@/components/proximity-heading'
+import ScrollReveal from '@/components/scroll-reveal'
 import Navbar from '@/components/navbar'
 import Image from 'next/image'
 import { CheckCircle2, ArrowUpRight, Layers } from 'lucide-react'
@@ -166,25 +168,7 @@ export default function DamConstructionPage() {
         <DamHeroSlideshow />
 
         {/* Stats strip */}
-        <section className="relative overflow-hidden bg-[#111111] px-6 py-10 md:px-12 lg:px-20">
-          <div className="relative mx-auto max-w-7xl">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-              {stats.map((s) => (
-                <div key={s.label} className="flex flex-col items-center px-3 text-center">
-                  <span
-                    className="font-black text-[#f5a623] leading-none"
-                    style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}
-                  >
-                    {s.value}
-                  </span>
-                  <span className="text-white/65 text-xs uppercase tracking-wide mt-2 font-medium">
-                    {s.label}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
+        <ServiceStatsStrip stats={stats} />
 
         {/* Overview + capabilities */}
         <section className="py-24 px-6 md:px-12 lg:px-20">
@@ -198,18 +182,20 @@ export default function DamConstructionPage() {
                   </span>
                 </div>
                 <h2
-                  className="font-black text-[#1a1a1a] text-balance leading-tight mb-6"
+                  className="mb-6 font-black leading-tight text-[#1a1a1a]"
                   style={{ fontSize: 'clamp(1.8rem, 3vw, 2.8rem)' }}
                 >
-                  Key Capabilities &amp; Expertise
+                  <ProximityHeading>Key Capabilities &amp; Expertise</ProximityHeading>
                 </h2>
-                <p className="text-[#6b7280] text-base leading-relaxed mb-10 text-pretty">
+                <ScrollReveal className="mb-10">
+                <p className="text-pretty text-base leading-relaxed text-[#6b7280]">
                   Excel Engineering is a premier dam construction contractor with decades of experience
                   delivering critical water infrastructure across India. Our teams handle every stage —
                   from site investigation and design coordination through to full structural completion
                   and commissioning. We specialise in all major dam types and water control structures,
                   ensuring each project meets the highest safety, quality, and environmental standards.
                 </p>
+                </ScrollReveal>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {capabilities.map((cap) => (
                     <div key={cap} className="flex items-start gap-3">
@@ -240,20 +226,24 @@ export default function DamConstructionPage() {
         <section id="gate-types" className="py-24 px-6 md:px-12 lg:px-20 bg-white">
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-16">
-              <div className="mb-5 flex justify-center">
-                <AnimatedSearchLabel text="Search dam gate expertise" />
+              <div className="mb-5 flex items-center justify-center gap-3">
+                <span className="h-px w-8 bg-[#e85d3f]" />
+                <span className="text-sm font-semibold uppercase tracking-widest text-[#e85d3f]">Gate Engineering</span>
+                <span className="h-px w-8 bg-[#e85d3f]" />
               </div>
               <h2
-                className="font-black text-[#1a1a1a] text-balance leading-tight mb-4"
+                className="mb-4 font-black leading-tight text-[#1a1a1a]"
                 style={{ fontSize: 'clamp(1.8rem, 3vw, 2.8rem)' }}
               >
-                Types of Gates &amp; Water Control Structures
+                <ProximityHeading>Types of Gates &amp; Water Control Structures</ProximityHeading>
               </h2>
-              <p className="text-[#6b7280] text-base max-w-2xl mx-auto text-pretty">
+              <ScrollReveal className="mx-auto max-w-2xl">
+              <p className="text-pretty text-base text-[#6b7280]">
                 Excel Engineering has rich experience in manufacturing, supplying, erecting, testing,
                 and commissioning a comprehensive range of hydraulic gates, hoists, and water control
                 structures for hydroelectric and irrigation projects across India.
               </p>
+              </ScrollReveal>
             </div>
 
             <DamGateCarousel types={damTypes} />
@@ -322,6 +312,7 @@ export default function DamConstructionPage() {
           faqs={faqs}
           heading="Dam Construction — Common Questions"
           subheading="Answers to the most common questions about Excel Engineering's dam construction capabilities, timelines, and certifications."
+          headingEffect="proximity"
         />
 
         {/* Inquiry CTA */}

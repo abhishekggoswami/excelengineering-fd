@@ -3,6 +3,8 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import { X, ChevronLeft, ChevronRight, ZoomIn } from 'lucide-react'
+import ProximityHeading from '@/components/proximity-heading'
+import ScrollReveal from '@/components/scroll-reveal'
 
 const DAM_IMAGES = [
   {
@@ -77,11 +79,13 @@ export default function DamGallerySection() {
               className="font-black text-[#1a1a1a] text-balance leading-tight"
               style={{ fontSize: 'clamp(1.8rem, 3vw, 2.8rem)' }}
             >
-              Dam Construction in Action
+              <ProximityHeading>Dam Construction in Action</ProximityHeading>
             </h2>
-            <p className="text-[#6b7280] text-base mt-3 max-w-lg text-pretty">
+            <ScrollReveal className="mt-3 max-w-lg">
+            <p className="text-[#6b7280] text-base text-pretty">
               Real project photography from Excel Engineering dam construction sites — barrages, gravity dams, radial gates, and reservoir structures across India.
             </p>
+            </ScrollReveal>
           </div>
           <a
             href="/gallery?category=Dam+Construction"

@@ -6,14 +6,14 @@ import GalleryExperience from '@/components/gallery-experience'
 
 // ─── Data ────────────────────────────────────────────────────────────────────
 
-const CATEGORIES = ['All', 'Dam Construction', 'Fabrication', 'Irrigation', 'Offices', 'Factory', 'Cranes'] as const
+const CATEGORIES = ['Dam Construction', 'Fabrication', 'Office & Factory', 'Cranes'] as const
 type Category = (typeof CATEGORIES)[number]
 
 interface GalleryImage {
   src: string
   alt: string
   title: string
-  category: Exclude<Category, 'All'>
+  category: Category
   wide?: boolean
 }
 
@@ -158,13 +158,6 @@ const GALLERY_IMAGES: GalleryImage[] = [
     category: 'Fabrication',
   },
   {
-    src: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Fabrication-7-b123yvfDnboxVIcR7KsC5LRxv57t3W.png',
-    alt: '6 workers outdoors fabricating steel gate panels on red earth ground, Excel compound wall',
-    title: 'Gate Fabrication — Outdoor Yard',
-    category: 'Fabrication',
-    wide: true,
-  },
-  {
     src: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Fabrication-8-HZnf03ub8SFJ2WjT3Ush4870G2Y3N7.png',
     alt: 'Engineer with clipboard inspecting rows of large brass rope drum spools inside factory hall',
     title: 'Rope Drum Spools — Batch Inspection',
@@ -174,25 +167,6 @@ const GALLERY_IMAGES: GalleryImage[] = [
     src: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Fabrication-9-9BQbiDlz5j1OnkLmvTqc7D53tKBeo5.png',
     alt: '3 engineers welding large modular steel frame panel under yellow overhead crane with hi-vis vests',
     title: 'Structural Frame Welding',
-    category: 'Fabrication',
-  },
-  {
-    src: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Fabrication-10-rf8fqEqtCn2xtpRrudcDLhSddPZ39W.png',
-    alt: 'Factory floor showing large steel spur gears, I-beam frames, air compressor, yellow hydraulic press',
-    title: 'Spur Gears & Steel Frames — Factory Floor',
-    category: 'Fabrication',
-  },
-  {
-    src: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Fabrication-11-oDznUfspb3zcb9DT15xUc8BBPOvHWN.png',
-    alt: 'Steel truss painted red oxide, engineer spray-coating, supervisor reviewing blueprints under yellow crane',
-    title: 'Steel Truss — Surface Coating',
-    category: 'Fabrication',
-    wide: true,
-  },
-  {
-    src: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Fabrication-12-Cqmy1QX7s0pNqhzQvS17iQcw23xQWn.png',
-    alt: '3 workers guiding a massive black steel gate panel being lifted by yellow mobile crane outside factory',
-    title: 'Heavy Gate Panel — Crane Dispatch',
     category: 'Fabrication',
   },
   {
@@ -220,80 +194,42 @@ const GALLERY_IMAGES: GalleryImage[] = [
     src: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Factory-2-i1rKhoVsmbdni9Uf0gK0zyiWK4OgAp.png',
     alt: 'Excel Engineering blue corrugated steel factory building exterior with large company signage and entrance',
     title: 'Factory Building — Main Entrance',
-    category: 'Factory',
-    wide: true,
-  },
-  {
-    src: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Factory-1-D9Oei4dRPFLxPOf6Cf9BcfyI9Lhi22.png',
-    alt: 'Landscaped garden path with flowers and trees beside factory compound wall bearing Excel Engineering logo',
-    title: 'Factory Compound — Garden',
-    category: 'Factory',
-  },
-  {
-    src: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Factory-4-YgWJEe5GHdro9e3JS1ptaZE6RS82LU.png',
-    alt: 'Aerial view of Excel Engineering compound showing blue factory shed, entrance gate, and Mercedes parked',
-    title: 'Factory Compound — Aerial View',
-    category: 'Factory',
+    category: 'Office & Factory',
     wide: true,
   },
   {
     src: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Factory-3-i2lbNNDwouDlnv8157stL3w8xw187r.png',
     alt: 'Aerial view of Excel Engineering stone-clad office annex alongside blue factory shed and landscaped grounds',
     title: 'Office Annex & Factory Shed — Aerial',
-    category: 'Factory',
+    category: 'Office & Factory',
   },
 
   // ── Offices ──────────────────────────────────────────────────────────────
   {
-    src: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Office-5-wYdguOqM3VmsjZlA7Wt7OivysuWJO4.png',
-    alt: 'Excel Engineering glass-partitioned corridor office with engineers at desks and company wall signage',
-    title: 'Head Office — Engineering Corridor',
-    category: 'Offices',
-    wide: true,
-  },
-  {
-    src: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Office-4-NC5zWcQ3qFNmrfGdN9aJxeLBW2zj5c.png',
-    alt: 'Open-plan cubicle office with multiple engineers in formal attire working at iMac workstations',
-    title: 'Engineering Operations Floor',
-    category: 'Offices',
-    wide: true,
-  },
-  {
     src: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Office-2-w6VCXy7qHOKXrQUmJ3DauF88gyjlmF.png',
     alt: 'Open cubicle office floor with dual-monitor setups and Gantt charts on whiteboard, October 2024 calendar',
     title: 'Project Planning Office',
-    category: 'Offices',
+    category: 'Office & Factory',
   },
   {
     src: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Office-1-LwjeJCzJJDM6tEquprCcIaBP3mAybA.png',
     alt: 'Engineer smiling at CAD workstation with dual monitors showing engineering drawings and dashboards',
     title: 'CAD & Design Workstation',
-    category: 'Offices',
-  },
-  {
-    src: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Office-3-BRQUvpET50e8beccAJf9Lxl1p09qiP.png',
-    alt: 'Reception and waiting area with two professionals in discussion on sofa, glass meeting room in background',
-    title: 'Reception & Client Lounge',
-    category: 'Offices',
+    category: 'Office & Factory',
   },
 ]
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
 const CATEGORY_COUNTS = CATEGORIES.reduce<Record<string, number>>((acc, cat) => {
-  acc[cat] =
-    cat === 'All'
-      ? GALLERY_IMAGES.length
-      : GALLERY_IMAGES.filter((img) => img.category === cat).length
+  acc[cat] = GALLERY_IMAGES.filter((img) => img.category === cat).length
   return acc
 }, {})
 
 const HERO_COLLAGE = Array.from({ length: 108 }, (_, index) => GALLERY_IMAGES[index % GALLERY_IMAGES.length])
 
 const categoryPreview = (category: Category) =>
-  category === 'All'
-    ? GALLERY_IMAGES[0]
-    : GALLERY_IMAGES.find((image) => image.category === category) ?? GALLERY_IMAGES[0]
+  GALLERY_IMAGES.find((image) => image.category === category) ?? GALLERY_IMAGES[0]
 
 const galleryCarouselScript = [
   '(() => {',
@@ -331,13 +267,17 @@ const galleryCarouselScript = [
 // ─── Inner component (reads searchParams) ────────────────────────────────────
 
 function GalleryContent({ params }: { params: { category?: string; image?: string; slide?: string; search?: string } }) {
-  const initialCat = (params.category ?? 'Dam Construction') as Category
+  const requestedCategory =
+    params.category === 'Factory' || params.category === 'Offices'
+      ? 'Office & Factory'
+      : params.category
+  const initialCat = (requestedCategory ?? 'Dam Construction') as Category
   const validInitial = CATEGORIES.includes(initialCat) ? initialCat : 'Dam Construction'
 
   const active = validInitial
   const searchQuery = params.search?.trim() ?? ''
   const normalizedSearch = searchQuery.toLowerCase()
-  const filtered = (active === 'All' ? GALLERY_IMAGES : GALLERY_IMAGES.filter((img) => img.category === active)).filter((image) => {
+  const filtered = GALLERY_IMAGES.filter((img) => img.category === active).filter((image) => {
     if (!normalizedSearch) return true
     return [image.title, image.alt, image.category].some((value) => value.toLowerCase().includes(normalizedSearch))
   })
@@ -351,7 +291,7 @@ function GalleryContent({ params }: { params: { category?: string; image?: strin
     : null
   const galleryHref = (imageIndex?: number) => {
     const params = new URLSearchParams()
-    if (active !== 'All') params.set('category', active)
+    params.set('category', active)
     if (imageIndex !== undefined) params.set('image', String(imageIndex))
     const query = params.toString()
     return query ? `/gallery?${query}` : '/gallery'
@@ -424,7 +364,7 @@ function GalleryContent({ params }: { params: { category?: string; image?: strin
                 return (
                   <a
                     key={cat}
-                    href={cat === 'All' ? '/gallery' : '/gallery?category=' + encodeURIComponent(cat)}
+                    href={'/gallery?category=' + encodeURIComponent(cat)}
                     className={'group relative flex w-28 shrink-0 items-end overflow-hidden rounded-xl border p-3 text-left shadow-sm transition-all duration-300 sm:w-32 ' + (isActive ? 'border-[#0e5c3d] ring-2 ring-[#0e5c3d]/15' : 'border-[#e5e7eb] hover:-translate-y-1 hover:border-[#e85d3f]/60')}
                   >
                     <Image src={preview.src} alt="" fill sizes="128px" className="object-cover transition-transform duration-500 group-hover:scale-110" />
@@ -448,7 +388,7 @@ function GalleryContent({ params }: { params: { category?: string; image?: strin
                 return (
                   <a
                     key={cat}
-                    href={cat === 'All' ? '/gallery' : `/gallery?category=${encodeURIComponent(cat)}`}
+                    href={`/gallery?category=${encodeURIComponent(cat)}`}
                     target="_self"
                     className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold whitespace-nowrap transition-all duration-200 flex-shrink-0 ${
                       isActive
@@ -532,18 +472,6 @@ function GalleryContent({ params }: { params: { category?: string; image?: strin
             </div>
           )}
 
-          {/* Coming soon notice for empty categories */}
-          {(['Irrigation'] as Category[]).includes(active) && filtered.length === 0 && (
-            <div className="mt-12 border border-dashed border-[#e5e7eb] rounded-2xl p-12 text-center">
-              <div className="w-12 h-12 rounded-full bg-[#f5efe0] flex items-center justify-center mx-auto mb-4">
-                <div className="w-6 h-px bg-[#e85d3f]" />
-              </div>
-              <p className="text-[#374151] font-semibold mb-2">Photos coming soon</p>
-              <p className="text-[#9ca3af] text-sm">
-                We are currently adding project photography for this category.
-              </p>
-            </div>
-          )}
         </section>
 
         <section className="hidden">

@@ -1,8 +1,8 @@
 'use client'
 
 import Image from 'next/image'
-import { ChevronLeft, ChevronRight, Maximize2, Search, X } from 'lucide-react'
-import { useEffect, useMemo, useState } from 'react'
+import { ChevronLeft, ChevronRight, Maximize2, X } from 'lucide-react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 
 export type GalleryExperienceImage = {
   src: string
@@ -13,14 +13,12 @@ export type GalleryExperienceImage = {
 
 // Keep the browsing order intentional: project work first, supporting imagery next,
 // and crane photography at the end of the complete collection.
-const CATEGORIES = ['Dam Construction', 'Fabrication', 'Irrigation', 'Offices', 'Factory', 'Cranes']
+const CATEGORIES = ['Dam Construction', 'Fabrication', 'Office & Factory', 'Cranes']
 const CATEGORY_ORDER: Record<string, number> = {
   'Dam Construction': 0,
   Fabrication: 1,
-  Irrigation: 2,
-  Offices: 3,
-  Factory: 4,
-  Cranes: 5,
+  'Office & Factory': 2,
+  Cranes: 3,
 }
 
 function Photo({
@@ -62,26 +60,23 @@ export default function GalleryExperience({
   initialIndex?: number
   searchQuery?: string
 }) {
-  const active = CATEGORIES.includes(initialCategory) ? initialCategory : 'All'
+  const [active, setActive] = useState(CATEGORIES.includes(initialCategory) ? initialCategory : 'Dam Construction')
   const [index, setIndex] = useState(initialIndex)
   const [selected, setSelected] = useState<number | null>(null)
+  const storiesRef = useRef<HTMLElement>(null)
   const orderedImages = useMemo(
     () => [...images].sort((a, b) => (CATEGORY_ORDER[a.category] ?? 99) - (CATEGORY_ORDER[b.category] ?? 99)),
     [images],
   )
-  const normalizedSearch = searchQuery.trim().toLowerCase()
   const filtered = useMemo(
-    () => (active === 'All' ? orderedImages : orderedImages.filter((image) => image.category === active)).filter((image) => {
-      if (!normalizedSearch) return true
-      return [image.title, image.alt, image.category].some((value) => value.toLowerCase().includes(normalizedSearch))
-    }),
-    [active, normalizedSearch, orderedImages],
+    () => orderedImages.filter((image) => image.category === active),
+    [active, orderedImages],
   )
   const fallback = images[0]?.src ?? ''
 
   const galleryHref = (category = active, slide?: number, image?: number) => {
     const params = new URLSearchParams()
-    if (category !== 'All') params.set('category', category)
+    params.set('category', category)
     if (searchQuery.trim()) params.set('search', searchQuery.trim())
     if (slide !== undefined) params.set('slide', String(slide))
     if (image !== undefined) params.set('image', String(image))
@@ -95,28 +90,42 @@ export default function GalleryExperience({
     return () => window.clearInterval(timer)
   }, [filtered.length])
 
+  function selectCategory(category: string) {
+    setActive(category)
+    setIndex(0)
+    setSelected(null)
+    const params = new URLSearchParams()
+    params.set('category', category)
+    window.history.replaceState(null, '', `/gallery?${params.toString()}`)
+    window.requestAnimationFrame(() => {
+      storiesRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    })
+  }
+
   const selectedImage = selected === null ? null : filtered[selected]
 
   return (
     <>
       <section className="border-b border-[#ece8df] bg-white px-5 py-16 sm:px-6 md:px-12 md:py-20 lg:px-20">
         <div className="mx-auto max-w-7xl">
-          <div className="mb-5 text-center font-serif text-xl font-semibold text-[#374151] sm:text-2xl">Quick Search</div>
-          <form action="/gallery" method="get" className="mx-auto mb-8 flex max-w-3xl items-center overflow-hidden rounded-full border border-[#e8e3d8] bg-[#fbfaf7] px-4 shadow-sm transition-shadow focus-within:shadow-[0_0_0_4px_rgba(14,92,61,.12)]">
-            <Search className="ml-1 h-4 w-4 text-[#e85d3f]" />
-            {active !== 'All' && <input type="hidden" name="category" value={active} />}
-            <input name="search" defaultValue={searchQuery} aria-label="Search project photography" placeholder="Search project photography" className="min-w-0 flex-1 bg-transparent px-4 py-4 text-sm text-[#1a1a1a] outline-none placeholder:text-[#7b8190] sm:text-base" />
-            <button type="submit" className="rounded-full bg-[#0e5c3d] px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-white transition-colors hover:bg-[#0a472f] sm:px-7">Search</button>
-          </form>
+          <div className="mb-8 text-center">
+            <div className="mb-3 flex items-center justify-center gap-3">
+              <span className="h-px w-9 bg-[#e85d3f]" />
+              <span className="text-xs font-black uppercase tracking-[0.2em] text-[#e85d3f]">Browse the gallery</span>
+              <span className="h-px w-9 bg-[#e85d3f]" />
+            </div>
+            <h2 className="text-3xl font-black tracking-[-0.03em] text-[#1a1a1a] sm:text-4xl">Categories</h2>
+          </div>
           <div className="flex justify-start gap-3 overflow-x-auto pb-3 sm:justify-center">
             {CATEGORIES.map((category) => {
               const preview = images.find((image) => image.category === category) ?? images[0]
               const count = images.filter((image) => image.category === category).length
               const isActive = active === category
               return (
-                <a
+                <button
+                  type="button"
                   key={category}
-                  href={galleryHref(category)}
+                  onClick={() => selectCategory(category)}
                   aria-current={isActive ? 'page' : undefined}
                   className={'group relative h-[116px] w-[132px] shrink-0 overflow-hidden rounded-2xl border text-left shadow-md transition-all sm:h-[128px] sm:w-[150px] ' + (isActive ? 'border-[#0e5c3d] ring-2 ring-[#0e5c3d]/20' : 'border-transparent hover:-translate-y-1')}
                 >
@@ -124,14 +133,14 @@ export default function GalleryExperience({
                   <div className={'absolute inset-0 ' + (isActive ? 'bg-[#0e5c3d]/38' : 'bg-black/35')} />
                   <span className="absolute inset-x-2 bottom-2 rounded bg-black/40 px-2 py-1.5 text-[11px] font-bold leading-tight text-white">{category}</span>
                   <span className="absolute right-2 top-2 rounded-full bg-white/90 px-2 py-1 text-[11px] font-black text-[#0e5c3d]">{count}</span>
-                </a>
+                </button>
               )
             })}
           </div>
         </div>
       </section>
 
-      <section className="overflow-hidden bg-[#fbfaf7] px-5 py-14 sm:px-6 md:px-12 md:py-20 lg:px-20">
+      <section ref={storiesRef} id="gallery-stories" className="scroll-mt-20 overflow-hidden bg-[#fbfaf7] px-5 py-14 sm:px-6 md:px-12 md:py-20 lg:px-20">
         <div className="mx-auto max-w-7xl">
           <div className="mb-9 text-center sm:mb-12">
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#e85d3f]">{active} collection</p>
@@ -146,19 +155,20 @@ export default function GalleryExperience({
             </div>
           ) : (
             <>
-              <div className="grid grid-cols-1 items-center gap-3 md:grid-cols-5 md:gap-4 lg:gap-5">
-                {[-2, -1, 0, 1, 2].map((offset) => {
+              <div className="grid grid-cols-1 items-center gap-4 md:grid-cols-3 md:gap-5">
+                {[-1, 0, 1].map((offset) => {
                   const imageIndex = (index + offset + filtered.length) % filtered.length
                   const image = filtered[imageIndex]
                   const center = offset === 0
                   return (
-                    <a
+                    <button
+                      type="button"
                       key={offset}
-                      href={center ? galleryHref(active, undefined, imageIndex) : galleryHref(active, imageIndex)}
-                      className={(center ? 'relative block md:scale-110 md:z-10 ' : 'relative hidden md:block ') + 'group overflow-hidden rounded-2xl bg-[#e2e7e4] text-left shadow-[0_18px_45px_-24px_rgba(14,92,61,.7)] transition-transform duration-500'}
+                      onClick={() => center ? setSelected(imageIndex) : setIndex(imageIndex)}
+                      className={(center ? 'relative block md:scale-[1.04] md:z-10 ' : 'relative hidden md:block ') + 'group w-full overflow-hidden rounded-2xl bg-[#e2e7e4] text-left shadow-[0_18px_45px_-24px_rgba(14,92,61,.7)] transition-transform duration-500'}
                     >
-                      <div className={center ? 'relative aspect-[4/5] sm:aspect-[16/10] md:aspect-[4/5]' : 'relative aspect-[4/5]'}>
-                        <Photo image={image} fallback={fallback} sizes={center ? '(max-width: 768px) 92vw, 24vw' : '18vw'} className="object-cover transition-transform duration-700 group-hover:scale-105" />
+                      <div className="relative aspect-video">
+                        <Photo image={image} fallback={fallback} sizes={center ? '(max-width: 768px) 92vw, 36vw' : '30vw'} className="object-cover transition-transform duration-700 group-hover:scale-105" />
                         <div className={'absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent ' + (center ? 'opacity-100' : 'opacity-35')} />
                         {center && (
                           <div className="absolute inset-x-0 bottom-0 p-5 text-white sm:p-6">
@@ -168,15 +178,15 @@ export default function GalleryExperience({
                         )}
                         {center && <span className="absolute right-3 top-3 flex h-10 w-10 items-center justify-center rounded-full bg-white/90 text-[#0e5c3d]"><Maximize2 className="h-4 w-4" /></span>}
                       </div>
-                    </a>
+                    </button>
                   )
                 })}
               </div>
               <div className="mt-10 flex items-center justify-center gap-4">
-                <a href={galleryHref(active, (index - 1 + filtered.length) % filtered.length)} aria-label="Previous gallery image" className="flex h-11 w-11 items-center justify-center rounded-full border border-[#0e5c3d]/20 bg-white text-[#0e5c3d] transition-colors hover:bg-[#0e5c3d] hover:text-white"><ChevronLeft className="h-5 w-5" /></a>
-                <div className="flex items-center gap-1.5">{filtered.slice(0, Math.min(filtered.length, 10)).map((image, dot) => <a key={image.src} href={galleryHref(active, dot)} aria-label={'Show ' + image.title} className={'h-2 w-2 rounded-full ' + (dot === index ? 'bg-[#e85d3f]' : 'bg-[#0e5c3d]/20')} />)}</div>
+                <button type="button" onClick={() => setIndex((index - 1 + filtered.length) % filtered.length)} aria-label="Previous gallery image" className="flex h-11 w-11 items-center justify-center rounded-full border border-[#0e5c3d]/20 bg-white text-[#0e5c3d] transition-colors hover:bg-[#0e5c3d] hover:text-white"><ChevronLeft className="h-5 w-5" /></button>
+                <div className="flex items-center gap-1.5">{filtered.slice(0, Math.min(filtered.length, 10)).map((image, dot) => <button type="button" key={image.src} onClick={() => setIndex(dot)} aria-label={'Show ' + image.title} className={'h-2 w-2 rounded-full ' + (dot === index ? 'bg-[#e85d3f]' : 'bg-[#0e5c3d]/20')} />)}</div>
                 <span className="min-w-14 text-center text-xs font-bold tracking-widest text-[#6b7280]">{String(index + 1).padStart(2, '0')} / {String(filtered.length).padStart(2, '0')}</span>
-                <a href={galleryHref(active, (index + 1) % filtered.length)} aria-label="Next gallery image" className="flex h-11 w-11 items-center justify-center rounded-full bg-[#0e5c3d] text-white transition-transform hover:scale-105"><ChevronRight className="h-5 w-5" /></a>
+                <button type="button" onClick={() => setIndex((index + 1) % filtered.length)} aria-label="Next gallery image" className="flex h-11 w-11 items-center justify-center rounded-full bg-[#0e5c3d] text-white transition-transform hover:scale-105"><ChevronRight className="h-5 w-5" /></button>
               </div>
             </>
           )}

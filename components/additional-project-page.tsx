@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import Image from 'next/image'
 import { ArrowLeft, ArrowUpRight, Building2, CheckCircle2, Clock, MapPin } from 'lucide-react'
 import Navbar from '@/components/navbar'
 import ServiceFaqSection from '@/components/service-faq-section'
@@ -26,10 +25,12 @@ export default function AdditionalProjectPage({ project }: { project: Additional
     <>
       <Navbar />
       <main className="bg-[#f7f4ec]">
-        <section className={`relative overflow-hidden ${completed ? 'flex min-h-[60vh] items-end bg-[#111111]' : 'bg-[#111111]'}`}>
+        <section className={`relative overflow-hidden ${completed ? 'flex min-h-[52svh] items-end bg-[#111111]' : 'bg-[#111111]'}`}>
           {media ? (
             <>
-              <Image src={media.src} alt={media.alt} fill priority sizes="100vw" className="object-cover object-center" />
+              <video autoPlay muted loop playsInline preload="auto" className="absolute inset-0 h-full w-full object-cover object-center" aria-label={media.alt}>
+                <source src={media.video} />
+              </video>
               <div className="absolute inset-0 bg-gradient-to-t from-[#111111] via-[#111111]/60 to-transparent" />
             </>
           ) : (
@@ -69,7 +70,7 @@ export default function AdditionalProjectPage({ project }: { project: Additional
           </div>
         </div>
 
-        <section className="px-6 py-16 md:px-12 lg:px-20">
+        <section className="bg-white px-5 py-14 sm:px-6 md:px-12 md:py-16 lg:px-20">
           <div className="mx-auto grid max-w-6xl grid-cols-1 gap-12 lg:grid-cols-3">
             <div className="flex flex-col gap-10 lg:col-span-2">
               <div className="inline-flex self-start items-center gap-3 rounded-2xl border border-[#e5d9c0] bg-white px-5 py-3 shadow-sm">
@@ -89,22 +90,14 @@ export default function AdditionalProjectPage({ project }: { project: Additional
                 <h2 className="mb-5 text-xl font-black text-[#1a1a1a]">Scope of Work</h2>
                 <div className="flex flex-col gap-3">
                   {project.scope.map((item, index) => (
-                    <div key={item} className="flex items-start gap-3 rounded-xl border border-[#e5d9c0] bg-white px-5 py-4 shadow-sm">
-                      <span className="mt-0.5 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full text-xs font-black text-white" style={{ background: accent }}>{String(index + 1).padStart(2, '0')}</span>
+                    <div key={item} className="group/scope flex items-start gap-3 rounded-xl border border-[#e5d9c0] bg-white px-4 py-4 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#e85d3f]/55 hover:shadow-lg sm:px-5">
+                      <span className="mt-0.5 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full text-xs font-black text-white transition-transform duration-300 group-hover/scope:scale-110 group-hover/scope:rotate-6" style={{ background: accent }}>{String(index + 1).padStart(2, '0')}</span>
                       <span className="text-sm font-medium leading-snug text-[#374151]">{item}</span>
                     </div>
                   ))}
                 </div>
               </div>
 
-              {media && (
-                <div>
-                  <h2 className="mb-5 text-xl font-black text-[#1a1a1a]">Project Photography</h2>
-                  <div className="relative h-64 overflow-hidden rounded-2xl sm:h-80">
-                    <Image src={media.src} alt={media.alt} fill sizes="(max-width: 1024px) 100vw, 66vw" className="object-cover object-center" />
-                  </div>
-                </div>
-              )}
             </div>
 
             <aside className="flex flex-col gap-6">
@@ -127,7 +120,7 @@ export default function AdditionalProjectPage({ project }: { project: Additional
               <div className="rounded-2xl border border-[#e5d9c0] bg-white p-6 shadow-sm">
                 <h3 className="mb-3 text-xs font-black uppercase tracking-widest text-[#1a1a1a]">Need a Similar Solution?</h3>
                 <p className="mb-4 text-sm leading-relaxed text-[#6b7280]">Talk to Excel Engineering about hydro-mechanical, irrigation, bridge and structural-steel works.</p>
-                <Link href="/#contact" className="inline-flex items-center gap-2 text-sm font-bold" style={{ color: accent }}>Contact Us <ArrowUpRight className="h-4 w-4" /></Link>
+                <Link href="/contact" className="inline-flex items-center gap-2 text-sm font-bold transition-all duration-300 hover:translate-x-1" style={{ color: accent }}>Contact Us <ArrowUpRight className="h-4 w-4" /></Link>
               </div>
             </aside>
           </div>

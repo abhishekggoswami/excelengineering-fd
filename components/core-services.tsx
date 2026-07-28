@@ -80,7 +80,7 @@ const serviceCarouselScript = [
 
 export default function CoreServices() {
   return (
-    <section id="services" className="overflow-hidden bg-[#f5efe0] px-5 py-16 sm:px-6 md:px-12 md:py-20 lg:px-20 lg:py-24">
+    <section id="services" className="overflow-hidden bg-white px-5 py-16 sm:px-6 md:px-12 md:py-20 lg:px-20 lg:py-24">
       <div className="mx-auto max-w-7xl">
         <div className="mb-10 flex flex-col gap-6 md:mb-14 md:flex-row md:items-end md:justify-between">
           <div>
@@ -96,31 +96,38 @@ export default function CoreServices() {
               {services.map((service) => {
                 const Icon = service.icon
                 return (
-                  <article key={service.id} className="relative min-h-[560px] w-full min-w-full overflow-hidden bg-[#102019] shadow-[0_30px_80px_-35px_rgba(14,92,61,0.6)] sm:min-h-[600px] lg:min-h-[620px]">
+                  <article key={service.id} className="relative min-h-[660px] w-full min-w-full overflow-hidden bg-[#102019] shadow-[0_30px_80px_-35px_rgba(14,92,61,0.6)] sm:min-h-[660px] lg:min-h-[680px]">
                     <video autoPlay loop muted playsInline preload="metadata" className="absolute inset-0 h-full w-full object-cover">
                       <source src={service.video} type="video/mp4" />
                     </video>
-                    <div className="absolute inset-4 rounded-[1.5rem] border border-white/30 sm:inset-6 sm:rounded-[1.75rem]">
-                      <div className="absolute inset-x-0 top-0 flex items-center justify-between gap-4 rounded-t-[1.5rem] border-b border-white/15 bg-white/[0.14] px-4 py-3 backdrop-blur-xl sm:px-6 sm:py-4">
-                        <div className="flex items-center gap-3"><Icon className="h-5 w-5 text-white" /><span className="text-[10px] font-bold uppercase tracking-[0.18em] text-white/85 sm:text-xs">{service.eyebrow}</span></div>
-                        <span className="text-[10px] font-semibold uppercase tracking-widest text-white/65">Excel Engineering</span>
+                    <div className="absolute inset-0 bg-gradient-to-r from-black/10 via-transparent to-black/10" />
+                    <div className="absolute inset-4 rounded-[1.5rem] border border-white/35 sm:inset-6 sm:rounded-[1.75rem]">
+                      <div className="absolute inset-x-0 top-0 z-10 flex items-center justify-between gap-4 px-5 py-5 sm:px-7 sm:py-6 lg:px-10">
+                        <div className="flex items-center gap-3 text-white drop-shadow-md">
+                          <Icon className="h-5 w-5" />
+                          <span className="text-[10px] font-black uppercase tracking-[0.2em] sm:text-xs">{service.eyebrow}</span>
+                        </div>
+                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white drop-shadow-md sm:text-xs">About</span>
                       </div>
 
-                      <div className="absolute inset-x-0 bottom-0 top-[200px] flex min-w-0 flex-col justify-between rounded-b-[1.5rem] border-t border-white/15 bg-white/[0.14] p-5 backdrop-blur-xl sm:inset-x-auto sm:right-0 sm:top-[70px] sm:w-[52%] sm:min-w-[270px] sm:rounded-br-[1.5rem] sm:rounded-tl-none sm:border-l sm:border-t-0 sm:p-7 lg:w-[48%] lg:p-9">
+                      <div className="service-copy-panel absolute inset-x-4 bottom-4 z-10 flex min-w-0 flex-col justify-between overflow-hidden rounded-[1.4rem] border border-white/20 bg-[linear-gradient(145deg,rgba(3,12,15,.82),rgba(8,33,29,.68))] p-5 text-white shadow-[0_24px_70px_-28px_rgba(0,0,0,.9)] backdrop-blur-xl sm:inset-x-auto sm:bottom-7 sm:right-7 sm:top-[88px] sm:w-[48%] sm:min-w-[320px] sm:rounded-[1.6rem] sm:p-7 lg:right-10 lg:top-[94px] lg:w-[42%]">
                         <div>
-                          <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-white/70">Engineering division</p>
-                          <h3 className="mt-3 text-balance text-3xl font-black leading-[.98] text-white sm:text-4xl lg:text-5xl">{service.title}</h3>
-                          <p className="mt-4 max-w-md text-pretty text-sm leading-relaxed text-white/80 sm:text-base">{service.description}</p>
+                          <span className="inline-flex rounded-full bg-[#8dbbd1]/80 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white shadow-sm backdrop-blur-md sm:text-xs">{service.eyebrow}</span>
+                          <h3 className="mt-4 text-balance font-medium leading-[.98] tracking-[-0.04em] text-white drop-shadow-sm" style={{ fontSize: 'clamp(2.25rem, 4vw, 3.5rem)' }}>{service.title}</h3>
+                          <p className="mt-4 max-w-md text-pretty text-sm leading-relaxed text-white/95 sm:text-base">{service.description}</p>
                         </div>
-                        <div>
-                          <div className="mb-4 flex flex-wrap gap-2">{service.tags.map((tag) => <span key={tag} className="rounded-full border border-white/25 bg-black/10 px-2.5 py-1 text-[10px] font-medium text-white/90 sm:text-xs">{tag}</span>)}</div>
-                          <Link href={service.href} className="group inline-flex items-center gap-2 rounded-full bg-white px-4 py-2.5 text-xs font-black uppercase tracking-wide text-[#0e5c3d] shadow-lg transition-all hover:bg-[#f5a623] hover:text-[#1a1a1a] sm:px-5 sm:py-3">Explore service <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" /></Link>
+                        <div className="mt-5">
+                          <ul className="mb-5 space-y-1.5 text-sm text-white/95 sm:text-base">
+                            {service.tags.map((tag) => <li key={tag} className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-white" />{tag}</li>)}
+                          </ul>
+                          <div className="flex flex-wrap items-center justify-between gap-4 border-t border-white/25 pt-5">
+                            <div>
+                              <strong className="block text-3xl font-black leading-none text-[#f5a623] sm:text-4xl">{service.stat}</strong>
+                              <span className="mt-1 block text-[9px] font-bold uppercase tracking-widest text-white/85 sm:text-[10px]">{service.statLabel}</span>
+                            </div>
+                            <Link href={service.href} className="group inline-flex items-center gap-2 rounded-full bg-white px-4 py-2.5 text-xs font-black uppercase tracking-wide text-[#0e5c3d] shadow-lg transition-all hover:-translate-y-0.5 hover:bg-[#f5a623] hover:text-[#1a1a1a] sm:px-5 sm:py-3">Explore <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" /></Link>
+                          </div>
                         </div>
-                      </div>
-
-                      <div className="absolute left-5 top-[80px] z-10 flex min-h-24 w-[45%] min-w-28 flex-col justify-between rounded-2xl border border-white/35 bg-transparent p-3 shadow-[inset_0_0_0_1px_rgba(0,0,0,.08)] sm:bottom-7 sm:left-7 sm:top-auto sm:min-h-40 sm:w-[38%] sm:p-4 lg:w-[36%]">
-                        <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-white/85">Site window</span>
-                        <div><strong className="block font-black leading-none text-[#f5a623]" style={{ fontSize: 'clamp(2rem, 4.5vw, 4rem)' }}>{service.stat}</strong><span className="mt-1 block text-[9px] font-bold uppercase tracking-widest text-white/80 sm:text-[10px]">{service.statLabel}</span></div>
                       </div>
                     </div>
                   </article>

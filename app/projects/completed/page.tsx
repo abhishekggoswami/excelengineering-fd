@@ -1,6 +1,5 @@
 import Navbar from '@/components/navbar'
 import ServiceFaqSection from '@/components/service-faq-section'
-import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowUpRight, Building2, CheckCircle2, MapPin } from 'lucide-react'
 import { additionalProjects } from '@/lib/additional-projects'
@@ -20,8 +19,8 @@ type CompletedProjectCard = {
   specification: string
   description: string
   highlights: string[]
-  image: string
-  imageAlt: string
+  video: string
+  videoAlt: string
   href: string
 }
 
@@ -37,8 +36,8 @@ const completedProjects: CompletedProjectCard[] = [
       'Top log gate fabrication and supply',
       'Hoist systems and bridge gantry structure',
     ],
-    image: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/IMG_0477-clean%20%281%29-R6hNEvtRgvlhVBKmjXgxAXQkCZPe0b.png',
-    imageAlt: 'Completed Barkheda Medium Irrigation Project',
+    video: completedProjectMedia.barkheda.video,
+    videoAlt: completedProjectMedia.barkheda.alt,
     href: '/projects/barkheda',
   },
   {
@@ -52,8 +51,8 @@ const completedProjects: CompletedProjectCard[] = [
       'Full fabrication, erection, testing and commissioning',
       'Executed to Water Resources Department specifications',
     ],
-    image: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/IMG_0479-clean-Bf6zZ0GGD3FL3uy0urqoL0lTWF2IS3.png',
-    imageAlt: 'Completed Bankpura spillway gate project',
+    video: completedProjectMedia.bankpura.video,
+    videoAlt: completedProjectMedia.bankpura.alt,
     href: '/projects/bankpura',
   },
   ...additionalProjects
@@ -65,8 +64,8 @@ const completedProjects: CompletedProjectCard[] = [
       specification: project.specification,
       description: project.overview,
       highlights: project.scope,
-      image: completedProjectMedia[project.slug].src,
-      imageAlt: completedProjectMedia[project.slug].alt,
+      video: completedProjectMedia[project.slug].video,
+      videoAlt: completedProjectMedia[project.slug].alt,
       href: `/projects/${project.slug}`,
     })),
 ]
@@ -94,14 +93,9 @@ function CompletedProjectCard({ project }: { project: CompletedProjectCard }) {
   return (
     <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-[#e5d9c0] bg-white transition-all duration-300 hover:-translate-y-1 hover:border-[#f5a623]/70 hover:shadow-xl">
       <div className="relative aspect-video overflow-hidden bg-[#102b25]">
-        <Image
-          src={project.image}
-          alt={project.imageAlt}
-          fill
-          loading="lazy"
-          sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
-          className="object-cover object-center transition-transform duration-500 group-hover:scale-105"
-        />
+        <video autoPlay muted loop playsInline preload="metadata" aria-label={project.videoAlt} className="h-full w-full object-cover object-center transition-transform duration-500 group-hover:scale-105">
+          <source src={project.video} />
+        </video>
         <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" />
         <span className="absolute bottom-3 left-3 inline-flex items-center gap-1.5 rounded-full bg-[#0e5c3d]/95 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-white">
           <CheckCircle2 className="h-3.5 w-3.5" /> Completed Work

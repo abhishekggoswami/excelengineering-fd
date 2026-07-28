@@ -3,6 +3,8 @@ import FabricationGallerySection from '@/components/fabrication-gallery-section'
 import ServiceFaqSection from '@/components/service-faq-section'
 import DamMethodology from '@/components/dam-methodology'
 import ServiceStatsStrip from '@/components/service-stats-strip'
+import ProximityHeading from '@/components/proximity-heading'
+import ScrollReveal from '@/components/scroll-reveal'
 import Navbar from '@/components/navbar'
 import Image from 'next/image'
 import { CheckCircle2, ArrowUpRight } from 'lucide-react'
@@ -124,8 +126,9 @@ export default function FabricationPage() {
                   className="font-black text-[#1a1a1a] text-balance leading-tight mb-6"
                   style={{ fontSize: 'clamp(1.8rem, 3vw, 2.8rem)' }}
                 >
-                  Key Capabilities &amp; Expertise
+                  <ProximityHeading>Key Capabilities &amp; Expertise</ProximityHeading>
                 </h2>
+                <ScrollReveal>
                 <p className="text-[#6b7280] text-base leading-relaxed mb-10 text-pretty">
                   Our fabrication division operates a fully equipped manufacturing facility capable
                   of handling large-scale structural steel, industrial, and plant fabrication
@@ -134,6 +137,7 @@ export default function FabricationPage() {
                   most demanding engineering specifications. From initial design to site
                   installation, Excel Engineering manages the entire fabrication lifecycle.
                 </p>
+                </ScrollReveal>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {capabilities.map((cap) => (
                     <div key={cap} className="flex items-start gap-3">
@@ -144,7 +148,7 @@ export default function FabricationPage() {
                 </div>
               </div>
 
-              <div className="relative h-[480px] rounded-3xl overflow-hidden">
+              <div className="relative h-[320px] overflow-hidden rounded-3xl sm:h-[420px] lg:h-[480px]">
                 <Image
                   src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Fabrication-1-x1oRQc8uzr8CQDeP0szPSUIsR5qp0O.png"
                   alt="Excel Engineering engineers inspecting large penstock pipe fabrication inside factory"
@@ -159,7 +163,11 @@ export default function FabricationPage() {
         </section>
 
         {/* Methodology */}
-        <DamMethodology steps={methodology} />
+        <DamMethodology
+          steps={methodology}
+          heading="Fabrication Methodology"
+          description="Four controlled stages take every fabrication package from approved drawings to inspected delivery."
+        />
         <section className="hidden bg-[#f5efe0] py-24 px-6 md:px-12 lg:px-20">
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-16">

@@ -147,48 +147,6 @@ main > :first-child {
 .dam-process-card > * { animation-delay: inherit; }
 .dam-process-glow, .dam-process-number { animation-delay: inherit; }
 
-/* Site-wide section eyebrow: a fixed-size search field with typewriter text. */
-.section-typing-label {
-  position: relative;
-  display: inline-block;
-  width: 16rem;
-  overflow: hidden;
-  white-space: nowrap;
-  border: 1px solid rgba(232, 93, 63, 0.32);
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.68);
-  padding: 0.42rem 1.8rem 0.42rem 2rem;
-  box-shadow: 0 10px 26px -24px rgba(232, 93, 63, 0.9);
-}
-
-.section-typing-label::before {
-  content: '⌕';
-  position: absolute;
-  left: 0.72rem;
-  top: 50%;
-  transform: translateY(-53%);
-  font-size: 1rem;
-  line-height: 1;
-  color: #e85d3f;
-}
-
-.section-typing-label::after {
-  content: '';
-  position: absolute;
-  right: 0.7rem;
-  top: 50%;
-  height: 0.9rem;
-  width: 1px;
-  transform: translateY(-50%);
-  background: currentColor;
-  animation: sectionSearchCursor 800ms steps(1, end) infinite;
-}
-
-@keyframes sectionSearchCursor {
-  0%, 45% { opacity: 1; }
-  46%, 100% { opacity: 0; }
-}
-
 @keyframes damGalleryMarquee {
   from { transform: translateX(0); }
   to { transform: translateX(-50%); }
@@ -275,15 +233,13 @@ main > :first-child {
   .cta-heading-flow,
   .cta-orange-flow,
   .animate-phone-ring,
-  .company-hero-content > *,
-  .section-typing-label::after {
+  .company-hero-content > * {
     animation: none;
   }
 }
 
 @media (max-width: 639px) {
   main > :first-child { margin-inline: 0; border-radius: 1rem 1rem 0 0; }
-  .section-typing-label { width: 15rem; }
 }
 
 /* ── Shared slideshow / hero animations ─────────────────────────────────── */
@@ -370,4 +326,171 @@ main > :first-child {
 @keyframes partnersScroll {
   0%   { transform: translateX(0); }
   100% { transform: translateX(-50%); }
+}
+@keyframes scroll-float-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(115%) scaleY(1.65) scaleX(.82);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scaleY(1) scaleX(1);
+  }
+}
+
+@keyframes scroll-paragraph-reveal {
+  from { opacity: 0; transform: translateY(22px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scroll-heading-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(46px);
+    clip-path: inset(0 0 100% 0);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@supports (animation-timeline: view()) {
+  .scroll-float-character {
+    animation: scroll-float-reveal linear both;
+    animation-timeline: view();
+    animation-range: entry 0% cover 45%;
+  }
+
+  .scroll-float-root {
+    animation: scroll-heading-reveal linear both;
+    animation-timeline: view();
+    animation-range: entry 0% cover 42%;
+    will-change: opacity, transform, clip-path;
+  }
+
+  .scroll-float-character:nth-child(2n) { animation-range: entry 4% cover 49%; }
+
+  .scroll-float-character:nth-child(3n) { animation-range: entry 8% cover 53%; }
+
+  .scroll-reveal-native {
+    animation: scroll-paragraph-reveal linear both;
+    animation-timeline: view();
+    animation-range: entry 0% cover 35%;
+  }
+}
+@keyframes bento-text-sheen {
+  0%,
+  72%,
+  100% {
+    background-position: 115% 50%;
+  }
+  86% {
+    background-position: -15% 50%;
+  }
+}
+
+.bento-text-sheen,
+.bento-text-sheen-light {
+  background-size: 240% 100%;
+  background-position: 115% 50%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  animation: bento-text-sheen 5.4s ease-in-out infinite;
+}
+
+.bento-text-sheen {
+  background-image: linear-gradient(105deg, #1a1a1a 0%, #1a1a1a 42%, #e85d3f 50%, #0e5c3d 58%, #1a1a1a 66%);
+}
+
+.bento-text-sheen-light {
+  background-image: linear-gradient(105deg, #ffffff 0%, #ffffff 42%, #f5a623 50%, #ffffff 58%, #ffffff 66%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bento-text-sheen,
+  .bento-text-sheen-light {
+    animation: none;
+    background-position: 0 50%;
+  }
+}
+@keyframes hero-heading-typewriter {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+.hero-heading-typewriter {
+  animation: hero-heading-typewriter 3.8s steps(48, end) 0.3s both;
+  will-change: clip-path;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-heading-typewriter {
+    animation: none;
+    clip-path: none;
+  }
+}
+
+@keyframes section-heading-alive {
+  from {
+    opacity: 0.72;
+    transform: translateY(12px);
+    filter: blur(2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes service-copy-arrive {
+  from { opacity: 0.78; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes leadership-ring-drift {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(-14px, 12px, 0) scale(1.06); }
+}
+
+@keyframes leadership-ring-drift-reverse {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1.02); }
+  50% { transform: translate3d(18px, -10px, 0) scale(.96); }
+}
+
+.service-copy-panel > * {
+  animation: service-copy-arrive .85s cubic-bezier(.22, 1, .36, 1) both;
+}
+
+.leadership-ring-one {
+  animation: leadership-ring-drift 9s ease-in-out infinite;
+}
+
+.leadership-ring-two {
+  animation: leadership-ring-drift-reverse 11s ease-in-out infinite;
+}
+
+@supports (animation-timeline: view()) {
+  main section h2 {
+    animation: section-heading-alive linear both;
+    animation-timeline: view();
+    animation-range: entry 5% cover 34%;
+    will-change: opacity, transform, filter;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .service-copy-panel > *,
+  .leadership-ring-one,
+  .leadership-ring-two,
+  main section h2 {
+    animation: none;
+  }
 }

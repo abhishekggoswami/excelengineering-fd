@@ -1,3 +1,5 @@
+import CountUp from '@/components/count-up'
+
 type ServiceStat = {
   value: string
   label: string
@@ -10,7 +12,7 @@ export default function ServiceStatsStrip({ stats }: { stats: ServiceStat[] }) {
         <div className="grid grid-cols-2 gap-5 md:grid-cols-4 md:gap-8">
           {stats.map((stat) => (
             <div key={stat.label} className="flex flex-col items-center px-3 text-center">
-              <span className="font-black leading-none text-[#f5a623]" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}>{stat.value}</span>
+              <CountUp value={stat.value} className="text-[clamp(2rem,4vw,3rem)] font-black leading-none text-[#f5a623]" />
               <span className="mt-2 text-xs font-medium uppercase tracking-wide text-white/65">{stat.label}</span>
             </div>
           ))}
