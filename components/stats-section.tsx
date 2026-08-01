@@ -40,9 +40,9 @@ function StatCard({ stat, index }: { stat: (typeof STATS)[0]; index: number }) {
 
   return (
     <div
-      className={`flex flex-col px-6 transition-all duration-500 ease-out ${
+      className={`flex flex-col px-0 sm:px-6 transition-all duration-500 ease-out ${
         !isLast ? 'lg:border-r border-[#e5e7eb]' : ''
-      } ${index === 0 ? 'pl-0' : ''} ${isLast ? 'lg:pr-0' : ''}`}
+      } ${index === 0 ? 'lg:pl-0' : ''} ${isLast ? 'lg:pr-0' : ''}`}
     >
       {/* Label + description */}
       <div className="flex-1 pb-6">

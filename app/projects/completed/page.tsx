@@ -6,7 +6,7 @@ import { additionalProjects } from '@/lib/additional-projects'
 import { completedProjectMedia } from '@/lib/completed-project-media'
 
 const stats = [
-  { value: '5+', label: 'Projects Completed' },
+  { value: '75+', label: 'Projects Completed' },
   { value: '25+', label: 'Years of Experience' },
   { value: 'M.P.', label: 'Primary State' },
   { value: 'WRD', label: 'Govt. Authority Served' },

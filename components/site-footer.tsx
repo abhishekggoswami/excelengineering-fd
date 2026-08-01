@@ -153,12 +153,20 @@ export default function SiteFooter() {
                 <div className="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center flex-shrink-0">
                   <Phone className="w-4 h-4 text-[#f5a623]" />
                 </div>
-                <a
-                  href="tel:+919179662443"
-                  className="text-white/55 hover:text-white text-sm font-medium transition-colors"
-                >
-                  +91 91796 62443
-                </a>
+                <div className="flex flex-col gap-1">
+                  <a
+                    href="tel:+919179662443"
+                    className="text-white/55 hover:text-white text-sm font-medium transition-colors"
+                  >
+                    +91 91796 62443
+                  </a>
+                  <a
+                    href="tel:07554939449"
+                    className="text-white/55 hover:text-white text-sm font-medium transition-colors"
+                  >
+                    Office: 0755-4939449
+                  </a>
+                </div>
               </li>
               <li className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center flex-shrink-0">
@@ -192,15 +200,29 @@ export default function SiteFooter() {
 
       {/* ── Bottom bar ───────────────────────────────────────────────── */}
       <div className="mx-auto max-w-7xl px-6 py-5 md:px-12 md:py-6 lg:px-20">
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="flex flex-col items-center gap-4 sm:grid sm:grid-cols-[1fr_auto_1fr]">
 
           {/* Copyright */}
           <p className="text-white/30 text-xs font-medium text-center sm:text-left">
             &copy; {new Date().getFullYear()} Excel Engineering. All rights reserved. Designed with precision.
           </p>
 
+          <p className="text-center text-xs font-medium text-white/45">
+            Website Developed By Abhishek Goswami -{' '}
+            <a
+              href="https://wa.link/d5gsre"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[#f5a623] transition-colors hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f5a623]"
+            >
+              Contact
+            </a>
+          </p>
+
           {/* Back to top */}
-          <BackToTop />
+          <div className="sm:justify-self-end">
+            <BackToTop />
+          </div>
         </div>
       </div>
 

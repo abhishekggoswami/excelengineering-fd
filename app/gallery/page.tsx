@@ -17,7 +17,18 @@ interface GalleryImage {
   wide?: boolean
 }
 
+const NEW_FABRICATION_IMAGES: GalleryImage[] = Array.from({ length: 40 }, (_, index) => {
+  const imageNumber = String(index + 9).padStart(4, '0')
+  return {
+    src: `/images/gallery/fabrication-2026/IMG-20260723-WA${imageNumber}.jpg`,
+    alt: `Excel Engineering fabrication workshop and project equipment, image ${index + 1}`,
+    title: `Fabrication Workshop — Project Image ${index + 1}`,
+    category: 'Fabrication',
+  }
+})
+
 const GALLERY_IMAGES: GalleryImage[] = [
+  ...NEW_FABRICATION_IMAGES,
   // ── Cranes ──────────────────────────────────────────────────────────────
   {
     src: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Vehicle-1-iSNS1EfAlxpeZ8gA8dz4WsGbO5nrhm.png',

@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { ArrowUpRight, Building2, Phone } from 'lucide-react'
+import { ArrowUpRight, Building2 } from 'lucide-react'
 
 const leaders = [
   {
@@ -15,7 +15,7 @@ const leaders = [
       'We do not just build structures — we build trust, integrity, and the infrastructure that powers India’s growth.',
     contact: '+91 94253 00449',
     href: 'tel:+919425300449',
-    image: '/images/farook-khan.jpg',
+    image: '/images/farook-khan.png',
     imageAlt: 'Mr. Farook Khan, Founder and Managing Director of Excel Engineering',
     highlights: ['25+ years of experience', '24+ major projects led'],
   },
@@ -64,9 +64,6 @@ export default function FounderSection() {
             >
               <span className="absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b from-[#f5a623] via-[#e85d3f] to-[#c54b32]" />
               <div className="flex shrink-0 items-center gap-5">
-                <span className="flex h-16 w-16 items-center justify-center rounded-2xl border border-[#e85d3f]/20 bg-[#fff3ed] text-2xl font-black text-[#e85d3f] transition-transform duration-500 group-hover:rotate-[-3deg] group-hover:scale-105">
-                  FK
-                </span>
                 <div>
                   <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[#e85d3f]">Assistant Director</p>
                   <h3 className="mt-1 text-2xl font-black tracking-[-0.03em] text-[#1a1a1a] sm:text-3xl">{leader.name}</h3>
@@ -124,13 +121,6 @@ export default function FounderSection() {
                     “{leader.quote}”
                   </blockquote>
                   <div className="mt-7 flex flex-wrap items-center gap-3">
-                    <Link
-                      href={leader.href}
-                      className="inline-flex items-center gap-2 rounded-full bg-[#e85d3f] px-5 py-3 text-xs font-black uppercase tracking-[0.08em] text-white transition-all hover:bg-[#f26a49] hover:shadow-lg"
-                    >
-                      {leader.contact}
-                      {leader.href.startsWith('tel:') ? <Phone className="h-3.5 w-3.5" /> : <ArrowUpRight className="h-3.5 w-3.5" />}
-                    </Link>
                     {leader.highlights.map((highlight) => (
                       <span
                         key={highlight}

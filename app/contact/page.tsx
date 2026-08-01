@@ -281,7 +281,7 @@ export default function ContactPage() {
           </div>
           <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2">
             <div className="rounded-2xl border border-[#e5e7eb] bg-[#fbfcfb] p-4 shadow-sm"><p className="text-[10px] font-bold uppercase tracking-widest text-[#e85d3f]">Office address</p><p className="mt-2 text-sm font-semibold leading-relaxed text-[#1a1a1a]">Plot No. 30/5, Sector H<br />Govindpura Industrial Area, Bhopal</p></div>
-            <div className="rounded-2xl border border-[#e5e7eb] bg-[#fbfcfb] p-4 shadow-sm"><p className="text-[10px] font-bold uppercase tracking-widest text-[#e85d3f]">Call our office</p><a href="tel:+919179662443" className="mt-2 inline-flex items-center gap-2 text-sm font-extrabold text-[#0e5c3d] hover:text-[#e85d3f]"><Phone className="h-4 w-4" />+91 91796 62443</a></div>
+            <div className="rounded-2xl border border-[#e5e7eb] bg-[#fbfcfb] p-4 shadow-sm"><p className="text-[10px] font-bold uppercase tracking-widest text-[#e85d3f]">Call our office</p><a href="tel:+919179662443" className="mt-2 inline-flex items-center gap-2 text-sm font-extrabold text-[#0e5c3d] hover:text-[#e85d3f]"><Phone className="h-4 w-4" />+91 91796 62443</a><a href="tel:07554939449" className="mt-1 block text-sm font-bold text-[#0e5c3d] hover:text-[#e85d3f]">Office: 0755-4939449</a></div>
           </div>
         </div>
       </section>

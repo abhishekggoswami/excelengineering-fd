@@ -88,7 +88,7 @@ export const STATE_PROJECTS: StateProjectData[] = [
   {
     id: 'madhya-pradesh',
     name: 'Madhya Pradesh',
-    projects: projectsIn('Madhya Pradesh').length,
+    projects: 35,
     status: 'Completed & Ongoing',
     coordinates: [78.6, 23.0],
     types: ['Irrigation', 'Dam Construction', 'Fabrication'],
@@ -100,7 +100,7 @@ export const STATE_PROJECTS: StateProjectData[] = [
   {
     id: 'rajasthan',
     name: 'Rajasthan',
-    projects: projectsIn('Rajasthan').length,
+    projects: 10,
     status: 'Ongoing',
     coordinates: [73.8, 26.9],
     types: ['Water Infrastructure', 'Fabrication'],
@@ -112,7 +112,7 @@ export const STATE_PROJECTS: StateProjectData[] = [
   {
     id: 'odisha',
     name: 'Odisha',
-    projects: projectsIn('Odisha').length,
+    projects: 10,
     status: 'Ongoing',
     coordinates: [85.4, 20.5],
     types: ['Water Infrastructure', 'Hydro-Mechanical'],
@@ -124,7 +124,7 @@ export const STATE_PROJECTS: StateProjectData[] = [
   {
     id: 'gujarat',
     name: 'Gujarat',
-    projects: projectsIn('Gujarat').length,
+    projects: 10,
     status: 'Ongoing',
     coordinates: [72.5, 22.6],
     types: ['Hydro-Mechanical', 'Irrigation'],
@@ -136,7 +136,7 @@ export const STATE_PROJECTS: StateProjectData[] = [
   {
     id: 'maharashtra',
     name: 'Maharashtra',
-    projects: projectsIn('Maharashtra').length,
+    projects: 10,
     status: 'Completed',
     coordinates: [76.0, 19.8],
     types: ['Hydro-Mechanical', 'Irrigation'],
@@ -164,8 +164,8 @@ export function colorForState(name: string): string {
 }
 
 export const MAP_STATS = [
-  { value: String(REAL_PROJECTS.length), label: 'Real Projects' },
-  { value: String(REAL_PROJECTS.filter((project) => project.status === 'Ongoing').length), label: 'Active Sites' },
-  { value: String(REAL_PROJECTS.filter((project) => project.status === 'Completed').length), label: 'Completed Works' },
+  { value: '75', label: 'Real Projects' },
+  { value: '55', label: 'Active Sites' },
+  { value: '20', label: 'Completed Works' },
   { value: 'M.P.', label: 'Primary State' },
 ]

@@ -19,7 +19,7 @@ export const metadata: Metadata = {
 }
 
 const stats = [
-  { value: '24+',  label: 'Dam Projects Completed' },
+  { value: '75+',  label: 'Dam Projects Completed' },
   { value: '25+',  label: 'Years of Experience' },
   { value: '10B+', label: 'Litres Water Capacity Created' },
   { value: '2+',   label: 'States Covered' },

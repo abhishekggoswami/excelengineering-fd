@@ -57,7 +57,7 @@ export default function Navbar() {
     /* Navbar is in normal document flow — NOT fixed — so the hero card sits below it */
     <header className="relative z-50 bg-[#faf9f6] border-b border-gray-100">
       <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20">
-        <div className="flex items-center justify-between py-3">
+        <div className="flex items-center justify-between py-2.5 md:py-3">
 
           {/* Logo */}
           <Link href="/" className="flex items-center flex-shrink-0">
@@ -171,18 +171,18 @@ export default function Navbar() {
 
           {/* Native disclosure keeps the mobile/tablet menu usable before and after hydration. */}
           <details className="group relative lg:hidden">
-            <summary aria-label="Toggle menu" className="flex list-none cursor-pointer rounded-xl border border-[#e5ded1] bg-white p-2 text-[#1a1a1a] shadow-sm transition-all hover:border-[#e85d3f] hover:text-[#e85d3f] [&::-webkit-details-marker]:hidden">
+            <summary aria-label="Toggle menu" className="flex list-none cursor-pointer rounded-xl border border-[#e5ded1] bg-white p-2.5 text-[#1a1a1a] shadow-sm transition-all hover:border-[#e85d3f] hover:text-[#e85d3f] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#e85d3f] [&::-webkit-details-marker]:hidden">
               <Menu className="h-6 w-6 group-open:hidden" />
               <X className="hidden h-6 w-6 group-open:block" />
             </summary>
-            <div className="absolute right-0 top-[calc(100%+0.75rem)] z-[70] w-[min(24rem,calc(100vw-1.5rem))] max-h-[calc(100svh-5.5rem)] overflow-y-auto rounded-2xl border border-[#e5ded1] bg-white/98 px-5 py-5 shadow-2xl backdrop-blur-xl sm:px-6">
-              <div className="mb-4 border-b border-[#eee8df] pb-4">
-                <span className="text-xs font-black uppercase tracking-[0.16em] text-[#e85d3f]">Explore Excel Engineering</span>
+            <div className="absolute right-0 top-[calc(100%+0.75rem)] z-[70] w-[min(22rem,calc(100vw-3rem))] max-h-[calc(100svh-5.5rem)] overflow-y-auto rounded-[1.5rem] border border-[#e5ded1] bg-[#fffdf9]/98 px-4 py-4 shadow-[0_24px_56px_rgba(14,38,29,0.22)] backdrop-blur-xl sm:px-5 sm:py-5">
+              <div className="mb-3 border-b border-[#eee8df] pb-3">
+                <span className="text-[11px] font-black uppercase tracking-[0.16em] text-[#e85d3f]">Explore Excel Engineering</span>
               </div>
-              <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-3">
                 {navLinks.map((link) =>
                   link.children ? (
-                    <div key={link.label} className="rounded-xl bg-[#f7f4ec] p-3">
+                    <div key={link.label} className="rounded-xl border border-[#eee8df] bg-[#f7f4ec] p-3">
                       <span className="mb-2 block text-xs font-bold uppercase tracking-widest text-[#1a1a1a]/50">{link.label}</span>
                       {link.children.map((child) => (
                         <Link key={child.label} href={child.href} className="block border-l-2 border-[#e85d3f] py-2 pl-3 text-sm font-semibold text-[#1a1a1a] transition-colors hover:text-[#e85d3f]">
@@ -191,12 +191,12 @@ export default function Navbar() {
                       ))}
                     </div>
                   ) : (
-                    <Link key={link.label} href={link.href} className="rounded-xl border border-[#eee8df] px-4 py-3 text-sm font-semibold uppercase tracking-wide text-[#1a1a1a] transition-colors hover:border-[#e85d3f] hover:text-[#e85d3f]">
+                    <Link key={link.label} href={link.href} className="rounded-xl border border-[#eee8df] bg-[#f7f4ec] px-4 py-3 text-sm font-semibold uppercase tracking-wide text-[#1a1a1a] transition-colors hover:border-[#e85d3f] hover:text-[#e85d3f]">
                       {link.label}
                     </Link>
                   )
                 )}
-                <Link href="/contact" className="mt-2 rounded-full bg-[#e85d3f] px-5 py-3 text-center text-sm font-bold uppercase tracking-wide text-white">Get Free Quote</Link>
+                <Link href="/contact" className="mt-1 rounded-full bg-[#e85d3f] px-5 py-3 text-center text-sm font-bold uppercase tracking-wide text-white shadow-[0_10px_20px_rgba(232,93,63,0.24)]">Get Free Quote</Link>
               </div>
             </div>
           </details>
