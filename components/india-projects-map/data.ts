@@ -19,7 +19,7 @@ export const REAL_PROJECTS: RealProject[] = [
   {
     id: 'barkheda-dhar',
     title: 'Barkheda Medium Irrigation Project',
-    spec: 'Radial Gate 12.00 × 8.30 MTR',
+    spec: 'Radial Gate',
     location: 'WRD Manawar, Dist. Dhar, Madhya Pradesh',
     status: 'Completed',
     coordinates: [75.09, 22.23],
@@ -29,7 +29,7 @@ export const REAL_PROJECTS: RealProject[] = [
   {
     id: 'bankpura-rajgarh',
     title: 'Bankpura Project',
-    spec: 'Vertical Spillway Gate 15.00 × 4.00 MTR',
+    spec: 'Vertical Spillway Gate',
     location: 'Dist. Rajgarh, Madhya Pradesh',
     status: 'Completed',
     coordinates: [76.73, 23.77],
@@ -49,7 +49,7 @@ export const REAL_PROJECTS: RealProject[] = [
   {
     id: 'hiran-irrigation',
     title: 'Hiran Medium Irrigation Project',
-    spec: 'Vertical Lift Gate 9.00 × 6.50 MTR',
+    spec: 'Vertical Lift Gate',
     location: 'Hiran River, Jabalpur, Madhya Pradesh',
     status: 'Ongoing',
     coordinates: [80.02, 23.20],

@@ -41,13 +41,13 @@ const completedProjects: CompletedProjectCard[] = [
     href: '/projects/madiya-dam',
   },
   {
-    title: 'Radial Gate 12.00 × 8.30 MTR – Barkheda Medium Irrigation Project',
+    title: 'Radial Gate – Barkheda Medium Irrigation Project',
     location: 'WRD Manawar, Dist. Dhar, Madhya Pradesh',
     client: 'Harikrisha Infrastructure, Kutch, Gujarat',
     specification: 'Radial gates, top log gates, hoists and bridge gantry structures',
     description: 'Excel Engineering completed the design, drawing, supply, fabrication and erection of hydraulic gate systems and bridge gantry structures for the Barkheda Medium Irrigation Project.',
     highlights: [
-      'Radial gate – 12.00 × 8.30 MTR dimensions',
+      'Radial gate fabrication and supply',
       'Top log gate fabrication and supply',
       'Hoist systems and bridge gantry structure',
     ],
@@ -56,13 +56,13 @@ const completedProjects: CompletedProjectCard[] = [
     href: '/projects/barkheda',
   },
   {
-    title: 'Vertical Spillway Gate 15.00 × 4.00 MTR – Bankpura Project',
+    title: 'Vertical Spillway Gate – Bankpura Project',
     location: 'Bankpura Project, Dist. Rajgarh, Madhya Pradesh',
     client: 'W.R.D. C.M.U. Bhopal',
     specification: 'Vertical spillway gates and allied components',
     description: 'Excel Engineering completed the fabrication, erection, testing and commissioning of vertical spillway gates and all allied components for the Bankpura Project.',
     highlights: [
-      'Vertical spillway gate – 15.00 × 4.00 MTR dimensions',
+      'Vertical spillway gate fabrication and supply',
       'Full fabrication, erection, testing and commissioning',
       'Executed to Water Resources Department specifications',
     ],

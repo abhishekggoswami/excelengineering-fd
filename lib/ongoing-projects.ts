@@ -35,7 +35,7 @@ const primaryOngoingProjects: OngoingProjectDetail[] = [
     title: 'Hiran Medium Irrigation Project',
     location: 'Hiran River, Jabalpur, Madhya Pradesh',
     client: 'SRS Infraway Pvt. Ltd., Gwalior (MOU)',
-    specification: 'Vertical Lift Gate – 9.00 × 6.50 MTR',
+    specification: 'Vertical Lift Gate',
     quantity: 'Approximately 325 MT of fabricated steel',
     overview: 'Excel Engineering is executing the design, supply, fabrication, erection, testing and commissioning of the hydro-mechanical gate and hoist systems for the Hiran Medium Irrigation Project.',
     scope: [

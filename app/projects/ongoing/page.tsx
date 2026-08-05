@@ -53,7 +53,7 @@ const projects: {
     image: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/IMG_0475-clean-yvyIC0wscjKJZ5V3S18D8NvGTHfGRN.png',
   },
   {
-    title: 'Spillway Vertical Lift Gate 9.00 × 6.50 MTR — Hiran Irrigation',
+    title: 'Spillway Vertical Lift Gate — Hiran Irrigation',
     location: 'Hiran Medium Irrigation Project, Madhya Pradesh',
     client: 'SRS Infraway Pvt. Ltd., Gwalior (MOU)',
     contractedBy: 'Sub Contractor — Excel Engineering, Bhopal',
@@ -65,7 +65,7 @@ const projects: {
     description:
       'Design drawing supply, fabrication, erection testing and commissioning of vertical Gate, vertical Gates Hoist and Bridge Trestle Assembly, Stoplog Monorail and Structure, Service and Emergency sluice Gate, Electrical Hoist — along with all allied components at Hiran Medium Irrigation project.',
     highlights: [
-      'Vertical lift gate — 9.00 × 6.50 MTR dimensions',
+      'Vertical lift gate fabrication and supply',
       'Vertical gates hoist and bridge trestle assembly',
       'Stoplog monorail structure fabrication',
       'Service and emergency sluice gate',
@@ -138,7 +138,7 @@ const faqs = [
   },
   {
     q: 'What work is Excel Engineering carrying out at the Hiran Medium Irrigation Project?',
-    a: 'At Hiran Medium Irrigation Project (M.P.), we are designing, supplying, fabricating, erecting, testing and commissioning a 9.00 × 6.50 MTR Vertical Lift Gate with Hoist, Bridge Trestle Assembly, Stoplog Monorail Structure, Service and Emergency Sluice Gate, and Electrical Hoist — as Sub Contractor to SRS Infraway Pvt. Ltd., Gwalior.',
+    a: 'At Hiran Medium Irrigation Project (M.P.), we are designing, supplying, fabricating, erecting, testing and commissioning a Vertical Lift Gate with Hoist, Bridge Trestle Assembly, Stoplog Monorail Structure, Service and Emergency Sluice Gate, and Electrical Hoist — as Sub Contractor to SRS Infraway Pvt. Ltd., Gwalior.',
   },
   {
     q: 'Does Excel Engineering operate as a sub-contractor on government projects?',

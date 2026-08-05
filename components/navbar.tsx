@@ -10,8 +10,8 @@ const navLinks = [
     label: 'Services',
     href: '#services',
     children: [
-      { label: 'Dam Construction', href: '/services/dam-construction' },
       { label: 'Fabrication Works', href: '/services/fabrication' },
+      { label: 'Dam Construction', href: '/services/dam-construction' },
       { label: 'Crane Services', href: '/services/crane-services' },
     ],
   },

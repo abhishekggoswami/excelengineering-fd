@@ -55,20 +55,36 @@ const faqs = [
   },
 ]
 
-type FormState = 'idle' | 'sending' | 'sent'
+type FormState = 'idle' | 'draftOpened'
+
+const CONTACT_EMAIL = 'info@excelengineeringbpl.com'
 
 export default function ContactPage() {
   const [form, setForm] = useState({ name: '', company: '', phone: '', email: '', message: '', service: '' })
   const [formState, setFormState] = useState<FormState>('idle')
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value })
   }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    setFormState('sending')
-    setTimeout(() => setFormState('sent'), 1400)
+    const subject = `New website enquiry from ${form.name}`
+    const body = [
+      'New enquiry received through the Excel Engineering website',
+      '',
+      `Name: ${form.name}`,
+      `Company: ${form.company || 'Not provided'}`,
+      `Phone: ${form.phone}`,
+      `Email: ${form.email || 'Not provided'}`,
+      `Service required: ${form.service || 'Not provided'}`,
+      '',
+      'Message:',
+      form.message,
+    ].join('\n')
+
+    window.location.href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
+    setFormState('draftOpened')
   }
 
   return (
@@ -153,12 +169,12 @@ export default function ContactPage() {
           {/* Right — Form */}
           <div className="w-full">
             <div className="rounded-[2rem] border border-white/70 bg-white/55 p-8 shadow-[0_24px_70px_-40px_rgba(7,43,31,.55)] backdrop-blur-xl md:p-10">
-              {formState === 'sent' ? (
+              {formState === 'draftOpened' ? (
                 <div className="flex flex-col items-center justify-center py-16 gap-5 text-center">
                   <div className="w-16 h-16 rounded-full bg-[#e85d3f]/10 flex items-center justify-center">
                     <CheckCircle2 className="w-8 h-8 text-[#e85d3f]" />
                   </div>
-                  <h3 className="font-black text-[#1a1a1a] text-2xl">Message Received</h3>
+                  <h3 className="font-black text-[#1a1a1a] text-2xl">Email Draft Opened</h3>
                   <p className="text-[#6b7280] text-sm leading-relaxed max-w-xs">
                     Thank you for reaching out. We&apos;ll review your inquiry and get back to you within 24–48 hours.
                   </p>
@@ -224,18 +240,11 @@ export default function ContactPage() {
                       <label className="text-[#1a1a1a] text-xs font-bold uppercase tracking-wide">
                         Service Required
                       </label>
-                      <select
-                        name="service" value={form.service} onChange={handleChange}
-                        className="bg-[#f5efe0] border border-[#e5d9c0] rounded-xl px-4 py-3 text-sm text-[#1a1a1a] focus:outline-none focus:border-[#e85d3f] transition-colors"
-                      >
-                        <option value="">Select a service...</option>
-                        <option>Dam Gate Fabrication & Installation</option>
-                        <option>Radial / Vertical Gate Engineering</option>
-                        <option>Hoist & Gantry Crane Systems</option>
-                        <option>Irrigation Project Gates</option>
-                        <option>Structural Steel Fabrication</option>
-                        <option>Other / General Inquiry</option>
-                      </select>
+                      <input
+                        type="text" name="service" value={form.service} onChange={handleChange}
+                        placeholder="Describe the service you need"
+                        className="bg-[#f5efe0] border border-[#e5d9c0] rounded-xl px-4 py-3 text-sm text-[#1a1a1a] placeholder:text-[#9ca3af] focus:outline-none focus:border-[#e85d3f] transition-colors"
+                      />
                     </div>
                     <div className="flex flex-col gap-1.5">
                       <label className="text-[#1a1a1a] text-xs font-bold uppercase tracking-wide">
@@ -250,12 +259,9 @@ export default function ContactPage() {
                     </div>
                     <button
                       type="submit"
-                      disabled={formState === 'sending'}
-                      className="flex items-center justify-center gap-2 bg-[#e85d3f] hover:bg-[#d14f33] disabled:opacity-60 text-white font-black text-sm uppercase tracking-wide px-8 py-4 rounded-full transition-colors duration-200 mt-2"
+                      className="flex items-center justify-center gap-2 bg-[#e85d3f] hover:bg-[#d14f33] text-white font-black text-sm uppercase tracking-wide px-8 py-4 rounded-full transition-colors duration-200 mt-2"
                     >
-                      {formState === 'sending' ? 'Sending...' : (
-                        <>Send Message <Send className="w-4 h-4" /></>
-                      )}
+                      <>Send Message <Send className="w-4 h-4" /></>
                     </button>
                   </form>
                 </>
