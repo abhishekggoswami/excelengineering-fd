@@ -25,11 +25,11 @@ export const additionalProjects: AdditionalProject[] = [
     state: 'Rajasthan',
     // Madasar / Nachna project area; slightly offset so the two Escape Reservoir packages remain selectable.
     coordinates: [72.90, 27.84],
-    status: 'Ongoing',
+    status: 'Completed',
     client: 'LCC Projects Pvt. Ltd.',
     specification: 'Intake well approach bridge and structural steel works',
     quantity: 'Approximately 46.67 MT of structural steel',
-    overview: 'Excel Engineering is executing the fabrication, supply, erection and commissioning of heavy structural steel works for the Escape Reservoir Project, including the Intake Well Approach Bridge and associated steel structures.',
+    overview: 'Excel Engineering completed the fabrication, supply, erection and commissioning of heavy structural-steel works for the Escape Reservoir Project, including the Intake Well Approach Bridge and associated steel structures.',
     scope: [
       'Trestle bridge fabrication',
       'Trash rack, structural-steel hoist bridge and monorail',

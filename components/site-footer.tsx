@@ -173,10 +173,10 @@ export default function SiteFooter() {
                   <Mail className="w-4 h-4 text-[#f5a623]" />
                 </div>
                 <a
-                  href="mailto:info@excelengineering.in"
+                  href="mailto:info@excelengineeringbpl.com"
                   className="text-white/55 hover:text-white text-sm font-medium transition-colors"
                 >
-                  info@excelengineering.in
+                  info@excelengineeringbpl.com
                 </a>
               </li>
               <li className="flex items-start gap-3">

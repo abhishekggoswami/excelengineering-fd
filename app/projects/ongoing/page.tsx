@@ -100,11 +100,22 @@ const projectVideos = Array.from(
   (_, index) => `/videos/ongoing/project-${String(index + 1).padStart(2, '0')}.mp4`,
 )
 
+const additionalProjectVideos: Record<string, string> = {
+  'escape-reservoir-intake-well-gate': '/videos/ongoing/project-03.mp4',
+  'kusabhadra-storage-structure': '/videos/ongoing/project-04.mp4',
+  'hanota-dam': '/videos/ongoing/project-05.mp4',
+  'sewda-water-supply-bridge': '/videos/ongoing/project-06.mp4',
+  'judi-irrigation-project': '/videos/ongoing/project-07.mp4',
+  'banda-dam': '/videos/ongoing/project-08.mp4',
+  'todiya-rock-lis-phase-1': '/videos/ongoing/project-09.mp4',
+  'ambod-madhavgadh-barrage': '/videos/ongoing/project-10.mp4',
+}
+
 const allOngoingProjects: OngoingProjectCard[] = [
-  ...projects.map((project, index) => ({
+  ...projects.slice(1).map((project, index) => ({
     ...project,
-    video: projectVideos[index],
-    href: index === 0 ? '/projects/madiya-dam' : '/projects/hiran-irrigation',
+    video: projectVideos[index + 1],
+    href: '/projects/hiran-irrigation',
   })),
   ...additionalOngoingProjects.map((project, index) => ({
     title: project.title,
@@ -115,7 +126,7 @@ const allOngoingProjects: OngoingProjectCard[] = [
     description: project.overview,
     highlights: project.scope,
     image: projectMedia[index % projectMedia.length],
-    video: projectVideos[projects.length + index],
+    video: additionalProjectVideos[project.slug],
     href: `/projects/${project.slug}`,
   })),
 ]

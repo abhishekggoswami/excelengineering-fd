@@ -48,9 +48,20 @@ const primaryOngoingProjects: OngoingProjectDetail[] = [
   },
 ]
 
+const additionalProjectVideos: Record<string, string> = {
+  'escape-reservoir-intake-well-gate': '/videos/ongoing/project-03.mp4',
+  'kusabhadra-storage-structure': '/videos/ongoing/project-04.mp4',
+  'hanota-dam': '/videos/ongoing/project-05.mp4',
+  'sewda-water-supply-bridge': '/videos/ongoing/project-06.mp4',
+  'judi-irrigation-project': '/videos/ongoing/project-07.mp4',
+  'banda-dam': '/videos/ongoing/project-08.mp4',
+  'todiya-rock-lis-phase-1': '/videos/ongoing/project-09.mp4',
+  'ambod-madhavgadh-barrage': '/videos/ongoing/project-10.mp4',
+}
+
 const additionalOngoingProjects: OngoingProjectDetail[] = additionalProjects
   .filter((project) => project.status === 'Ongoing')
-  .map((project, index) => ({
+  .map((project) => ({
     slug: project.slug,
     title: project.title,
     location: project.location,
@@ -60,10 +71,13 @@ const additionalOngoingProjects: OngoingProjectDetail[] = additionalProjects
     scope: project.scope,
     quantity: project.quantity,
     value: project.value,
-    video: `/videos/ongoing/project-${String(index + 3).padStart(2, '0')}.mp4`,
+    video: additionalProjectVideos[project.slug],
   }))
 
-export const ongoingProjects = [...primaryOngoingProjects, ...additionalOngoingProjects]
+export const ongoingProjects = [
+  ...primaryOngoingProjects.filter((project) => project.slug !== 'madiya-dam'),
+  ...additionalOngoingProjects,
+]
 
 export const ongoingProjectBySlug = Object.fromEntries(
   ongoingProjects.map((project) => [project.slug, project]),

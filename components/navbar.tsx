@@ -37,6 +37,8 @@ const navLinks = [
 
 export default function Navbar() {
   const [openDropdown, setOpenDropdown] = useState<string | null>(null)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [openMobileSection, setOpenMobileSection] = useState<string | null>(null)
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const handleMouseEnter = (label: string) => {
@@ -51,6 +53,11 @@ export default function Navbar() {
   const closeDropdown = () => {
     if (closeTimer.current) clearTimeout(closeTimer.current)
     setOpenDropdown(null)
+  }
+
+  const closeMobileMenu = () => {
+    setMobileMenuOpen(false)
+    setOpenMobileSection(null)
   }
 
   return (
@@ -169,37 +176,109 @@ export default function Navbar() {
             </Link>
           </div>
 
-          {/* Native disclosure keeps the mobile/tablet menu usable before and after hydration. */}
-          <details className="group relative lg:hidden">
-            <summary aria-label="Toggle menu" className="flex list-none cursor-pointer rounded-xl border border-[#e5ded1] bg-white p-2.5 text-[#1a1a1a] shadow-sm transition-all hover:border-[#e85d3f] hover:text-[#e85d3f] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#e85d3f] [&::-webkit-details-marker]:hidden">
-              <Menu className="h-6 w-6 group-open:hidden" />
-              <X className="hidden h-6 w-6 group-open:block" />
-            </summary>
-            <div className="absolute right-0 top-[calc(100%+0.75rem)] z-[70] w-[min(22rem,calc(100vw-3rem))] max-h-[calc(100svh-5.5rem)] overflow-y-auto rounded-[1.5rem] border border-[#e5ded1] bg-[#fffdf9]/98 px-4 py-4 shadow-[0_24px_56px_rgba(14,38,29,0.22)] backdrop-blur-xl sm:px-5 sm:py-5">
-              <div className="mb-3 border-b border-[#eee8df] pb-3">
-                <span className="text-[11px] font-black uppercase tracking-[0.16em] text-[#e85d3f]">Explore Excel Engineering</span>
-              </div>
-              <div className="flex flex-col gap-3">
-                {navLinks.map((link) =>
-                  link.children ? (
-                    <div key={link.label} className="rounded-xl border border-[#eee8df] bg-[#f7f4ec] p-3">
-                      <span className="mb-2 block text-xs font-bold uppercase tracking-widest text-[#1a1a1a]/50">{link.label}</span>
-                      {link.children.map((child) => (
-                        <Link key={child.label} href={child.href} className="block border-l-2 border-[#e85d3f] py-2 pl-3 text-sm font-semibold text-[#1a1a1a] transition-colors hover:text-[#e85d3f]">
-                          {child.label}
-                        </Link>
-                      ))}
-                    </div>
-                  ) : (
-                    <Link key={link.label} href={link.href} className="rounded-xl border border-[#eee8df] bg-[#f7f4ec] px-4 py-3 text-sm font-semibold uppercase tracking-wide text-[#1a1a1a] transition-colors hover:border-[#e85d3f] hover:text-[#e85d3f]">
+          <button
+            type="button"
+            aria-label="Open menu"
+            aria-expanded={mobileMenuOpen}
+            aria-controls="mobile-navigation"
+            onClick={() => setMobileMenuOpen(true)}
+            className="flex rounded-xl border border-[#e5ded1] bg-white p-2.5 text-[#1a1a1a] shadow-sm transition-all hover:border-[#e85d3f] hover:text-[#e85d3f] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#e85d3f] lg:hidden"
+          >
+            <Menu className="h-6 w-6" />
+          </button>
+        </div>
+      </div>
+
+      <div
+        id="mobile-navigation"
+        aria-hidden={!mobileMenuOpen}
+        className={`fixed inset-0 z-[100] overflow-y-auto bg-[#fffdf9] transition-[clip-path,opacity] duration-500 lg:hidden ${
+          mobileMenuOpen ? 'pointer-events-auto opacity-100 [clip-path:circle(150%_at_100%_0)]' : 'pointer-events-none opacity-0 [clip-path:circle(0%_at_100%_0)]'
+        }`}
+      >
+        <div className="mx-auto flex min-h-[100svh] w-full max-w-3xl flex-col px-6 py-5 sm:px-10 sm:py-7">
+          <div className="grid grid-cols-[1fr_auto_1fr] items-center">
+            <button
+              type="button"
+              aria-label="Close menu"
+              onClick={closeMobileMenu}
+              className="group flex h-11 w-11 items-center justify-center rounded-full text-[#e85d3f] transition-colors hover:bg-[#fff0eb] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#e85d3f]"
+            >
+              <X className="h-6 w-6 transition-transform duration-300 group-hover:rotate-90" />
+            </button>
+            <Link href="/" onClick={closeMobileMenu} className="justify-self-center">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logo-removed-bg-hV46daKY7PAwLB5y0ip6oioQ9M408R.png"
+                alt="Excel Engineering"
+                className="h-12 w-auto object-contain sm:h-14"
+              />
+            </Link>
+            <Link
+              href="/contact"
+              onClick={closeMobileMenu}
+              className="justify-self-end rounded-full border border-[#0d6948]/25 px-3 py-2 text-[10px] font-black uppercase tracking-[0.13em] text-[#0d6948] transition-all hover:bg-[#0d6948] hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d6948] sm:px-4 sm:text-[11px]"
+            >
+              Quote
+            </Link>
+          </div>
+
+          <nav aria-label="Mobile navigation" className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center py-10 sm:py-12">
+            <div className="border-y border-[#e9e1d4] py-5 sm:py-6">
+              {navLinks.map((link) =>
+                link.children ? (
+                  <div key={link.label} className="border-b border-[#eee8df] last:border-b-0">
+                    <button
+                      type="button"
+                      aria-expanded={openMobileSection === link.label}
+                      aria-controls={`mobile-section-${link.label.toLowerCase()}`}
+                      onClick={() => setOpenMobileSection(openMobileSection === link.label ? null : link.label)}
+                      className="group flex w-full items-center justify-center gap-2 py-4 text-center text-sm font-black uppercase tracking-[0.22em] text-[#1a1a1a] transition-colors hover:text-[#e85d3f] sm:py-5 sm:text-base"
+                    >
                       {link.label}
-                    </Link>
-                  )
-                )}
-                <Link href="/contact" className="mt-1 rounded-full bg-[#e85d3f] px-5 py-3 text-center text-sm font-bold uppercase tracking-wide text-white shadow-[0_10px_20px_rgba(232,93,63,0.24)]">Get Free Quote</Link>
-              </div>
+                      <ChevronDown className={`h-4 w-4 text-[#0d6948] transition-transform duration-300 ${openMobileSection === link.label ? 'rotate-180' : ''}`} />
+                    </button>
+                    <div
+                      id={`mobile-section-${link.label.toLowerCase()}`}
+                      className={`grid overflow-hidden transition-[grid-template-rows,opacity] duration-300 ${openMobileSection === link.label ? 'grid-rows-[1fr] pb-3 opacity-100' : 'grid-rows-[0fr] opacity-0'}`}
+                    >
+                      <div className="min-h-0 space-y-1 text-center">
+                        {link.children.map((child) => (
+                          <Link
+                            key={child.label}
+                            href={child.href}
+                            onClick={closeMobileMenu}
+                            className="group/link mx-auto flex w-fit items-center gap-2 px-4 py-2 text-sm font-semibold text-[#596475] transition-colors hover:text-[#e85d3f]"
+                          >
+                            <span className="h-1.5 w-1.5 rounded-full bg-[#e85d3f] transition-transform duration-300 group-hover/link:scale-150" />
+                            {child.label}
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <Link
+                    key={link.label}
+                    href={link.href}
+                    onClick={closeMobileMenu}
+                    className="group flex items-center justify-center gap-2 border-b border-[#eee8df] py-4 text-center text-sm font-black uppercase tracking-[0.22em] text-[#1a1a1a] transition-colors hover:text-[#e85d3f] sm:py-5 sm:text-base"
+                  >
+                    <span className="h-1.5 w-1.5 rounded-full bg-transparent transition-colors group-hover:bg-[#0d6948]" />
+                    {link.label}
+                    <span className="h-1.5 w-1.5 rounded-full bg-transparent transition-colors group-hover:bg-[#e85d3f]" />
+                  </Link>
+                )
+              )}
             </div>
-          </details>
+          </nav>
+
+          <div className="mx-auto flex w-full max-w-md items-center justify-between border-t border-[#e9e1d4] pt-5 text-[10px] font-bold uppercase tracking-[0.16em] text-[#7b8491] sm:pt-6 sm:text-xs">
+            <span>Excel Engineering</span>
+            <Link href="/contact" onClick={closeMobileMenu} className="text-[#e85d3f] transition-colors hover:text-[#0d6948]">
+              Let&apos;s talk
+            </Link>
+          </div>
         </div>
       </div>
     </header>

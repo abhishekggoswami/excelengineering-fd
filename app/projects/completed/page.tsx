@@ -26,6 +26,21 @@ type CompletedProjectCard = {
 
 const completedProjects: CompletedProjectCard[] = [
   {
+    title: 'Madiya Dam - Radial Gate Works',
+    location: 'Rahtghar, Dist. Sagar, Madhya Pradesh',
+    client: 'LCC Projects Pvt. Ltd., Ahmedabad',
+    specification: 'Radial gate, stoplog gate, hoists and gantry-crane works',
+    description: 'Excel Engineering completed the design, supply, fabrication, erection, testing and commissioning of the radial-gate and hydro-mechanical package for Madiya Dam.',
+    highlights: [
+      'Radial gate - 12.85 x 10.30 MTR dimensions',
+      'Stoplog gate, dam sluice and power-channel gate works',
+      'Rope drum, electrical and hydraulic hoist systems',
+    ],
+    video: completedProjectMedia['madiya-dam'].video,
+    videoAlt: completedProjectMedia['madiya-dam'].alt,
+    href: '/projects/madiya-dam',
+  },
+  {
     title: 'Radial Gate 12.00 × 8.30 MTR – Barkheda Medium Irrigation Project',
     location: 'WRD Manawar, Dist. Dhar, Madhya Pradesh',
     client: 'Harikrisha Infrastructure, Kutch, Gujarat',
