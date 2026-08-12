@@ -5,7 +5,7 @@ const STATS = [
     label: 'Completed Projects',
     description:
       'Successfully delivering diverse construction projects on time, exceeding expectations.',
-    end: 24,
+    end: 50,
     suffix: '+',
     duration: 1600,
   },
@@ -13,7 +13,7 @@ const STATS = [
     label: 'Happy Clients',
     description:
       'Committed to ensuring client satisfaction through exceptional building services.',
-    end: 17,
+    end: 49,
     suffix: '+',
     duration: 1400,
   },
@@ -21,15 +21,15 @@ const STATS = [
     label: 'Project Value',
     description:
       'Building trust, integrity, and excellence as our core principles.',
-    end: 5,
-    suffix: 'Cr+',
+    end: 50,
+    suffix: 'Cr',
     duration: 1500,
   },
   {
     label: 'Awards Won',
     description:
       'Recognized nationally and internationally for outstanding construction achievements.',
-    end: 4,
+    end: 11,
     suffix: '+',
     duration: 1200,
   },

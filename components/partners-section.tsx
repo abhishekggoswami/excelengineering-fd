@@ -19,7 +19,7 @@ const PARTNERS = [
     src: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/nhdc-logo-cZ6YbK8GtD6kTZXX3kY4v5rdtNg7Dv.png',
   },
   {
-    name: 'LCC — Many Hands One Vision',
+    name: 'LCC',
     shortName: 'LCC',
     src: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/LCC%20logo-vvDjjRw70zLcgErYQL3jwWQ8bQ0yuF.png',
   },

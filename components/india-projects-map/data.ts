@@ -164,7 +164,7 @@ export function colorForState(name: string): string {
 }
 
 export const MAP_STATS = [
-  { value: '75', label: 'Real Projects' },
+  { value: '50+', label: 'Real Projects' },
   { value: '55', label: 'Active Sites' },
   { value: '20', label: 'Completed Works' },
   { value: 'M.P.', label: 'Primary State' },
