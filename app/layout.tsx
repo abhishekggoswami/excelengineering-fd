@@ -12,9 +12,21 @@ const barlow = Barlow({
 })
 
 export const metadata: Metadata = {
-  title: 'Excel Engineering Construction',
+  metadataBase: new URL('https://www.excelengineeringbpl.com'),
+  title: 'Excel Engineering',
   description:
-    'Excel Engineering — Premier infrastructure contractor specializing in dam construction, fabrication works, irrigation projects, and crane services.',
+    'Specialists in supply, fabrication & erection of heavy steel structures for dams, irrigation networks, metros & major bridges across India.',
+  alternates: {
+    canonical: '/',
+  },
+  openGraph: {
+    type: 'website',
+    url: '/',
+    siteName: 'Excel Engineering',
+    title: 'Excel Engineering',
+    description:
+      'Specialists in supply, fabrication & erection of heavy steel structures for dams, irrigation networks, metros & major bridges across India.',
+  },
   generator: 'v0.app',
 }
 
@@ -31,6 +43,19 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${barlow.variable} bg-background`}>
       <body className="font-sans antialiased">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'Organization',
+              name: 'Excel Engineering',
+              url: 'https://www.excelengineeringbpl.com',
+              description:
+                'Specialists in supply, fabrication & erection of heavy steel structures for dams, irrigation networks, metros & major bridges across India.',
+            }),
+          }}
+        />
         {children}
         <SiteFooter />
         <WhatsAppContactButton />
