@@ -4,7 +4,7 @@ import { useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 
-const HERO_HEADING = 'Specialists in Dam Construction & Hydraulic Works'
+const HERO_HEADING = 'Dam Fabrication & Heavy Steel Erection'
 const SLIDES = [
   {
     src: '/videos/home-hero-1.mp4',
@@ -175,21 +175,19 @@ export default function HeroSection() {
             style={{ fontSize: 'clamp(2.8rem, 6vw, 5.5rem)' }}
           >
             <span aria-hidden="true" className="invisible">
-              Specialists in <span>Dam Construction</span> &amp; Hydraulic Works
+              {HERO_HEADING}
             </span>
             <span
               aria-hidden="true"
               className="hero-heading-typewriter absolute inset-x-0 top-0"
             >
-              Specialists in <span className="text-[#f5a623]">Dam Construction</span>{' '}
-              &amp; Hydraulic Works
+              Dam <span className="text-[#f5a623]">Fabrication</span> &amp; Heavy Steel Erection
             </span>
           </h1>
 
           <p className="mb-10 max-w-xl text-pretty text-lg leading-relaxed text-white/75">
-            From gravity dams and spillways to radial gate installations and
-            barrage structures — Excel Engineering delivers precision hydraulic
-            infrastructure for government and irrigation authorities across India.
+            Specialists in Dam manufacture, fabrication &amp; erection of heavy steel structures for
+            dams, irrigation networks, metros &amp; major bridges across India.
           </p>
 
           <div className="flex flex-wrap items-center gap-4">
