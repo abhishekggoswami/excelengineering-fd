@@ -23,8 +23,8 @@ const contactDetails = [
   {
     icon: Mail,
     label: 'Email',
-    lines: ['excalengt@gmail.com'],
-    href: 'mailto:excalengt@gmail.com',
+    lines: ['excalengg@gmail.com'],
+    href: 'mailto:excalengg@gmail.com',
     cta: 'Send Email',
   },
   {
@@ -39,7 +39,7 @@ const contactDetails = [
 const faqs = [
   {
     q: 'What is the best way to reach Excel Engineering for a project inquiry?',
-    a: 'For project inquiries, you can call us directly at +91-9425300449 or email excalengt@gmail.com. Our director M. Farook Khan personally oversees all new project discussions to ensure the right technical expertise is engaged from the start.',
+    a: 'For project inquiries, you can call us directly at +91-9425300449 or email excalengg@gmail.com. Our director M. Farook Khan personally oversees all new project discussions to ensure the right technical expertise is engaged from the start.',
   },
   {
     q: 'Where is Excel Engineering\'s fabrication facility located?',
@@ -57,7 +57,7 @@ const faqs = [
 
 type FormState = 'idle' | 'draftOpened'
 
-const CONTACT_EMAIL = 'info@excelengineeringbpl.com'
+const CONTACT_EMAIL = 'excalengg@gmail.com'
 
 export default function ContactPage() {
   const [form, setForm] = useState({ name: '', company: '', phone: '', email: '', message: '', service: '' })
